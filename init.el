@@ -896,6 +896,11 @@
   		 )
   )
 
+(use-package custom
+  :config
+		(setq custom-file "~/.emacs.d/emacs-custom.el")
+  )
+
 
 ;; Customize key bindings
 
