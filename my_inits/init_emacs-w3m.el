@@ -57,6 +57,7 @@
 		;; Use cookies
 		(setq w3m-use-cookies t)
 		(setq w3m-cookie-file "~/.emacs.d/cookie")
+		(evil-set-initial-state 'w3m-mode 'normal)
   :hook
 		(w3m-mode . (lambda ()
 			(setq left-margin-width 5)
@@ -105,4 +106,4 @@
 ;; (define-key w3m-mode-map (kbd "s") 'w3m-search)
 ;; (define-key w3m-mode-map (kbd "S") 'w3m-search-new-session)
 
-(provide 'init_emacs-w3m.el)
+(provide 'init_emacs-w3m)
