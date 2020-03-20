@@ -104,3 +104,5 @@
 ;; (define-key w3m-mode-map (kbd "X") 'w3m-delete-other-buffers)
 ;; (define-key w3m-mode-map (kbd "s") 'w3m-search)
 ;; (define-key w3m-mode-map (kbd "S") 'w3m-search-new-session)
+
+(provide 'init_emacs-w3m.el)
