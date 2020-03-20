@@ -479,7 +479,11 @@
 (use-package flycheck
   :config
 		(add-to-list 'flycheck-gcc-include-path (getenv "unity_path"))
-		(setq-default flycheck-disabled-checkers '(c/c++-clang))
+		(setq-default flycheck-disabled-checkers '(
+			c/c++-clang
+			emacs-lisp
+			emacs-lisp-checkdoc
+		))
 		(setq-default flycheck-enabled-checkers '(c/c++-gcc))
 		(global-flycheck-mode)
   )
