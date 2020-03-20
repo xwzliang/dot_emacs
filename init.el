@@ -731,6 +731,9 @@
   		 )
   )
 
+(use-package init_emacs-w3m
+  )
+
 
 ;; built-in packages with use-package
 
