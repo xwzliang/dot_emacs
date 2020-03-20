@@ -54,6 +54,10 @@
          (setq mac-option-modifier 'meta)
   )))
 
+;; load paths
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/my_inits"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/my_packages"))
+
 
 ;; Package settings
 
@@ -716,8 +720,6 @@
   )
 
 (use-package my_macros
-  :load-path
-		"~/.emacs.d/"
   :bind
 		(
 			("C-c m j" . my_macro_copy_all_agenda_items_link_to_journal)
