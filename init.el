@@ -134,6 +134,12 @@
 		(evil-mode 1)
 		; change granularity level of undo
 		(setq evil-want-fine-undo t)
+		(general-define-key
+			:states 'motion
+			;; swap ; and :
+			";" 'evil-ex
+			":" 'evil-repeat-find-char
+		 )
   :hook
 		(after-change-major-mode . (lambda ()
 			;; Treat underscore as part of the whole word for all major mode
@@ -146,8 +152,6 @@
   		;; Don't use evil-collection in w3m
 		(delete 'w3m evil-collection-mode-list)
 		(evil-collection-init)
-		(evil-collection-swap-key nil 'evil-motion-state-map
-  ";" ":")
   :custom
 		(evil-collection-setup-minibuffer t)
   )
