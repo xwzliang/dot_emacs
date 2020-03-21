@@ -57,7 +57,6 @@
 		;; Use cookies
 		(setq w3m-use-cookies t)
 		(setq w3m-cookie-file "~/.emacs.d/cookie")
-		(evil-set-initial-state 'w3m-mode 'normal)
   :hook
 		(w3m-mode . (lambda ()
 			(setq left-margin-width 5)

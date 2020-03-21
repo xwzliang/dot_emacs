@@ -894,8 +894,7 @@
 (use-package windmove
   :general
 		(
-			;; Enable in evil normal and motion state
-			:states '(normal motion)
+			:states '(normal motion emacs)
 			;; Override all other key bindings
 			:keymaps 'override
 			"M-h" 'windmove-left
