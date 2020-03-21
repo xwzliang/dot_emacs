@@ -734,6 +734,7 @@
 		(
 			("C-c m j" . my_macro_copy_all_agenda_items_link_to_journal)
 			("C-c m k" . my_macro_close_checklist_item_and_linked_todo_item)
+			("C-c m s" . my_macro_save_html_and_url)
   		 )
   )
 
