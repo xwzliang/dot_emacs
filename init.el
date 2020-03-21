@@ -146,6 +146,8 @@
   		;; Don't use evil-collection in w3m
 		(delete 'w3m evil-collection-mode-list)
 		(evil-collection-init)
+		(evil-collection-swap-key nil 'evil-motion-state-map
+  ";" ":")
   :custom
 		(evil-collection-setup-minibuffer t)
   )
