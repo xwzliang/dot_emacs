@@ -571,7 +571,7 @@
 		; Don't ask for confirmation when execute the code block
 		(setq org-confirm-babel-evaluate nil)
 		(setq org-todo-keywords '((sequence "SOMEDAY(s)" "TODO(t!)" "NEXT(n!)" "WAITING(w@/!)" "|" "DONE(d@)" "CANCELED(c@)")))
-		(setq org-tag-alist '(("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("URGENT" . ?u) ("optional" . ?o)))
+		(setq org-tag-alist '(("Daily" . ?d) ("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("URGENT" . ?u) ("optional" . ?o)))
 		(setq org-capture-templates
 		'(
 			("e" "Journal Entry"
