@@ -434,6 +434,7 @@
   		 )
   :hook
 		(magit-post-refresh . git-gutter:update-all-windows)
+		(after-save . magit-after-save-refresh-status)
   )
 
 (use-package evil-magit
