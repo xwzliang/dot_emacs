@@ -451,6 +451,11 @@
 		(evil magit)
   )
 
+(use-package forge
+  :after
+		(magit)
+  )
+
 (use-package insert-shebang
   :hook
 		;; For file extension in my_insert_file_type_list and file has not been created yet, insert shebang, two newline and enter evil-insert-state
