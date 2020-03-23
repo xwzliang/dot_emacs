@@ -69,6 +69,15 @@
 
 ;; Third party packages with use-package
 
+(use-package auto-package-update
+  :config
+		(setq package-archives '(
+			("gnu" . "http://elpa.gnu.org/packages/")
+			("melpa" . "https://melpa.org/packages/")
+			("org" . "https://orgmode.org/elpa/")
+		 ))
+  )
+
 (use-package general
   )
 
