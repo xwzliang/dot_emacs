@@ -931,6 +931,14 @@
 		(setq custom-file "~/.emacs.d/emacs-custom.el")
   )
 
+(use-package auth-source
+  :custom
+		(auth-sources (quote (
+			"~/.authinfo"
+			"~/Dropbox/keys/emacs/authinfo"
+		 )))
+)
+
 
 ;; Customize key bindings
 
