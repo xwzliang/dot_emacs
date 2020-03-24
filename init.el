@@ -79,6 +79,8 @@
   )
 
 (use-package general
+  :config
+		(general-create-definer my-prefix-key-evil-def :prefix "C-c e")
   )
 
 (use-package clues-theme
@@ -295,6 +297,33 @@
 (use-package helm-descbinds
   :config
 		(helm-descbinds-mode)
+  )
+
+(use-package helm-swoop
+  :after
+		(helm)
+  :bind
+  		(
+  			:map helm-command-map
+			("w w" . helm-multi-swoop)
+			("w a" . helm-multi-swoop-all)
+			("w m" . helm-multi-swoop-current-mode-from-helm-swoop)
+  		 )
+  :general
+  		(
+			;; Fix RET not working with helm-multi-swoop
+			:states '(normal insert)
+			:keymaps 'helm-multi-swoop-buffers-map
+			"RET"  (lambda () (interactive) (helm-exit-and-execute-action 'helm-multi-swoop--exec))
+  		 )
+  		(my-prefix-key-evil-def
+			:states 'motion
+		 	"w" 'helm-swoop-from-evil-search
+  		 )
+  :custom-face
+		(helm-swoop-target-line-block-face ((t nil)))
+		(helm-swoop-target-line-face ((t nil)))
+		(helm-swoop-target-word-face ((t (:foreground "gold3"))))
   )
 
 (use-package hydra
