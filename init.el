@@ -69,6 +69,9 @@
 
 ;; Third party packages with use-package
 
+(use-package restart-emacs
+  )
+
 (use-package auto-package-update
   :config
 		(setq package-archives '(
