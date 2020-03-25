@@ -326,6 +326,20 @@
 		(helm-swoop-target-word-face ((t (:foreground "gold3"))))
   )
 
+(use-package helm-ag
+  :bind
+  		(
+  			:map helm-command-map
+			("g g" . helm-ag)
+			("g d" . helm-do-ag)
+			("g b" . helm-do-ag-buffers)
+			("g p" . helm-do-ag-project-root)
+  		 )
+  :custom
+		;; Enable helm-follow-mode by default
+		(helm-follow-mode-persistent t)
+  )
+
 (use-package hydra
   )
 
