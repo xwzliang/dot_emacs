@@ -91,6 +91,9 @@
 		(load-theme 'clues t)
   )
 
+(use-package macrostep
+  )
+
 (use-package persp-mode
   :init
   		(add-hook 'after-init-hook 'persp-mode)
