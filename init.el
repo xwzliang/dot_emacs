@@ -196,6 +196,13 @@
 		(evil-replace-with-register-install)
   )
 
+(use-package evil-visualstar
+  :config
+		;; allowing for repeated * or #
+		(setq evil-visualstar/persistent t)
+		(global-evil-visualstar-mode)
+  )
+
 (use-package evil-nerd-commenter
   :config
 		(evilnc-default-hotkeys)
