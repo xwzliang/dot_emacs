@@ -190,6 +190,12 @@
   		(evil-exchange-install)
   )
 
+(use-package evil-replace-with-register
+  :config
+		(setq evil-replace-with-register-key (kbd "gr"))
+		(evil-replace-with-register-install)
+  )
+
 (use-package evil-nerd-commenter
   :config
 		(evilnc-default-hotkeys)
