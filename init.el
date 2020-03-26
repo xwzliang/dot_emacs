@@ -213,6 +213,14 @@
 		(evil-lion-mode)
   )
 
+(use-package evil-numbers
+  :bind
+  		(
+			("C-c +" . evil-numbers/inc-at-pt)
+			("C-c -" . evil-numbers/dec-at-pt)
+  		 )
+  )
+
 (use-package git-gutter
   :init
 		(add-hook 'after-init-hook 'global-git-gutter-mode)
