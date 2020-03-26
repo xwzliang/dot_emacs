@@ -185,6 +185,11 @@
 		(global-evil-surround-mode 1)
   )
 
+(use-package evil-exchange
+  :config
+  		(evil-exchange-install)
+  )
+
 (use-package evil-nerd-commenter
   :config
 		(evilnc-default-hotkeys)
