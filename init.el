@@ -208,6 +208,11 @@
 		(evilnc-default-hotkeys)
   )
 
+(use-package evil-lion
+  :config
+		(evil-lion-mode)
+  )
+
 (use-package git-gutter
   :init
 		(add-hook 'after-init-hook 'global-git-gutter-mode)
