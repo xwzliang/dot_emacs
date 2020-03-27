@@ -221,6 +221,17 @@
   		 )
   )
 
+(use-package evil-args
+  :bind
+  		(
+			;; "cia" change arg, "daa" delete arg
+			:map evil-inner-text-objects-map
+			("a" . evil-inner-arg)
+			:map evil-outer-text-objects-map
+			("a" . evil-outer-arg)
+  		 )
+  )
+
 (use-package git-gutter
   :init
 		(add-hook 'after-init-hook 'global-git-gutter-mode)
