@@ -240,6 +240,14 @@
 (use-package evil-visual-mark-mode
   )
 
+(use-package anzu
+  :config
+		(global-anzu-mode)
+  )
+
+(use-package evil-anzu
+  )
+
 (use-package git-gutter
   :init
 		(add-hook 'after-init-hook 'global-git-gutter-mode)
