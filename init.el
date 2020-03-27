@@ -248,6 +248,16 @@
 (use-package evil-anzu
   )
 
+(use-package evil-mc
+  :general
+  		(
+			:states '(normal visual)
+			"g m" evil-mc-cursors-map
+  		 )
+  :config
+		(global-evil-mc-mode)
+  )
+
 (use-package git-gutter
   :init
 		(add-hook 'after-init-hook 'global-git-gutter-mode)
