@@ -232,6 +232,11 @@
   		 )
   )
 
+(use-package evil-indent-plus
+  :config
+		(evil-indent-plus-default-bindings)
+  )
+
 (use-package git-gutter
   :init
 		(add-hook 'after-init-hook 'global-git-gutter-mode)
