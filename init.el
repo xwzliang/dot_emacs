@@ -269,6 +269,24 @@
 		(global-evil-mc-mode)
   )
 
+(use-package avy
+  :general
+  		(my-prefix-key-leader-def
+  			:states '(normal motion visual)
+			:prefix (concat my-leader " v")
+		 	"c" 'avy-goto-char
+		 	"w" 'avy-goto-word-1
+		 	"l" 'avy-goto-line
+		 	"o" 'avy-org-goto-heading-timer
+		 	"r" 'avy-resume
+  		 )
+  :custom-face
+		(avy-lead-face ((t (:background "blue" :foreground "white"))))
+		(avy-lead-face-0 ((t (:background "blue" :foreground "white"))))
+		(avy-lead-face-1 ((t (:background "blue" :foreground "white"))))
+		(avy-lead-face-2 ((t (:background "blue" :foreground "white"))))
+  )
+
 (use-package git-gutter
   :init
 		(add-hook 'after-init-hook 'global-git-gutter-mode)
