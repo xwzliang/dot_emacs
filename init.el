@@ -613,6 +613,15 @@
 		(magit)
   )
 
+(use-package gitignore-mode
+  )
+
+(use-package gitconfig-mode
+  )
+
+(use-package gitattributes-mode
+  )
+
 (use-package git-timemachine
   :bind
   		(
