@@ -86,14 +86,15 @@
 
 (use-package general
   :config
+		(general-auto-unbind-keys)
 		(general-create-definer my-prefix-key-evil-def :prefix "C-c e")
 		(defconst my-leader "SPC")
 		;; Unbind my-leader key
-  		(general-define-key
-			:keymaps 'override
-			:prefix my-leader
-		 	"" nil
-		  )
+  		;; (general-define-key
+		;; 	:keymaps 'override
+		;; 	:prefix my-leader
+		;;  	"" nil
+		;;   )
 		(general-create-definer my-prefix-key-leader-def
 			:keymaps 'override
 			:prefix my-leader
