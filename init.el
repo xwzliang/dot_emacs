@@ -613,6 +613,37 @@
 		(magit)
   )
 
+(use-package git-timemachine
+  :bind
+  		(
+			("C-c g r" . git-timemachine)
+  		 )
+  :general
+  		(my-prefix-key-leader-def
+  			:definer 'minor-mode
+  			:states '(normal motion visual)
+			:keymaps 'git-timemachine-mode
+			:prefix (concat my-leader " g")
+			"p" 'git-timemachine-show-previous-revision
+			"n" 'git-timemachine-show-next-revision
+			"g" 'git-timemachine-show-nth-revision
+			"t" 'git-timemachine-show-revision-fuzzy
+			"q" 'git-timemachine-quit
+			"w" 'git-timemachine-kill-abbreviated-revision
+			"W" 'git-timemachine-kill-revision
+			"b" 'git-timemachine-blame
+			"c" 'git-timemachine-show-commit
+			"?" 'git-timemachine-help
+  		 )
+  		(
+  			:definer 'minor-mode
+  			:states '(normal motion visual)
+			:keymaps 'git-timemachine-mode
+			"\C-k" 'git-timemachine-show-previous-revision
+			"\C-j" 'git-timemachine-show-next-revision
+  		 )
+  )
+
 (use-package insert-shebang
   :hook
 		;; For file extension in my_insert_file_type_list and file has not been created yet, insert shebang, two newline and enter evil-insert-state
