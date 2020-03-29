@@ -609,6 +609,18 @@
 		(evil magit)
   )
 
+(use-package magit-gitflow
+  :after
+		(magit)
+  :general
+  		(
+			:keymaps 'magit-mode-map
+			"gw" 'magit-gitflow-popup
+  		 )
+  :hook
+		(magit-mode . turn-on-magit-gitflow)
+  )
+
 (use-package forge
   :after
 		(magit)
