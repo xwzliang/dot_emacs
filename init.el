@@ -69,6 +69,9 @@
 
 ;; Third party packages with use-package
 
+(use-package delight
+  )
+
 (use-package restart-emacs
   )
 
