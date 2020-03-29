@@ -446,6 +446,14 @@
 		(helm-follow-mode-persistent t)
   )
 
+(use-package helm-make
+  :bind
+  		(
+  			:map helm-command-map
+			("k" . helm-make)
+  		 )
+  )
+
 (use-package hydra
   )
 
