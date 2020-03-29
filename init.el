@@ -188,6 +188,17 @@
 		(evil-collection-setup-minibuffer t)
   )
 
+(use-package linum-relative
+  :general
+  		(my-prefix-key-leader-def
+  			:states '(normal motion visual)
+		 	"l" 'linum-relative-toggle
+  		 )
+  :config
+		;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
+		(setq linum-relative-backend 'display-line-numbers-mode)
+  )
+
 (use-package smartparens-config
   :commands
   		smartparens-mode
