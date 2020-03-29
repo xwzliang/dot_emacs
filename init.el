@@ -943,6 +943,13 @@
 		))
   )
 
+(use-package define-word
+  :bind
+		(
+			("C-c m w" . define-word)
+  		 )
+  )
+
 (use-package my_macros
   :bind
 		(
