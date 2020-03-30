@@ -303,6 +303,10 @@
 (use-package evil-textobj-syntax
   )
 
+;; Evil operator g~ to cycle text objects through camelCase, kebab-case, snake_case and UPPER_CASE.
+(use-package evil-string-inflection
+  )
+
 (use-package avy
   :general
   		(my-prefix-key-leader-def
