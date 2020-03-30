@@ -299,6 +299,10 @@
 (use-package exato
   )
 
+;; This package provides h text objects for consecutive items with same syntax highlight.
+(use-package evil-textobj-syntax
+  )
+
 (use-package avy
   :general
   		(my-prefix-key-leader-def
