@@ -295,6 +295,10 @@
 (use-package evil-textobj-line
   )
 
+;; This package provides the x text object to manipulate html/xml tag attributes.
+(use-package exato
+  )
+
 (use-package avy
   :general
   		(my-prefix-key-leader-def
