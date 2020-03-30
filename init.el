@@ -153,6 +153,8 @@
 (use-package evil
   :init
 		(setq evil-want-keybinding nil)		;; required by evil-collection
+		; Don't use TAB to jump forward
+		(setq evil-want-C-i-jump nil)
   :bind
 		(
 			:map evil-motion-state-map
@@ -162,6 +164,12 @@
 			; Use C-b to evil-scroll-up instead of evil-scroll-page-up
 			("C-b" . evil-scroll-up)
 		 )
+  :general
+  		(my-prefix-key-leader-def
+  			:states '(normal motion visual)
+		 	"j" 'evil-jump-forward
+		 	"k" 'evil-jump-backward
+  		 )
   :config
 		(evil-mode 1)
 		; change granularity level of undo
