@@ -307,6 +307,12 @@
 (use-package evil-string-inflection
   )
 
+;; This package provides the f,c,d text object
+(use-package evil-cleverparens
+  ;; :hook
+  ;; 		((lisp-mode emacs-lisp-mode) . evil-cleverparens-mode)
+  )
+
 (use-package avy
   :general
   		(my-prefix-key-leader-def
