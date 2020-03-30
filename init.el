@@ -292,6 +292,9 @@
 		(global-evil-mc-mode)
   )
 
+(use-package evil-textobj-line
+  )
+
 (use-package avy
   :general
   		(my-prefix-key-leader-def
