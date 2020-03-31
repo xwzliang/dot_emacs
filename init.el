@@ -1013,6 +1013,17 @@
 			"^\\(buffer[0-9]+\\): +\\([0-9]+\\) +\\(bytes\\): +[\"]\\(.*\\)[\"]")
   )
 
+
+(use-package which-key
+  :config
+		(setq which-key-allow-evil-operators t)
+		(setq which-key-show-operator-state-maps t)
+		(which-key-mode)
+  )
+
+
+;; my packages with use-package
+
 (use-package my_macros
   :bind
 		(
