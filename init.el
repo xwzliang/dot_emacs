@@ -1003,6 +1003,16 @@
   		 )
   )
 
+(use-package emamux
+  :bind-keymap
+		("C-c x" . emamux:keymap)
+  :custom
+  		(emamux:completing-read-type 'helm)
+  		(emamux:show-buffers-with-index nil)
+  		(emamux:get-buffers-regexp
+			"^\\(buffer[0-9]+\\): +\\([0-9]+\\) +\\(bytes\\): +[\"]\\(.*\\)[\"]")
+  )
+
 (use-package my_macros
   :bind
 		(
