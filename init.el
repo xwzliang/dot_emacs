@@ -954,6 +954,14 @@
 		(setq deft-recursive t)
   )
 
+(use-package howm
+  :config
+  		(setq howm-directory "~/Dropbox/org/howm")
+  :custom-face
+		(howm-mode-title-face ((t (:foreground "#BDBA9F"))))
+		(howm-reminder-today-face ((t (:foreground "#55C0D2"))))
+  )
+
 (use-package anki-editor
   :after
 		(org org-expiry)
