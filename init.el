@@ -1021,6 +1021,19 @@
 		(which-key-mode)
   )
 
+(use-package helpful
+  :general
+		(
+			:prefix "C-h"
+			"f" 'helpful-callable
+			"v" 'helpful-variable
+			"k" 'helpful-key
+			"x" 'helpful-at-point
+			"F" 'helpful-function
+			"D" 'helpful-command
+  		 )
+  )
+
 
 ;; my packages with use-package
 
