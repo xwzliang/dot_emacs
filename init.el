@@ -1052,6 +1052,16 @@
   		 )
   )
 
+(use-package undo-propose
+  ;; :config
+  ;; 		(global-undo-tree-mode -1)
+  :general
+		(
+			:states 'normal
+			"U" 'undo-propose
+  		 )
+  )
+
 
 ;; my packages with use-package
 
