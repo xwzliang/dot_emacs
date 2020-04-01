@@ -944,6 +944,16 @@
 		(setq org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib"))
   )
 
+(use-package deft
+  :bind
+  		(
+			("C-c o d" . deft)
+  		 )
+  :config
+		(setq deft-directory "~/Dropbox/org/notes")
+		(setq deft-recursive t)
+  )
+
 (use-package anki-editor
   :after
 		(org org-expiry)
