@@ -669,6 +669,27 @@
 		(magit)
   )
 
+(use-package hl-todo
+  :general
+  		(
+			:prefix "C-c t"
+			:keymaps 'hl-todo-mode-map
+			"p" 'hl-todo-previous
+			"n" 'hl-todo-next
+			"o" 'hl-todo-occur
+			"i" 'hl-todo-insert
+  		 )
+  :config
+		;; (setq hl-todo-keyword-faces '(
+		;; 	("TODO"   . "#FF0000")
+		;; 	("FIXME"  . "#FF0000")
+		;; 	("DEBUG"  . "#A020F0")
+		;; 	("GOTCHA" . "#FF4500")
+		;; 	("STUB"   . "#1E90FF")
+		;;  ))
+		(global-hl-todo-mode 1)
+  )
+
 (use-package gitignore-mode
   )
 
