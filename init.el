@@ -937,6 +937,14 @@
   			(evil-set-initial-state 'org-brain-visualize-mode 'emacs)))
   )
 
+(use-package org-projectile
+  :config
+		(setq org-projectile-projects-file (concat (file-name-as-directory org-directory) "projects.org"))
+		(push (org-projectile-project-todo-entry) org-capture-templates)
+		(setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+		(setq org-confirm-elisp-link-function nil)
+  )
+
 (use-package org-ref
   :after
 		(org)
