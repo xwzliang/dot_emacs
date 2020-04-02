@@ -69,6 +69,9 @@
 
 ;; Third party packages with use-package
 
+(use-package f
+  )
+
 (use-package delight
   )
 
@@ -846,10 +849,10 @@
 		(setq org-capture-templates
 		'(
 			("e" "Journal Entry"
-				entry (file+olp+datetree (lambda () (concat org-directory "/journal.org")))
+				entry (file+olp+datetree (lambda () (f-join org-directory "journal.org")))
 				"* %?")
 			("j" "Journal Checklist"
-				checkitem (file+olp+datetree (lambda () (concat org-directory "/journal.org")))
+				checkitem (file+olp+datetree (lambda () (f-join org-directory "journal.org")))
 				"[/]\n- [ ] %?")
 			("c" "Checklist Item"
 				plain (function (lambda nil (goto-char (point))))
@@ -870,8 +873,7 @@
   :config
 		; Need this to resolve id links
 		(setq org-id-link-to-org-use-id t)
-		;; (setq org-id-locations-file "~/Dropbox/org/.org-id-locations")
-		(setq org-id-locations-file (concat org-directory "/.org-id-locations"))
+		(setq org-id-locations-file (f-join org-directory ".org-id-locations"))
   )
 
 (use-package org-agenda
@@ -939,7 +941,7 @@
 
 (use-package org-projectile
   :config
-		(setq org-projectile-projects-file (concat (file-name-as-directory org-directory) "projects.org"))
+		(setq org-projectile-projects-file (f-join org-directory "projects.org"))
 		(push (org-projectile-project-todo-entry) org-capture-templates)
 		(setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
 		(setq org-confirm-elisp-link-function nil)
@@ -958,13 +960,13 @@
 			("C-c o d" . deft)
   		 )
   :config
-		(setq deft-directory "~/Dropbox/org/notes")
+		(setq deft-directory (f-join org-directory "notes"))
 		(setq deft-recursive t)
   )
 
 (use-package howm
   :config
-  		(setq howm-directory "~/Dropbox/org/howm")
+  		(setq howm-directory (f-join org-directory "howm"))
   :custom-face
 		(howm-mode-title-face ((t (:foreground "#BDBA9F"))))
 		(howm-reminder-today-face ((t (:foreground "#55C0D2"))))
