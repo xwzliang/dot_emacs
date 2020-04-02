@@ -638,7 +638,6 @@
 			("C-c g c" . magit-blame)
 			("C-c g b" . magit-branch)
 			("C-c g s" . magit-status)
-			("C-c g t" . magit-tag)
 			:map magit-mode-map
 			("o" . magit-file-checkout)
   		 )
@@ -688,6 +687,20 @@
 		;; 	("STUB"   . "#1E90FF")
 		;;  ))
 		(global-hl-todo-mode 1)
+  )
+
+(use-package magit-todos
+  :bind
+  		(
+			("C-c g t" . magit-todos-mode)
+  			:map helm-command-map
+			("g t" . helm-magit-todos)
+  		 )
+  :config
+		;; (if (executable-find "nice")
+		;; 	(setq magit-todos-nice t))
+		(if (executable-find "rg")
+			(setq magit-todos-scanner 'magit-todos--scan-with-rg))
   )
 
 (use-package gitignore-mode
