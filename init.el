@@ -591,6 +591,15 @@
 		(setq helm-yas-space-match-any-greedy t)
   )
 
+(use-package rg
+  :config
+  		(rg-enable-default-bindings)
+  :custom-face
+		(rg-info-face ((t (:foreground "#0ff"))))
+		(rg-line-number-face ((t (:foreground "#0ff"))))
+		(rg-match-face ((t (:foreground "gold3"))))
+  )
+
 (use-package bookmark+
   :load-path
 		"~/.emacs.d/custom/bookmark-plus/"
