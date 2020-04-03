@@ -600,6 +600,26 @@
 		(rg-match-face ((t (:foreground "gold3"))))
   )
 
+(use-package helm-rg
+  :bind
+  		(
+  			:map helm-command-map
+			("g r" . helm-rg)
+  			:map helm-rg-map
+			("C-u" . helm-find-files-up-one-level)
+  		 )
+  :config
+		(setq helm-rg--color-format-argument-alist
+			'((red :cmd-line yellow :text-property yellow)))
+		;; Enable follow mode by helm-attrset for helm-rg-process-source
+		(helm-attrset 'follow 1 helm-rg-process-source)
+  :custom-face
+		(helm-rg-title-face ((t (:foreground "green" :weight bold))))
+		(helm-rg-line-number-match-face ((t (:foreground "#0ff" :underline t))))
+		(helm-rg-error-message ((t (:foreground "pink"))))
+		(helm-rg-preview-line-highlight ((t (:foreground "gold3"))))
+  )
+
 (use-package bookmark+
   :load-path
 		"~/.emacs.d/custom/bookmark-plus/"
