@@ -1017,6 +1017,15 @@
 		(setq org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib"))
   )
 
+(use-package org-pomodoro
+  :after
+		(org)
+  :bind
+  		(
+			("C-c o t" . org-pomodoro)
+  		 )
+  )
+
 (use-package deft
   :bind
   		(
