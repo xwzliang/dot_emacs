@@ -77,4 +77,9 @@
 		)))
   )
 
+(use-package browse-url
+  :custom
+		(browse-url-browser-function (quote w3m-browse-url))
+  )
+
 (provide 'init_emacs-w3m)
