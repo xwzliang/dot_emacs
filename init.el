@@ -1026,6 +1026,35 @@
   		 )
   )
 
+(use-package org-present
+  :after
+		(org)
+  :config
+		;; Some evil keybindings are made afterwards because of the eval-after-load. There's nothing general can do about this. You need to use with-eval-after-load/:config
+		(general-define-key
+			:definer 'minor-mode
+			:states 'motion
+			:keymaps 'org-present-mode
+			"<left>" 'org-present-prev
+			"<right>" 'org-present-next
+			"k" 'org-present-prev
+			"j" 'org-present-next
+			"g g" 'org-present-beginning
+			"G" 'org-present-end
+		 )
+  :hook
+		(org-present-mode . (lambda ()
+			(org-display-inline-images)
+			(org-present-read-only)
+			(org-present-hide-cursor)
+		 ))
+		(org-present-mode-quit . (lambda ()
+			(org-remove-inline-images)
+			(org-present-read-write)
+			(org-present-show-cursor)
+		 ))
+  )
+
 (use-package deft
   :bind
   		(
