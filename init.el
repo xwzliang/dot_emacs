@@ -113,6 +113,7 @@
   )
 
 (use-package persp-mode
+  :delight
   :init
   		(add-hook 'after-init-hook 'persp-mode)
   :config
@@ -123,6 +124,7 @@
 
 ;; company-mode
 (use-package company
+  :delight
   :init
 		(add-hook 'after-init-hook 'global-company-mode)
   :bind
@@ -278,6 +280,7 @@
   )
 
 (use-package anzu
+  :delight
   :config
 		(global-anzu-mode)
   )
@@ -286,6 +289,7 @@
   )
 
 (use-package evil-mc
+  :delight
   :general
   		(
 			:states '(normal visual)
@@ -316,6 +320,10 @@
   ;; 		((lisp-mode emacs-lisp-mode) . evil-cleverparens-mode)
   )
 
+(use-package undo-tree
+  :delight
+  )
+
 (use-package avy
   :general
   		(my-prefix-key-leader-def
@@ -335,6 +343,7 @@
   )
 
 (use-package git-gutter
+  :delight
   :init
 		(add-hook 'after-init-hook 'global-git-gutter-mode)
   :bind
@@ -382,6 +391,7 @@
 
 
 (use-package helm
+  :delight
   :bind-keymap
 		("C-c h" . helm-command-prefix)
   :bind
@@ -502,6 +512,7 @@
   )
 
 (use-package projectile
+  :delight
   :bind-keymap
 		("C-c p" . projectile-command-map)
   :bind
@@ -814,6 +825,7 @@
   )
 
 (use-package flycheck
+  :delight
   :config
 		(add-to-list 'flycheck-gcc-include-path (getenv "unity_path"))
 		(setq-default flycheck-disabled-checkers '(
@@ -832,6 +844,7 @@
   )
 
 (use-package golden-ratio
+  :delight
   :config
 		(golden-ratio-mode 1)
   )
@@ -930,6 +943,10 @@
 			(prettify-symbols-mode)))
   )
 
+(use-package org-indent
+  :delight
+  )
+
 (use-package org-id
   :after
 		(org)
@@ -955,6 +972,7 @@
   )
 
 (use-package evil-org
+  :delight
   :after
 		(evil org)
   :config
@@ -1144,6 +1162,7 @@
 
 
 (use-package which-key
+  :delight
   :config
 		(setq which-key-allow-evil-operators t)
 		(setq which-key-show-operator-state-maps t)
@@ -1359,6 +1378,14 @@
 (use-package custom
   :config
 		(setq custom-file "~/.emacs.d/emacs-custom.el")
+  )
+
+(use-package simple
+  :delight visual-line-mode
+  )
+
+(use-package eldoc
+  :delight
   )
 
 (use-package auth-source
