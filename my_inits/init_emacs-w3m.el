@@ -13,8 +13,8 @@
 			("g" . beginning-of-buffer)
 			("G" . end-of-buffer)
 			("D" . w3m-delete-buffer)
-			("m" . w3m-bookmark-view)
-			("M" . w3m-bookmark-view-new-session)
+			("m" . w3m-bookmark-view-new-session)
+			("M" . helm-firefox-bookmarks)
 			("V" . w3m-view-url-with-browse-url)
 			("u" . w3m-scroll-down-or-previous-url)
 			("y" . evil-yank)
@@ -68,5 +68,13 @@
 									:foreground "black")
 		))
  )
+
+(use-package helm-firefox
+  :config
+		(cond ((string-equal system-type "darwin")
+			(progn
+				(setq helm-firefox-default-directory "~/Library/Application Support/Firefox/")
+		)))
+  )
 
 (provide 'init_emacs-w3m)
