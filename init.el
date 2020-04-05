@@ -1061,6 +1061,9 @@
   		 )
   )
 
+(use-package hide-mode-line
+  )
+
 (use-package org-present
   :after
 		(org)
@@ -1082,11 +1085,13 @@
 			(org-display-inline-images)
 			(org-present-read-only)
 			(org-present-hide-cursor)
+			(hide-mode-line-mode +1)
 		 ))
 		(org-present-mode-quit . (lambda ()
 			(org-remove-inline-images)
 			(org-present-read-write)
 			(org-present-show-cursor)
+			(hide-mode-line-mode -1)
 		 ))
   )
 
