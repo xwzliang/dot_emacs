@@ -109,6 +109,23 @@
 		(load-theme 'clues t)
   )
 
+(use-package doom-modeline
+  :config
+  		(doom-modeline-mode 1)
+  :custom-face
+		(doom-modeline-buffer-modified ((t (:inherit bold :foreground "brightblack"))))
+		(doom-modeline-debug ((t nil)))
+		(doom-modeline-evil-emacs-state ((t nil)))
+		(doom-modeline-evil-insert-state ((t nil)))
+		(doom-modeline-evil-motion-state ((t nil)))
+		(doom-modeline-evil-normal-state ((t nil)))
+		(doom-modeline-evil-operator-state ((t nil)))
+		(doom-modeline-evil-visual-state ((t nil)))
+		(doom-modeline-info ((t (:inherit bold))))
+		(doom-modeline-project-dir ((t (:inherit bold))))
+		(doom-modeline-warning ((t nil)))
+  )
+
 (use-package macrostep
   )
 
