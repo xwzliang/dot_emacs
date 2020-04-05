@@ -1418,3 +1418,12 @@
 		 )))
 )
 
+(use-package eshell
+  :bind
+  		(
+			("C-c e s" . eshell)
+  		 )
+  :custom-face
+		(eshell-prompt ((t (:foreground "green" :weight bold))))
+  )
+
