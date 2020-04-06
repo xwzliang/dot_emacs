@@ -1226,6 +1226,12 @@
   		 )
   )
 
+(use-package eshell-z
+  :hook
+		(eshell-mode . (lambda ()
+            (require 'eshell-z)
+		))
+  )
 
 ;; my packages with use-package
 
