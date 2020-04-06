@@ -129,6 +129,16 @@
 (use-package macrostep
   )
 
+(use-package transpose-frame
+  :general
+  		(
+  			:prefix "C-c f"
+		 	"t" 'transpose-frame
+		 	"f" 'flip-frame
+		 	"F" 'flop-frame
+  		 )
+  )
+
 (use-package persp-mode
   :delight
   :init
