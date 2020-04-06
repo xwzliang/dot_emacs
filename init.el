@@ -1052,6 +1052,19 @@
 		(setq org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib"))
   )
 
+(use-package org-web-tools
+  :general
+  		(
+			:prefix "C-c o w"
+			"u" 'org-web-tools-insert-link-for-url
+			"w" 'org-web-tools-read-url-as-org
+			"W" 'org-web-tools-insert-web-page-as-entry
+			"v" 'org-web-tools-convert-links-to-page-entries
+			"t" 'org-web-tools-archive-attach
+			"V" 'org-web-tools-archive-view
+  		 )
+  )
+
 (use-package org-pomodoro
   :after
 		(org)
