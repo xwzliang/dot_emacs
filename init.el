@@ -902,6 +902,18 @@
 			"g ]" 'org-next-link
 			"g [" 'org-previous-link
   		 )
+		(
+			:keymaps 'org-mode-map
+			:prefix "C-c o c"
+			"i" 'org-clock-in
+			"o" 'org-clock-out
+			"g" 'org-clock-goto
+			"G" 'org-clock-in-last
+			"q" 'org-clock-cancel
+			"p" 'org-clock-report
+			"v" 'org-clock-display
+			"e" 'org-clock-modify-effort-estimate
+  		 )
   :config
 		; Log into a logbook drawer
 		(setq org-log-into-drawer t)
