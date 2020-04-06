@@ -1175,6 +1175,18 @@
 (use-package emamux
   :bind-keymap
 		("C-c x" . emamux:keymap)
+  :bind
+		(
+			:map emamux:keymap
+			("y" . emamux:copy-kill-ring)
+			("p" . emamux:yank-from-list-buffers)
+			("k" . emamux:close-panes)
+			("s" . emamux:send-command)
+			("r" . emamux:run-command)
+			("!" . emamux:run-region)
+			("." . emamux:run-last-command)
+			("x" . eshell)
+  		 )
   :custom
   		(emamux:completing-read-type 'helm)
   		(emamux:show-buffers-with-index nil)
