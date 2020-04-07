@@ -911,6 +911,7 @@
 			"g k" 'evil-previous-visual-line
 			"g ]" 'org-next-link
 			"g [" 'org-previous-link
+			"g s" 'org-set-property
   		 )
 		(
 			:keymaps 'org-mode-map
@@ -942,6 +943,19 @@
 		(setq org-enforce-todo-checkbox-dependencies t)
 		(setq org-track-ordered-property-with-tag t)
 		(setq org-clock-into-drawer "CLOCKING")
+		(setq org-clock-out-remove-zero-time-clocks t)
+		(setq org-clock-out-when-done t)
+		(setq org-clock-report-include-clocking-task t)
+		;; use pretty things for the clocktable
+		;; (setq org-pretty-entities t)
+		;; Resume clocking task when emacs is restarted
+		(org-clock-persistence-insinuate)
+		;; Save the running clock and all clock history when exiting Emacs, load it on startup
+		(setq org-clock-persist t)
+		;; Resume clocking task on clock-in if the clock is open
+		(setq org-clock-in-resume t)
+		;; Do not prompt to resume an active clock, just resume it
+		(setq org-clock-persist-query-resume nil)
 		(setq org-startup-indented t)
 		(setq org-hide-leading-stars t)
 		; Add beamer for exporting option
@@ -957,10 +971,14 @@
 			))
 		; Don't ask for confirmation when execute the code block
 		(setq org-confirm-babel-evaluate nil)
+		;; global Effort estimate values
+		(setq org-global-properties
+			'(("Effort_ALL" .
+				"0:15 0:30 0:45 1:00 2:00 3:00 4:00 6:00 8:00")))
 		(setq org-todo-keywords '((sequence "SOMEDAY(s)" "TODO(t!)" "NEXT(n!)" "WAITING(w@/!)" "|" "DONE(d@)" "CANCELED(c@)")))
 		;; TODO state to which a repeater should return the repeating task.
 		(setq org-todo-repeat-to-state "TODO")
-		(setq org-tag-alist '(("Daily" . ?d) ("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("URGENT" . ?u) ("optional" . ?o)))
+		(setq org-tag-alist '(("Daily" . ?d) ("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("IMPORTANT" . ?i) ("URGENT" . ?u) ("optional" . ?o)))
 		(setq org-capture-templates
 		'(
 			("e" "Journal Entry"
@@ -980,6 +998,8 @@
 			(push '("[ ]" . "☐") prettify-symbols-alist)
 			(push '("[X]" . "☑" ) prettify-symbols-alist)
 			(prettify-symbols-mode)))
+  :custom-face
+		(org-table ((t (:foreground "white"))))
   )
 
 (use-package org-indent
@@ -1004,10 +1024,18 @@
 			:keymaps 'org-agenda-mode-map
 			"D" 'org-agenda-day-view
 			"W" 'org-agenda-week-view
+			"g l" 'org-agenda-log-mode
+			"g ]" 'org-next-link
+			"g [" 'org-previous-link
   		 )
   :config
 		; agenda files
-		(add-to-list 'org-agenda-files org-directory)
+		(setq org-agenda-files
+			(f-files org-directory (lambda (file) (equal (f-ext file) "org")))
+		 )
+		(setq org-agenda-start-with-clockreport-mode t)
+		;; Org agenda start from day view
+		(setq org-agenda-span 'day)
   )
 
 (use-package evil-org
@@ -1061,9 +1089,10 @@
 
 (use-package org-projectile
   :config
-		(setq org-projectile-projects-file (f-join org-directory "projects.org"))
+		;; (setq org-projectile-projects-directory (f-join org-directory "projectile"))
+		(setq org-projectile-projects-file (f-join org-directory "1_2_projects.org"))
 		(push (org-projectile-project-todo-entry) org-capture-templates)
-		(setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+		;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
 		(setq org-confirm-elisp-link-function nil)
   )
 
