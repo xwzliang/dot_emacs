@@ -1084,6 +1084,9 @@
 		 )
   )
 
+(use-package org-ql
+  )
+
 (use-package calfw
   )
 
