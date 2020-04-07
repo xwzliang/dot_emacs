@@ -1065,6 +1065,25 @@
 		(setq org-expiry-inactive-timestamps t)
   )
 
+(use-package helm-org-rifle
+  :general
+  		(
+			:prefix "C-c o g"
+			"g" 'helm-org-rifle
+			"a" 'helm-org-rifle-agenda-files
+			"d" 'helm-org-rifle-directories
+			"f" 'helm-org-rifle-files
+			"b" 'helm-org-rifle-current-buffer
+			"o" 'helm-org-rifle-org-directory
+			"n" 'helm-org-rifle-my-notes
+  		 )
+  :preface
+		(defun helm-org-rifle-my-notes ()
+			(interactive)
+			(helm-org-rifle-directories (list (f-join org-directory "notes")))
+		 )
+  )
+
 (use-package calfw
   )
 
