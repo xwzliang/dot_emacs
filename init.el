@@ -1385,8 +1385,8 @@
   :bind
 		(
 			:map dired-mode-map
-			; Use "C-c e" to edit in dired mode.
-			("C-c e" . wdired-change-to-wdired-mode)
+			; Use "C-c d e" to edit in dired mode.
+			("C-c d e" . wdired-change-to-wdired-mode)
 		 )
   :config
 		(setq
