@@ -1036,6 +1036,32 @@
 		(setq org-agenda-start-with-clockreport-mode t)
 		;; Org agenda start from day view
 		(setq org-agenda-span 'day)
+		;; Add custom view for agenda
+		(add-to-list 'org-agenda-custom-commands
+			'("L" "Agenda and non-scheduled TODO|SOMEDAY tasks" (
+				(agenda "" (
+					;; (org-agenda-span 1)
+					(org-agenda-span 'day)
+					(org-agenda-prefix-format '((agenda . " %1c %?-12t% s")))
+				))
+				(todo "TODO|SOMEDAY" (
+					(org-agenda-overriding-header "=== TODO|SOMEDAY tasks without scheduled date ===")
+					(org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+					(org-agenda-prefix-format '((todo . " %1c ")))
+				))
+		)))
+		(add-to-list 'org-agenda-custom-commands
+			'("l" "Agenda and non-scheduled TODO tasks" (
+				(agenda "" (
+					(org-agenda-span 'day)
+					(org-agenda-prefix-format '((agenda . " %1c %?-12t% s")))
+				))
+				(todo "TODO" (
+					(org-agenda-overriding-header "=== TODO tasks without scheduled date ===")
+					(org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+					(org-agenda-prefix-format '((todo . " %1c ")))
+				))
+		)))
   )
 
 (use-package evil-org
