@@ -1138,6 +1138,11 @@
   		 )
   )
 
+(use-package org-board
+  :bind-keymap
+		("C-c o b" . org-board-keymap)
+  )
+
 (use-package org-pomodoro
   :after
 		(org)
