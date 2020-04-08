@@ -1536,3 +1536,13 @@
 		(eshell-prompt ((t (:foreground "green" :weight bold))))
   )
 
+(use-package eww
+  :hook
+		(eww-mode . (lambda ()
+			(setq left-margin-width 5)
+			(setq right-margin-width 5)
+			(face-remap-add-relative 'default
+									:background "white"
+									:foreground "black")
+		))
+)
