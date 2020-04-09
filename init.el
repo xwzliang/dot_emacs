@@ -1036,6 +1036,7 @@
 		(setq org-agenda-start-with-clockreport-mode t)
 		;; Org agenda start from day view
 		(setq org-agenda-span 'day)
+		(setq org-agenda-start-with-log-mode t)
 		;; Add custom view for agenda
 		(add-to-list 'org-agenda-custom-commands
 			'("L" "Agenda and non-scheduled TODO|SOMEDAY tasks" (
