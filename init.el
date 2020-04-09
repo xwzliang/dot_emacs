@@ -1065,6 +1065,17 @@
 		)))
   )
 
+(use-package org-timeline
+  :hook
+  		(org-agenda-finalize . org-timeline-insert-timeline)
+  :custom-face
+		;; Background
+		(org-timeline-elapsed ((t (:background "brightblack"))))
+		;; Scheduled task
+		(org-timeline-block ((t (:background "blue"))))
+		(org-timeline-clocked ((t (:background "MediumSeaGreen"))))
+  )
+
 (use-package evil-org
   :delight
   :after
