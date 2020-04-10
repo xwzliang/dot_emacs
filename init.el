@@ -1103,6 +1103,30 @@
 		(setq org-expiry-inactive-timestamps t)
   )
 
+(use-package org-super-agenda
+  :general
+  		(
+			:keymaps 'org-agenda-mode-map
+			"g p" 'my-org-super-agenda-toggle
+  		 )
+  :preface
+		(defun my-org-super-agenda-toggle ()
+			;; Toggle org-super-agenda-mode and refresh agenda
+			(interactive)
+			(if org-super-agenda-mode
+				(org-super-agenda-mode -1)
+				(org-super-agenda-mode 1)
+				)
+			(org-agenda-redo)
+		 )
+  :config
+		;; items are automatically grouped by their category (which is usually the filename of the buffer they’re in)
+		(setq org-super-agenda-groups
+			'((:auto-category t)))
+		;; don't break evil on org-super-agenda headings
+		(setq org-super-agenda-header-map (make-sparse-keymap))
+  )
+
 (use-package helm-org-rifle
   :general
   		(
