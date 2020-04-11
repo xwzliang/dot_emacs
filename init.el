@@ -1127,6 +1127,18 @@
 		(setq org-super-agenda-header-map (make-sparse-keymap))
   )
 
+(use-package origami
+  :after
+		(org-super-agenda)
+  :bind
+  		(
+			:map org-super-agenda-header-map
+			("TAB" . origami-toggle-node)
+  		 )
+  :hook
+		(org-agenda-finalize . origami-mode)
+  )
+
 (use-package helm-org-rifle
   :general
   		(
