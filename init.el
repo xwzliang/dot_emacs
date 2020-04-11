@@ -1620,3 +1620,8 @@
 									:foreground "black")
 		))
 )
+
+(use-package hideshow
+  :hook
+		(prog-mode . hs-minor-mode)
+)
