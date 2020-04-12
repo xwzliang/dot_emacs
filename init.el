@@ -1260,6 +1260,27 @@
 		 ))
   )
 
+(use-package nov
+  :mode
+  		("\\.epub\\'" . nov-mode)
+  :general
+		(
+			:states 'normal
+			:keymaps 'nov-mode-map
+			"u" 'nov-scroll-up
+			"U" 'nov-scroll-down
+  		 )
+  :hook
+		(nov-mode . (lambda ()
+			(setq left-margin-width 5)
+			(setq right-margin-width 5)
+			(visual-line-mode 1)
+			(face-remap-add-relative 'default
+									:background "white"
+									:foreground "black")
+		))
+  )
+
 (use-package deft
   :bind
   		(
