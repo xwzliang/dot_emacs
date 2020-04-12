@@ -55,6 +55,8 @@
   )))
 
 ;; load paths
+(let ((default-directory "~/.emacs.d/custom/"))
+  (normal-top-level-add-subdirs-to-load-path))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/my_inits"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/my_packages"))
 
@@ -659,8 +661,6 @@
   )
 
 (use-package bookmark+
-  :load-path
-		"~/.emacs.d/custom/bookmark-plus/"
   :custom
 		(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
   )
