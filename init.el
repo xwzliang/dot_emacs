@@ -1260,6 +1260,16 @@
 		 ))
   )
 
+(use-package org-noter
+  :general
+  		(
+			:prefix "C-c n"
+			"n" 'org-noter
+			"i" 'org-noter-insert-note
+			"." 'org-noter-sync-current-note
+  		 )
+  )
+
 (use-package nov
   :mode
   		("\\.epub\\'" . nov-mode)
