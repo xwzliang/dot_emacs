@@ -1270,6 +1270,23 @@
   		 )
   )
 
+(use-package org-roam
+  :general
+  		(
+			:prefix "C-c n"
+			"r" 'org-roam
+			"f" 'org-roam-find-file
+			"g" 'org-roam-show-graph
+			"l" 'org-roam-insert
+  		 )
+  :config
+  		(setq org-roam-completion-system 'helm)
+  :hook
+  		(after-init . org-roam-mode)
+  :custom
+  		(org-roam-directory (f-join org-directory "wiki"))
+  )
+
 (use-package nov
   :mode
   		("\\.epub\\'" . nov-mode)
@@ -1294,10 +1311,10 @@
 (use-package deft
   :bind
   		(
-			("C-c o d" . deft)
+			("C-c n d" . deft)
   		 )
   :config
-		(setq deft-directory (f-join org-directory "notes"))
+		(setq deft-directory (f-join org-directory "wiki"))
 		(setq deft-recursive t)
   )
 
