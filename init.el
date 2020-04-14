@@ -892,7 +892,7 @@
 		(setq org-directory "~/Dropbox/org")
   :bind
   		(
-			("C-c o j" . org-capture)
+			("C-c o c" . org-capture)
 			("C-c o a" . org-agenda)
 			("C-c o l" . org-store-link)
 			:map org-mode-map
@@ -915,7 +915,7 @@
   		 )
 		(
 			:keymaps 'org-mode-map
-			:prefix "C-c o c"
+			:prefix "C-c o k"
 			"i" 'org-clock-in
 			"o" 'org-clock-out
 			"g" 'org-clock-goto
