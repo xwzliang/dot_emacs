@@ -1215,6 +1215,11 @@
   		 )
   )
 
+(use-package org-download
+  :hook
+  		(org-mode . org-download-enable)
+  )
+
 (use-package org-board
   :bind-keymap
 		("C-c o b" . org-board-keymap)
