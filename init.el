@@ -1290,6 +1290,17 @@
   		(org-roam-directory (f-join org-directory "wiki"))
   )
 
+(use-package org-journal
+  :bind
+  		(
+			("C-c o j" . org-journal-new-entry)
+  		 )
+  :custom
+  		(org-journal-dir (f-join org-directory "journal"))
+  		(org-journal-file-format "%Y-%m-%d.org")
+  		(org-journal-date-prefix "#+TITLE: ")
+  )
+
 (use-package nov
   :mode
   		("\\.epub\\'" . nov-mode)
