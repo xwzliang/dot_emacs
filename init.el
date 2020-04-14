@@ -990,6 +990,9 @@
 			("c" "Checklist Item"
 				plain (function (lambda nil (goto-char (point))))
 				"*** Checklist\n- [ ] %?")
+			("i" "Inbox TODO"
+				entry (file (lambda () (f-join org-directory "inbox.org")))
+				"* SOMEDAY %?")
 		))
   :hook
 		(org-mode . (lambda ()
