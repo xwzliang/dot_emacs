@@ -1335,6 +1335,9 @@
   :config
 		(setq deft-directory (f-join org-directory "wiki"))
 		(setq deft-recursive t)
+  :hook
+  		(deft-mode . (lambda ()
+  			(evil-set-initial-state 'deft-mode 'insert)))
   )
 
 (use-package howm
