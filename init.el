@@ -80,6 +80,9 @@
 (use-package restart-emacs
   )
 
+(use-package el-patch
+  )
+
 (use-package auto-package-update
   :config
 		(setq package-archives '(
