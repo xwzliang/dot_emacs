@@ -1750,3 +1750,11 @@
   :hook
 		(prog-mode . hs-minor-mode)
 )
+
+(use-package xref
+  :general
+  		(
+  			:states '(normal motion visual)
+		 	"M-." 'xref-find-definitions
+  		 )
+)
