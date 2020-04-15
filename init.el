@@ -991,7 +991,7 @@
 		(setq org-global-properties
 			'(("Effort_ALL" .
 				"0:15 0:30 0:45 1:00 2:00 3:00 4:00 6:00 8:00")))
-		(setq org-todo-keywords '((sequence "SOMEDAY(s)" "TODO(t!)" "NEXT(n!)" "WAITING(w@/!)" "|" "DONE(d@)" "CANCELED(c@)")))
+		(setq org-todo-keywords '((sequence "SOMEDAY(s)" "TODO(t!)" "NEXT(n!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
 		;; TODO state to which a repeater should return the repeating task.
 		(setq org-todo-repeat-to-state "TODO")
 		(setq org-tag-alist '(("Daily" . ?d) ("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("IMPORTANT" . ?i) ("URGENT" . ?u) ("optional" . ?o)))
