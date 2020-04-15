@@ -1764,3 +1764,10 @@
 		 	"M-." 'xref-find-definitions
   		 )
 )
+
+(use-package descr-text
+  :bind
+  		(
+		 	("C-h c" . describe-char)
+  		 )
+)
