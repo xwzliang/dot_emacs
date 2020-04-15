@@ -821,32 +821,38 @@
   )
 
 (use-package insert-shebang
-  :hook
+  ;; :hook
 		;; For file extension in my_insert_file_type_list and file has not been created yet, insert shebang, two newline and enter evil-insert-state
-		(find-file . (lambda ()
-			(setq my_insert_file_type_list (list
-				"sh"
-				"py"
-				"bats"
-				))
-			(if (and (member (file-name-extension (buffer-name)) my_insert_file_type_list) (not (file-exists-p (buffer-name))))
-				(progn
-					(insert-shebang)
-					(newline)
-					(newline)
-					(evil-insert-state)
-					))))
+		;; (find-file . (lambda ()
+		;; 	(setq my_insert_file_type_list (list
+		;; 		"sh"
+		;; 		"py"
+		;; 		"bats"
+		;; 		))
+		;; 	(if (and (member (file-name-extension (buffer-name)) my_insert_file_type_list) (not (file-exists-p (buffer-name))))
+		;; 		(progn
+		;; 			(insert-shebang)
+		;; 			(newline)
+		;; 			(newline)
+		;; 			(evil-insert-state)
+		;; 			))))
+  :bind
+		(
+			("C-c f i" . insert-shebang)
+		 )
+  :config
+		(remove-hook 'find-file-hook 'insert-shebang)
   :custom
 		(insert-shebang-file-types (quote
 			(("py" . "python3")
 			("sh" . "bash")
 			("pl" . "perl")
 			("bats" . "bats"))))
-		(insert-shebang-ignore-extensions (quote (
-			"txt"
-			"org"
-			"c"
-		 )))
+		;; (insert-shebang-ignore-extensions (quote (
+		;; 	"txt"
+		;; 	"org"
+		;; 	"c"
+		;;  )))
   )
 
 (use-package flyspell
