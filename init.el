@@ -1499,6 +1499,11 @@
 		(company-quickhelp-terminal-mode 1)
   )
 
+(use-package highlight-indentation
+  :custom-face
+		(highlight-indentation-face ((t (:background "color-235"))))
+  )
+
 
 ;; my packages with use-package
 
