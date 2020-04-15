@@ -1504,6 +1504,24 @@
 		(highlight-indentation-face ((t (:background "color-235"))))
   )
 
+(use-package elpy
+  :general
+		(
+			:states 'normal
+			:keymaps 'elpy-mode-map
+			"M-." 'elpy-goto-definition
+  		 )
+  :config
+		(setq elpy-rpc-python-command "python3")
+		(setq python-shell-interpreter "python3")
+  :hook
+  		(python-mode . (lambda ()
+            (elpy-enable)
+            ;; Don't enable highlight-indentation-mode by default
+            (highlight-indentation-mode -1)
+  		 ))
+  )
+
 
 ;; my packages with use-package
 
