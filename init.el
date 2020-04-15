@@ -83,6 +83,13 @@
 (use-package el-patch
   )
 
+(use-package fzf
+  :bind
+		(
+			("C-c f z" . fzf)
+		 )
+  )
+
 (use-package auto-package-update
   :config
 		(setq package-archives '(
