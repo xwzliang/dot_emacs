@@ -1478,6 +1478,28 @@
 		))
   )
 
+(use-package popup
+  :custom-face
+		(popup-tip-face ((t (:inherit popup-face))))
+  )
+
+(use-package company-quickhelp
+  :bind
+  		(
+  			:map company-active-map
+			("C-c h" . company-quickhelp-manual-begin)
+  		 )
+  :config
+		(setq company-quickhelp-delay nil)
+		(company-quickhelp-mode)
+  )
+
+(use-package company-quickhelp-terminal
+  :config
+		(company-quickhelp-terminal-mode 1)
+  )
+
+
 ;; my packages with use-package
 
 (use-package my_macros
