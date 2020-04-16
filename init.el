@@ -1528,6 +1528,18 @@
   		 ))
   )
 
+(use-package realgud
+  :general
+  		(
+  			:prefix "C-c d"
+  			"p" 'realgud:pdb
+  			"t" 'realgud:trepan3k
+  			"g" 'realgud:gdb
+  			"b" 'realgud:bashdb
+  			"z" 'realgud:zshdb
+  		 )
+  )
+
 
 ;; my packages with use-package
 
