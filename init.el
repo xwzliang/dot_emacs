@@ -890,6 +890,17 @@
   :delight
   :config
 		(golden-ratio-mode 1)
+		(setq golden-ratio-exclude-modes '(
+			"gud-mode"
+			"gdb-locals-mode"
+			"gdb-registers-mode"
+			"gdb-breakpoints-mode"
+			"gdb-threads-mode"
+			"gdb-frames-mode"
+			"gdb-inferior-io-mode"
+			"gdb-disassembly-mode"
+			"gdb-memory-mode"
+		))
   )
 
 (use-package pdf-tools
@@ -1627,6 +1638,11 @@
   :config
 		;; Automatically reload changed file in buffer
 		(global-auto-revert-mode t)
+  )
+
+(use-package gdb-mi
+  :config
+		(setq gdb-many-windows t)
   )
 
 (use-package cc-mode
