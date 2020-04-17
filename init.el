@@ -940,6 +940,7 @@
 			"p" 'org-clock-report
 			"v" 'org-clock-display
 			"e" 'org-clock-modify-effort-estimate
+			"s" 'org-resolve-clocks
   		 )
   :config
 		; Log into a logbook drawer
@@ -1043,6 +1044,7 @@
 			:keymaps 'org-agenda-mode-map
 			"D" 'org-agenda-day-view
 			"W" 'org-agenda-week-view
+			"g a" 'org-agenda
 			"g l" 'org-agenda-log-mode
 			"g ]" 'org-next-link
 			"g [" 'org-previous-link
