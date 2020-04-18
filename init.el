@@ -1801,3 +1801,10 @@
 		 	("C-h c" . describe-char)
   		 )
 )
+
+(use-package edebug
+  :bind
+  		(
+		 	("C-c d e" . edebug-defun)
+  		 )
+  )
