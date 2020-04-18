@@ -1558,6 +1558,13 @@
   		 )
   )
 
+(use-package company-web
+  :hook
+  		(html-mode . (lambda ()
+  			(set (make-local-variable 'company-backends) '(company-web-html))
+		))
+  )
+
 
 ;; my packages with use-package
 
