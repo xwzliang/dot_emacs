@@ -194,6 +194,11 @@
 		(company-tooltip-selection ((t (:background "forestgreen"))))
   )
 
+(use-package company-statistics
+  :hook
+  		(after-init . company-statistics-mode)
+  )
+
 (use-package evil
   :init
 		(setq evil-want-keybinding nil)		;; required by evil-collection
