@@ -1553,6 +1553,13 @@
 		(python-mode . blacken-mode)
   )
 
+(use-package py-isort
+  :config
+		(setq py-isort-options '("--lines=88" "-m=3" "-tc" "-ca"))
+  :hook
+		(python-mode . py-isort-before-save)
+  )
+
 (use-package realgud
   :general
   		(
