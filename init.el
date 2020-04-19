@@ -1565,6 +1565,11 @@
 		(python-docstring-install)
   )
 
+(use-package sphinx-doc
+  :hook
+		(python-mode . sphinx-doc-mode)
+  )
+
 (use-package realgud
   :general
   		(
