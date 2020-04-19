@@ -1546,6 +1546,13 @@
   		 ))
   )
 
+(use-package blacken
+  :config
+		(setq blacken-line-length '88)
+  :hook
+		(python-mode . blacken-mode)
+  )
+
 (use-package realgud
   :general
   		(
