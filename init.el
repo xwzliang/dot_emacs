@@ -1560,6 +1560,11 @@
 		(python-mode . py-isort-before-save)
   )
 
+(use-package python-docstring
+  :config
+		(python-docstring-install)
+  )
+
 (use-package realgud
   :general
   		(
