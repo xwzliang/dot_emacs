@@ -1579,6 +1579,13 @@
 		))
   )
 
+(use-package proxy-mode
+  :bind
+  		(
+			("C-c m u" . proxy-mode)
+  		 )
+  )
+
 
 ;; my packages with use-package
 
