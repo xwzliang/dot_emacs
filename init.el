@@ -1570,6 +1570,11 @@
 		(python-mode . sphinx-doc-mode)
   )
 
+(use-package pyenv-mode
+  :hook
+		(python-mode . pyenv-mode)
+  )
+
 (use-package realgud
   :general
   		(
