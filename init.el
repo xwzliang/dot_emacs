@@ -1587,6 +1587,9 @@
   		 )
   )
 
+(use-package list-environment
+  )
+
 (use-package company-web
   :hook
   		(html-mode . (lambda ()
