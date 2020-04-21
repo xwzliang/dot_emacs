@@ -114,6 +114,12 @@
 			:keymaps 'override
 			:prefix my-leader
 		  )
+		(general-evil-setup)
+		;; jk to <esc> keybinding in insert state
+		(general-imap "j"
+			(general-key-dispatch 'self-insert-command
+				:timeout 0.25
+				"k" 'evil-normal-state))
   )
 
 (use-package clues-theme
