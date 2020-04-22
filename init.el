@@ -1610,6 +1610,13 @@
   		 )
   )
 
+(use-package format-all
+  :bind
+  		(
+			("C-c f m" . format-all-buffer)
+  		 )
+  )
+
 
 ;; my packages with use-package
 
