@@ -1461,6 +1461,8 @@
 			("!" . emamux:run-region)
 			("." . emamux:run-last-command)
 			("x" . eshell)
+		 	("t" . term)
+		 	("i" . ielm)
   		 )
   :custom
   		(emamux:completing-read-type 'helm)
