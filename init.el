@@ -1583,6 +1583,11 @@
 		(python-mode . pyenv-mode)
   )
 
+(use-package pippel
+  :custom
+		(pippel-python-command "python3")
+  )
+
 (use-package realgud
   :general
   		(
