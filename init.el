@@ -1682,6 +1682,8 @@
         (
             ("C-c w" . whitespace-mode)
          )
+  :hook
+        (before-save . whitespace-cleanup)
   )
 
 (use-package simple
