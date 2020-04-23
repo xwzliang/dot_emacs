@@ -1588,6 +1588,12 @@
 		(pippel-python-command "python3")
   )
 
+(use-package elisp-slime-nav
+  :hook
+		(emacs-lisp-mode . elisp-slime-nav-mode)
+		(ielm-mode . elisp-slime-nav-mode)
+  )
+
 (use-package realgud
   :general
   		(
