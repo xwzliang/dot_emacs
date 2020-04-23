@@ -46,6 +46,9 @@
 ;; Changing tab width
 (setq-default tab-width 4)
 
+;; Disable tabs by default
+(setq-default indent-tabs-mode nil)
+
 ;; Settings for MacOS
 (cond ((string-equal system-type "darwin")
        (progn
