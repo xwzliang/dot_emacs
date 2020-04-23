@@ -1885,3 +1885,26 @@
 		 	("C-c d e" . edebug-defun)
   		 )
   )
+
+(use-package ert
+  :preface
+		(defun add-pwd-into-load-path ()
+			"add current directory into load-path, useful for elisp developers"
+			(interactive)
+			(let ((dir (expand-file-name default-directory)))
+				(if (not (memq dir load-path))
+					(add-to-list 'load-path dir)
+				 )
+				(message "Directory added into load-path:%s" dir)
+			 )
+		 )
+  :bind
+  		(
+		 	("C-c t e" . (lambda ()
+				(interactive)
+				(add-pwd-into-load-path)
+				(eval-buffer)
+				(ert t)
+			 ))
+  		 )
+  )
