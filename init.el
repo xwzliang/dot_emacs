@@ -265,11 +265,13 @@
         (setq linum-relative-backend 'display-line-numbers-mode)
   )
 
-(use-package smartparens-config
-  :commands
-        smartparens-mode
-  ;; :config
-  ;;        (smartparens-global-mode 1)
+(use-package smartparens
+  :config
+        (require 'smartparens-config)
+        (smartparens-global-mode 1)
+  :hook
+        (emacs-lisp-mode . show-smartparens-mode)
+        (ielm-mode . show-smartparens-mode)
   )
 
 (use-package evil-surround
