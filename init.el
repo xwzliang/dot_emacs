@@ -1020,7 +1020,7 @@
         (setq org-todo-keywords '((sequence "SOMEDAY(s)" "TODO(t!)" "NEXT(n!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
         ;; TODO state to which a repeater should return the repeating task.
         (setq org-todo-repeat-to-state "TODO")
-        (setq org-tag-alist '(("Daily" . ?d) ("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("IMPORTANT" . ?i) ("URGENT" . ?u) ("optional" . ?o)))
+        (setq org-tag-alist '(("Daily" . ?d) ("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("IMPORTANT" . ?i) ("URGENT" . ?u) ("optional" . ?o) ("Emacs" . ?e)))
         (setq org-capture-templates
         '(
             ("e" "Journal Entry"
