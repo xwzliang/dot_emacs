@@ -118,11 +118,11 @@
             :prefix my-leader
           )
         (general-evil-setup)
-        ;; jk to <esc> keybinding in insert state
-        (general-imap "j"
+        ;; Use ,, to <esc> keybinding in insert state (jk will cause my macro to be broken somehow)
+        (general-imap ","
             (general-key-dispatch 'self-insert-command
                 :timeout 0.25
-                "k" 'evil-normal-state))
+                "," 'evil-normal-state))
   )
 
 (use-package clues-theme
@@ -1637,6 +1637,7 @@
 ;; my packages with use-package
 
 (use-package my_macros
+  :commands my_macro_org_copy_agenda_link_line_to_journal_checklist
   :bind
         (
             ("C-c m j" . my_macro_copy_all_agenda_items_link_to_journal)
