@@ -1645,6 +1645,9 @@
         ;;  ))
   )
 
+(use-package elmacro
+  )
+
 
 ;; my packages with use-package
 
