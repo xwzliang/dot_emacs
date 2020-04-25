@@ -1635,6 +1635,16 @@
          )
   )
 
+(use-package keyfreq
+  :config
+        (keyfreq-mode 1)
+        (keyfreq-autosave-mode 1)
+        ;; (setq keyfreq-excluded-commands '(
+        ;;     forward-char
+        ;;     backward-char
+        ;;  ))
+  )
+
 
 ;; my packages with use-package
 
