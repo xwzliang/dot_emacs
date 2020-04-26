@@ -1648,6 +1648,13 @@
 (use-package elmacro
   )
 
+(use-package ace-window
+  :bind
+        (
+            ("M-o" . ace-window)
+         )
+  )
+
 
 ;; my packages with use-package
 
