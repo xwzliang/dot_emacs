@@ -106,16 +106,17 @@
   :config
         (general-auto-unbind-keys)
         (general-create-definer my-prefix-key-evil-def :prefix "C-c e")
-        (defconst my-leader "SPC")
-        ;; Unbind my-leader key
+        (defconst my-space-leader "SPC")
+        ;; Unbind my-space-leader key
         ;; (general-define-key
         ;;      :keymaps 'override
-        ;;      :prefix my-leader
+        ;;      :prefix my-space-leader
         ;;      "" nil
         ;;   )
-        (general-create-definer my-prefix-key-leader-def
+        (general-create-definer my-space-leader-def
+            :states '(normal motion visual)
             :keymaps 'override
-            :prefix my-leader
+            :prefix my-space-leader
           )
         (general-evil-setup)
         ;; Use ,, to <esc> keybinding in insert state (jk will cause my macro to be broken somehow)
@@ -223,8 +224,7 @@
             ("C-b" . evil-scroll-up)
          )
   :general
-        (my-prefix-key-leader-def
-            :states '(normal motion visual)
+        (my-space-leader-def
             "j" 'evil-jump-forward
             "k" 'evil-jump-backward
          )
@@ -256,8 +256,7 @@
 
 (use-package linum-relative
   :general
-        (my-prefix-key-leader-def
-            :states '(normal motion visual)
+        (my-space-leader-def
             "l" 'linum-relative-toggle
          )
   :config
@@ -381,9 +380,8 @@
 
 (use-package avy
   :general
-        (my-prefix-key-leader-def
-            :states '(normal motion visual)
-            :prefix (concat my-leader " v")
+        (my-space-leader-def
+            :prefix (concat my-space-leader " v")
             "c" 'avy-goto-char
             "w" 'avy-goto-word-1
             "l" 'avy-goto-line
@@ -473,8 +471,7 @@
             "C-j" 'helm-next-line
             "C-k" 'helm-previous-line
         )
-        (my-prefix-key-leader-def
-            :states '(normal motion visual)
+        (my-space-leader-def
             "x" 'helm-M-x
             "y" 'helm-show-kill-ring
         )
@@ -823,11 +820,11 @@
             ("C-c g r" . git-timemachine)
          )
   :general
-        (my-prefix-key-leader-def
+        (my-space-leader-def
             :definer 'minor-mode
             :states '(normal motion visual)
             :keymaps 'git-timemachine-mode
-            :prefix (concat my-leader " g")
+            :prefix (concat my-space-leader " g")
             "p" 'git-timemachine-show-previous-revision
             "n" 'git-timemachine-show-next-revision
             "g" 'git-timemachine-show-nth-revision
