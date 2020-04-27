@@ -1611,6 +1611,15 @@
          )
   )
 
+(use-package emr
+  :bind
+        (
+            ("C-c t r" . emr-show-refactor-menu)
+         )
+  :custom
+        (emr-popup-help-delay 3)
+  )
+
 (use-package list-environment
   )
 
