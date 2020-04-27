@@ -1517,7 +1517,9 @@
 
 (use-package popup
   :custom-face
-        (popup-tip-face ((t (:inherit popup-face))))
+        (popup-face ((t (:inherit company-tooltip))))
+        (popup-menu-selection-face ((t (:inherit company-tooltip-selection :foreground "white"))))
+        (popup-tip-face ((t (:background "lightgray" :foreground "black"))))
   )
 
 (use-package company-quickhelp
