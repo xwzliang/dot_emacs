@@ -80,9 +80,6 @@
 (use-package delight
   )
 
-(use-package restart-emacs
-  )
-
 (use-package el-patch
   )
 
@@ -131,6 +128,13 @@
         (load-theme 'clues t)
   )
 
+(use-package restart-emacs
+  :general
+        (my-space-leader-def
+            "r r" 'restart-emacs
+         )
+  )
+
 (use-package doom-modeline
   :config
         (doom-modeline-mode 1)
@@ -169,6 +173,11 @@
         ; Don't auto resume
         (setq persp-auto-resume-time 0)
         (persp-set-keymap-prefix (kbd "C-c r"))
+  :general
+        (my-space-leader-def
+            "r l" 'persp-load-state-from-file
+            "r w" 'persp-save-state-to-file
+         )
   )
 
 ;; company-mode
@@ -225,8 +234,10 @@
          )
   :general
         (my-space-leader-def
-            "j" 'evil-jump-forward
-            "k" 'evil-jump-backward
+            "J n" 'evil-jump-forward
+            "J p" 'evil-jump-backward
+            "u" 'evil-scroll-up
+            "d" 'evil-scroll-down
          )
   :config
         (evil-mode 1)
@@ -257,7 +268,7 @@
 (use-package linum-relative
   :general
         (my-space-leader-def
-            "l" 'linum-relative-toggle
+            ";" 'linum-relative-toggle
          )
   :config
         ;; Use `display-line-number-mode` as linum-mode's backend for smooth performance
@@ -380,13 +391,16 @@
 
 (use-package avy
   :general
+        ;; (my-space-leader-def
+        ;;     :prefix (concat my-space-leader " v")
+        ;;     "c" 'avy-goto-char
+        ;;     "w" 'avy-goto-word-1
+        ;;     "l" 'avy-goto-line
+        ;;     "o" 'avy-org-goto-heading-timer
+        ;;     "r" 'avy-resume
+        ;;  )
         (my-space-leader-def
-            :prefix (concat my-space-leader " v")
-            "c" 'avy-goto-char
-            "w" 'avy-goto-word-1
-            "l" 'avy-goto-line
-            "o" 'avy-org-goto-heading-timer
-            "r" 'avy-resume
+            "z" 'avy-goto-char
          )
   :custom-face
         (avy-lead-face ((t (:background "blue" :foreground "white"))))
@@ -409,6 +423,15 @@
             ("C-x v r" . git-gutter:revert-hunk)
             ("C-x v SPC" . git-gutter:mark-hunk)
          )
+  :general
+        (my-space-leader-def
+            "v =" 'git-gutter:popup-hunk
+            "v p" 'git-gutter:previous-hunk
+            "v n" 'git-gutter:next-hunk
+            "v s" 'git-gutter:stage-hunk
+            "v r" 'git-gutter:revert-hunk
+            "v SPC" 'git-gutter:mark-hunk
+         )
   :config
         (add-to-list 'git-gutter:update-hooks 'focus-in-hook)
   :custom
@@ -430,6 +453,10 @@
             :map evil-normal-state-map
             ("C-n" . neotree-refresh)
          )
+  :general
+        (my-space-leader-def
+            "8" 'neotree-toggle
+         )
   :config
         (general-define-key
             :states 'normal
@@ -445,8 +472,10 @@
 
 (use-package helm
   :delight
-  :bind-keymap
-        ("C-c h" . helm-command-prefix)
+  :init
+        (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  ;; :bind-keymap
+  ;;       ("C-c h" . helm-command-prefix)
   :bind
         (
             ("M-x" . helm-M-x)
@@ -472,8 +501,12 @@
             "C-k" 'helm-previous-line
         )
         (my-space-leader-def
-            "x" 'helm-M-x
+            "SPC" 'helm-M-x
             "y" 'helm-show-kill-ring
+            "b" 'helm-mini
+            "s" 'helm-find-files
+            "f" 'helm-occur
+            "a" (general-simulate-key "C-c h")
         )
   :config
         (require 'helm-config)
@@ -597,12 +630,20 @@
   :config
         (helm-projectile-on)
         ;; (setq projectile-switch-project-action 'helm-projectile)
+  :general
+        (my-space-leader-def
+            "p" 'helm-projectile-switch-project
+         )
   )
 
 (use-package iedit
   :bind
         (
             ("C-c s" . iedit-mode)
+         )
+  :general
+        (my-space-leader-def
+            "e" 'iedit-mode
          )
   )
 
@@ -743,6 +784,11 @@
             :map magit-mode-map
             ("o" . magit-file-checkout)
          )
+  :general
+        (my-space-leader-def
+            "g" 'magit-status
+         )
+
   :hook
         (magit-post-refresh . git-gutter:update-all-windows)
         (after-save . magit-after-save-refresh-status)
@@ -824,7 +870,7 @@
             :definer 'minor-mode
             :states '(normal motion visual)
             :keymaps 'git-timemachine-mode
-            :prefix (concat my-space-leader " g")
+            :prefix (concat my-space-leader " g t")
             "p" 'git-timemachine-show-previous-revision
             "n" 'git-timemachine-show-next-revision
             "g" 'git-timemachine-show-nth-revision
@@ -977,6 +1023,9 @@
             "v" 'org-clock-display
             "e" 'org-clock-modify-effort-estimate
             "s" 'org-resolve-clocks
+         )
+        (my-space-leader-def
+            "o" (general-simulate-key "C-c o")
          )
   :config
         ; Log into a logbook drawer
@@ -1341,6 +1390,9 @@
             "g" 'org-roam-show-graph
             "l" 'org-roam-insert
          )
+        (my-space-leader-def
+            "n" (general-simulate-key "C-c n")
+         )
   :config
         (setq org-roam-completion-system 'helm)
   :hook
@@ -1415,6 +1467,10 @@
             ("C-c m z p" . anki-editor-cloze-region-dont-incr)
             ("C-c m z r" . anki-editor-reset-cloze-number)
          )
+  :general
+        (my-space-leader-def
+            "m" (general-simulate-key "C-c m")
+         )
   :preface
         (defun anki-editor-cloze-region-auto-incr (&optional arg)
             "Cloze region without hint and increase card number."
@@ -1478,6 +1534,15 @@
             ("t" . term)
             ("i" . ielm)
          )
+  :general
+        (my-space-leader-def
+            :prefix (concat my-space-leader " x")
+            "y" 'emamux:copy-kill-ring
+            "p" 'emamux:yank-from-list-buffers
+            "x" 'eshell
+            "t" 'term
+            "i" 'ielm
+         )
   :custom
         (emamux:completing-read-type 'helm)
         (emamux:show-buffers-with-index nil)
@@ -1504,6 +1569,9 @@
             "x" 'helpful-at-point
             "F" 'helpful-function
             "D" 'helpful-command
+         )
+        (my-space-leader-def
+            "i" (general-simulate-key "C-h")
          )
   )
 
@@ -1620,12 +1688,19 @@
             "b" 'realgud:bashdb
             "z" 'realgud:zshdb
          )
+        (my-space-leader-def
+            "t d" (general-simulate-key "C-c d")
+         )
   )
 
 (use-package emr
   :bind
         (
             ("C-c t r" . emr-show-refactor-menu)
+         )
+  :general
+        (my-space-leader-def
+            "t r" 'emr-show-refactor-menu
          )
   :custom
         (emr-popup-help-delay 3)
@@ -1663,6 +1738,10 @@
         ;;     forward-char
         ;;     backward-char
         ;;  ))
+  :general
+        (my-space-leader-def
+            "q" 'keyfreq-show
+         )
   )
 
 (use-package elmacro
@@ -1672,6 +1751,10 @@
   :bind
         (
             ("M-o" . ace-window)
+         )
+  :general
+        (my-space-leader-def
+            "]" 'ace-window
          )
   )
 
@@ -1736,6 +1819,10 @@
         (
             ("C-c v" . visual-line-mode)
          )
+  :general
+        (my-space-leader-def
+            "v v" 'visual-line-mode
+         )
   )
 
 (use-package frame
@@ -1791,6 +1878,10 @@
         (
             ("C-c l" . linum-mode)
          )
+  :general
+        (my-space-leader-def
+            "[" 'linum-mode
+         )
   :custom
         (linum-format " %3d ")
   :custom-face
@@ -1832,6 +1923,10 @@
         (
             ("C-x C-b" . ibuffer)
          )
+  :general
+        (my-space-leader-def
+            "B" 'ibuffer
+         )
   :config
         (setq ibuffer-use-other-window t) ;; always display ibuffer in another window
   )
@@ -1846,6 +1941,10 @@
   :bind*
         (
             ("C-c c" . compile)
+         )
+  :general
+        (my-space-leader-def
+            "c" 'compile
          )
   :config
         (setq compilation-ask-about-save nil          ; Just save before compiling
@@ -1863,6 +1962,12 @@
             "M-l" 'windmove-right
             "M-j" 'windmove-down
             "M-k" 'windmove-up
+         )
+        (my-space-leader-def
+            "h" 'windmove-left
+            "l" 'windmove-right
+            "j" 'windmove-down
+            "k" 'windmove-up
          )
   )
 
@@ -1918,6 +2023,10 @@
             :states '(normal motion visual)
             "M-." 'xref-find-definitions
          )
+        (my-space-leader-def
+            "." (general-simulate-key "M-.")
+            "," (general-simulate-key "M-,")
+         )
 )
 
 (use-package descr-text
@@ -1946,13 +2055,26 @@
                 (message "Directory added into load-path:%s" dir)
              )
          )
-  :bind
-        (
-            ("C-c t e" . (lambda ()
+        (defun my-ert-run ()
+          "Add pwd to load path, eval current buffer and run ert"
                 (interactive)
                 (add-pwd-into-load-path)
                 (eval-buffer)
                 (ert t)
-             ))
+          )
+  :bind
+        (
+            ("C-c t e" . my-ert-run)
+         )
+  :general
+        (my-space-leader-def
+            "t e" 'my-ert-run
          )
   )
+
+(use-package files
+  :general
+        (my-space-leader-def
+            "w" 'save-buffer
+         )
+)
