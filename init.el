@@ -104,6 +104,7 @@
         (general-auto-unbind-keys)
         (general-create-definer my-prefix-key-evil-def :prefix "C-c e")
         (defconst my-space-leader "SPC")
+        (defconst my-comma-leader ",")
         ;; Unbind my-space-leader key
         ;; (general-define-key
         ;;      :keymaps 'override
@@ -114,6 +115,11 @@
             :states '(normal motion visual)
             :keymaps 'override
             :prefix my-space-leader
+          )
+        (general-create-definer my-comma-leader-def
+            :states '(normal motion visual)
+            :keymaps 'override
+            :prefix my-comma-leader
           )
         (general-evil-setup)
         ;; Use ,, to <esc> keybinding in insert state (jk will cause my macro to be broken somehow)
@@ -508,6 +514,11 @@
             "f" 'helm-occur
             "a" (general-simulate-key "C-c h")
         )
+        (my-comma-leader-def
+            :states '(normal motion visual insert)
+            :keymaps 'helm-map
+            "," 'helm-keyboard-quit
+         )
   :config
         (require 'helm-config)
         (global-unset-key (kbd "C-x c"))
@@ -1976,9 +1987,9 @@
         (setq custom-file "~/.emacs.d/emacs-custom.el")
   )
 
-(use-package simple
-  :delight visual-line-mode
-  )
+;; (use-package simple
+;;   :delight visual-line-mode
+;;   )
 
 (use-package eldoc
   :delight
