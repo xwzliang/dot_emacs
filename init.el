@@ -466,6 +466,18 @@
             :map minibuffer-local-map
             ("C-c C-l" . helm-minibuffer-history)
         )
+  :general
+        (
+            :states '(insert normal)
+            :keymaps 'helm-map
+            "C-j" 'helm-next-line
+            "C-k" 'helm-previous-line
+        )
+        (my-prefix-key-leader-def
+            :states '(normal motion visual)
+            "x" 'helm-M-x
+            "y" 'helm-show-kill-ring
+        )
   :config
         (require 'helm-config)
         (global-unset-key (kbd "C-x c"))
