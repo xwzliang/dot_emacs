@@ -1739,6 +1739,10 @@
          )
   )
 
+(use-package nix-mode
+  :mode "\\.nix\\'"
+  )
+
 (use-package format-all
   :bind
         (
