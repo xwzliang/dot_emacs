@@ -1689,6 +1689,11 @@
         (ielm-mode . elisp-slime-nav-mode)
   )
 
+(use-package eros
+  :hook
+        (emacs-lisp-mode . eros-mode)
+  )
+
 (use-package realgud
   :general
         (
