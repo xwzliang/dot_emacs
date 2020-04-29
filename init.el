@@ -659,7 +659,7 @@
          )
   :general
         (my-space-leader-def
-            "e" 'iedit-mode
+            "e e" 'iedit-mode
          )
   )
 
@@ -2058,6 +2058,16 @@
   :bind
         (
             ("C-h c" . describe-char)
+         )
+)
+
+(use-package elisp-mode
+  :general
+        (my-space-leader-def
+            "e b" 'eval-buffer
+            "e d" 'eval-defun
+            "e l" 'eval-last-sexp
+            "e x" 'eval-expression
          )
 )
 
