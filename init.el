@@ -183,6 +183,12 @@
         (my-space-leader-def
             "r l" 'persp-load-state-from-file
             "r w" 'persp-save-state-to-file
+            "r s" 'persp-frame-switch
+            "r r" 'persp-rename
+            "r a" 'persp-add-buffer
+            "r k" 'persp-remove-buffer
+            "r K" 'persp-kill-buffer
+            "b" 'persp-switch-to-buffer
          )
   )
 
@@ -509,7 +515,6 @@
         (my-space-leader-def
             "SPC" 'helm-M-x
             "y" 'helm-show-kill-ring
-            "b" 'helm-mini
             "s" 'helm-find-files
             "f" 'helm-occur
             "a" (general-simulate-key "C-c h")
