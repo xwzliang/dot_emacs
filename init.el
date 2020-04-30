@@ -184,7 +184,7 @@
             "r l" 'persp-load-state-from-file
             "r w" 'persp-save-state-to-file
             "r s" 'persp-frame-switch
-            "r r" 'persp-rename
+            "r R" 'persp-rename
             "r a" 'persp-add-buffer
             "r k" 'persp-remove-buffer
             "r K" 'persp-kill-buffer
