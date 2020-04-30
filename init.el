@@ -2113,3 +2113,8 @@
             "w" 'save-buffer
          )
 )
+
+(use-package term
+  :init
+        (setq-default term-prompt-regexp "^[^$%>»]*[#$%>»] ")
+)
