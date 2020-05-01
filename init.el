@@ -1566,6 +1566,16 @@
             "^\\(buffer[0-9]+\\): +\\([0-9]+\\) +\\(bytes\\): +[\"]\\(.*\\)[\"]")
   )
 
+(use-package eshell-prompt-extras
+  :config
+        (with-eval-after-load "esh-opt"
+            (autoload 'epe-theme-lambda "eshell-prompt-extras")
+            (setq eshell-highlight-prompt nil
+                  eshell-prompt-function 'epe-theme-lambda))
+  :custom-face
+        (epe-dir-face ((t (:foreground "blue" :weight bold))))
+        (epe-git-face ((t (:foreground "yellow"))))
+  )
 
 (use-package which-key
   :delight
