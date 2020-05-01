@@ -2022,6 +2022,33 @@
         (
             ("C-c e s" . eshell)
          )
+  :config
+        (with-eval-after-load 'em-prompt
+          (el-patch-defun eshell-previous-prompt (n)
+            "Move to end of Nth previous prompt in the buffer.
+            See `eshell-prompt-regexp'."
+            (interactive "p")
+            (beginning-of-line)               ; Don't count prompt on current line.
+            ;; PATCH beginning-of-line does not move across the prompt
+            (el-patch-add (backward-char))
+            (eshell-next-prompt (- n))))
+  :preface
+        ;; From spacemacs
+        (defun protect-eshell-prompt ()
+            "Protect Eshell's prompt like Comint's prompts.
+            E.g. `evil-change-whole-line' won't wipe the prompt. This
+            is achieved by adding the relevant text properties."
+            (let ((inhibit-field-text-motion t))
+            (add-text-properties
+              (point-at-bol)
+              (point)
+              '(rear-nonsticky t
+                inhibit-line-move-field-capture t
+                field output
+                read-only t
+                front-sticky (field inhibit-line-move-field-capture)))))
+  :hook
+        (eshell-after-prompt . protect-eshell-prompt)
   :custom-face
         (eshell-prompt ((t (:foreground "green" :weight bold))))
   )
