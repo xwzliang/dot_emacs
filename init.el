@@ -2108,6 +2108,13 @@
          )
 )
 
+(use-package vc
+  :general
+        (my-space-leader-def
+            "v u" 'vc-revert
+         )
+)
+
 (use-package edebug
   :bind
         (
