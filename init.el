@@ -1590,6 +1590,17 @@
         (epe-git-face ((t (:foreground "yellow"))))
   )
 
+(use-package exec-path-from-shell
+  )
+
+(use-package eshell-up
+  )
+
+(use-package eshell-did-you-mean
+  :config
+        (eshell-did-you-mean-setup)
+  )
+
 (use-package which-key
   :delight
   :config
