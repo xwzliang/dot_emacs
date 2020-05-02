@@ -633,6 +633,8 @@
   )
 
 (use-package hydra
+  :custom-face
+        (hydra-face-red ((t (:foreground "green"))))
   )
 
 (use-package projectile
