@@ -1601,6 +1601,13 @@
         (eshell-did-you-mean-setup)
   )
 
+(use-package fish-completion
+  :config
+        (when (and (executable-find "fish")
+                (require 'fish-completion nil t))
+          (global-fish-completion-mode))
+  )
+
 (use-package which-key
   :delight
   :config
