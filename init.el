@@ -244,12 +244,23 @@
             ; Use C-b to evil-scroll-up instead of evil-scroll-page-up
             ("C-b" . evil-scroll-up)
          )
+  :preface
+        (defhydra hydra-move ()
+          "move"
+          ("j" evil-next-line)
+          ("k" evil-previous-line)
+          ("u" evil-scroll-up)
+          ("d" evil-scroll-down)
+          ("g" evil-goto-first-line)
+          ("G" evil-goto-line)
+          )
   :general
         (my-space-leader-def
             "J n" 'evil-jump-forward
             "J p" 'evil-jump-backward
             "u" 'evil-scroll-up
             "d" 'evil-scroll-down
+            "<escape>" 'hydra-move/body
          )
   :config
         (evil-mode 1)
