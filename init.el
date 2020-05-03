@@ -1601,6 +1601,9 @@
         (eshell-did-you-mean-setup)
   )
 
+(use-package fish-mode
+  )
+
 (use-package fish-completion
   :config
         (when (and (executable-find "fish")
