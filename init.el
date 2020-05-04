@@ -1594,7 +1594,7 @@
             (autoload 'epe-theme-lambda "eshell-prompt-extras")
             (setq eshell-highlight-prompt nil
                   eshell-prompt-function 'epe-theme-lambda))
-        ;; zsh will be slow, fish is even slower
+        ;; zsh will be slow, fish is even slower for git repo directory
         (setq shell-file-name "/bin/sh")
   :custom-face
         (epe-dir-face ((t (:foreground "blue" :weight bold))))
