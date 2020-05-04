@@ -1568,7 +1568,7 @@
             :prefix (concat my-space-leader " x")
             "y" 'emamux:copy-kill-ring
             "p" 'emamux:yank-from-list-buffers
-            "x" 'eshell
+            "e" 'eshell
             "t" 'term
             "i" 'ielm
          )
@@ -1579,12 +1579,23 @@
             "^\\(buffer[0-9]+\\): +\\([0-9]+\\) +\\(bytes\\): +[\"]\\(.*\\)[\"]")
   )
 
+(use-package aweshell
+  :general
+        (my-space-leader-def
+            :prefix (concat my-space-leader " x")
+            "x" 'aweshell-dedicated-toggle
+         )
+  )
+
 (use-package eshell-prompt-extras
+  :after aweshell
   :config
         (with-eval-after-load "esh-opt"
             (autoload 'epe-theme-lambda "eshell-prompt-extras")
             (setq eshell-highlight-prompt nil
                   eshell-prompt-function 'epe-theme-lambda))
+        ;; zsh will be slow, fish is even slower
+        (setq shell-file-name "/bin/sh")
   :custom-face
         (epe-dir-face ((t (:foreground "blue" :weight bold))))
         (epe-git-face ((t (:foreground "yellow"))))
