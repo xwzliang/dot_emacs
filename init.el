@@ -2082,17 +2082,27 @@
             "Protect Eshell's prompt like Comint's prompts.
             E.g. `evil-change-whole-line' won't wipe the prompt. This
             is achieved by adding the relevant text properties."
+            (interactive)
             (let ((inhibit-field-text-motion t))
             (add-text-properties
               (point-at-bol)
-              (point)
+              ;; (point)
+              (eshell-bol)
               '(rear-nonsticky t
                 inhibit-line-move-field-capture t
                 field output
                 read-only t
                 front-sticky (field inhibit-line-move-field-capture)))))
   :hook
-        (eshell-after-prompt . protect-eshell-prompt)
+        ;; (eshell-after-prompt . protect-eshell-prompt)
+        (eshell-mode . (lambda ()
+                         (general-define-key
+                          :states 'insert
+                          :keymaps 'eshell-mode-map
+                          "<escape>" (lambda () (interactive)
+                                       (protect-eshell-prompt)
+                                       (evil-normal-state)
+                                       (evil-end-of-line)))))
   :custom-face
         (eshell-prompt ((t (:foreground "green" :weight bold))))
   )
