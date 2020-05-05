@@ -1803,6 +1803,10 @@
   :mode "\\.nix\\'"
   )
 
+(use-package json-mode
+  :mode "\\.json\\'"
+  )
+
 (use-package format-all
   :bind
         (
