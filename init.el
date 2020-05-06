@@ -1807,6 +1807,12 @@
   :mode "\\.json\\'"
   )
 
+(use-package json-reformat
+  )
+
+(use-package json-snatcher
+  )
+
 (use-package format-all
   :bind
         (
