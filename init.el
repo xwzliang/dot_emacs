@@ -673,7 +673,26 @@
   :general
         (my-space-leader-def
             "e e" 'iedit-mode
+            "e <escape>" 'hydra-iedit/body
          )
+  :preface
+        (defun hydra-iedit-pre ()
+          ;; Enable iedit-mode if not enabled already
+          (if (not (bound-and-true-p iedit-mode))
+              (iedit-mode)
+              )
+          ;; Restrict to current line for next operation
+          (iedit-restrict-current-line)
+          )
+        (defhydra hydra-iedit
+          (:body-pre hydra-iedit-pre)
+            "iedit"
+            ("j" iedit-expand-down-a-line)
+            ("k" iedit-expand-up-a-line)
+            ("." iedit-restrict-current-line)
+            ("n" iedit-next-occurrence)
+            ("p" iedit-prev-occurrence)
+          )
   )
 
 (use-package evil-iedit-state
