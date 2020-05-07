@@ -1836,6 +1836,13 @@
   :mode "Dockerfile\\'"
   )
 
+(use-package docker
+  :bind
+        (
+            ("C-c d k" . docker)
+         )
+  )
+
 (use-package format-all
   :bind
         (
