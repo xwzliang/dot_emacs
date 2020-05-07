@@ -1832,6 +1832,10 @@
 (use-package json-snatcher
   )
 
+(use-package dockerfile-mode
+  :mode "Dockerfile\\'"
+  )
+
 (use-package format-all
   :bind
         (
