@@ -1832,6 +1832,10 @@
 (use-package json-snatcher
   )
 
+(use-package jq-mode
+  :mode "\\.jq\\'"
+  )
+
 (use-package dockerfile-mode
   :mode "Dockerfile\\'"
   )
