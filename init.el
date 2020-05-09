@@ -1788,6 +1788,18 @@
          )
   )
 
+(use-package lsp-mode
+  :init
+        (setq lsp-keymap-prefix "C-c l")
+  :config
+        (setq lsp-prefer-capf t)
+        (setq gc-cons-threshold 100000000)
+        (setq read-process-output-max (* 1024 1024)) ;; 1mb
+        ;; (setq lsp-log-io t)
+  :hook
+        (lsp-mode . lsp-enable-which-key-integration)
+  )
+
 (use-package emr
   :bind
         (
@@ -2000,7 +2012,7 @@
 (use-package linum
   :bind*
         (
-            ("C-c l" . linum-mode)
+            ("C-c [" . linum-mode)
          )
   :general
         (my-space-leader-def
