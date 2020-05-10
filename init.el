@@ -1033,6 +1033,11 @@
         ))
   )
 
+(use-package page-break-lines
+  ;; :hook
+  ;;       (text-mode . page-break-lines-mode)
+  )
+
 (use-package org
   :init
         (setq org-directory "~/Dropbox/org")
