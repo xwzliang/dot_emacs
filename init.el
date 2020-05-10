@@ -1803,6 +1803,9 @@
 (use-package helm-lsp
   )
 
+(use-package rainbow-delimiters
+  )
+
 (use-package emr
   :bind
         (
