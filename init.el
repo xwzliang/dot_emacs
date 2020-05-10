@@ -1800,6 +1800,9 @@
         (lsp-mode . lsp-enable-which-key-integration)
   )
 
+(use-package helm-lsp
+  )
+
 (use-package emr
   :bind
         (
