@@ -1794,6 +1794,20 @@
          )
   )
 
+(use-package overseer
+  :general
+        (my-space-leader-def
+            "t e" 'overseer-test-this-buffer
+         )
+  :config
+        (el-patch-defun overseer--current-buffer-test-file-p ()
+          "Return t if the current buffer is a test file."
+          (string-match
+           (el-patch-swap "-test\.el$" "test\.el$")
+           (or (buffer-file-name) ""))
+          )
+  )
+
 (use-package lsp-mode
   :init
         (setq lsp-keymap-prefix "C-c l")
@@ -2267,10 +2281,6 @@
   :bind
         (
             ("C-c t e" . my-ert-run)
-         )
-  :general
-        (my-space-leader-def
-            "t e" 'my-ert-run
          )
   )
 
