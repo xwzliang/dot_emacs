@@ -1931,6 +1931,12 @@
             ("C-c m k" . my_macro_close_checklist_item_and_linked_todo_item)
             ("C-c m s" . my_macro_save_html_and_url)
          )
+  :general
+        (
+            :keymaps 'org-mode-map
+            :prefix "C-c o k"
+            "k" 'my_macro_org_resolve_clock
+         )
   )
 
 (use-package init_emacs-w3m
