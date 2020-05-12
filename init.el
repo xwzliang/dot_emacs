@@ -1978,6 +1978,8 @@
          )
   :hook
         (before-save . whitespace-cleanup)
+        ;; Don't expand tabs for sh-mode, otherwise bats won't work
+        (sh-mode . (lambda () (remove-hook 'before-save-hook 'whitespace-cleanup)))
   )
 
 (use-package simple
