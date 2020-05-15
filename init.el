@@ -479,6 +479,7 @@
   :general
         (my-space-leader-def
             "8" 'neotree-toggle
+            "9" 'neotree-refresh
          )
   :config
         (general-define-key
