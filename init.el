@@ -1638,6 +1638,13 @@
         (eshell-did-you-mean-setup)
   )
 
+(use-package quickrun
+  :general
+        (my-space-leader-def
+            "x b" 'quickrun
+         )
+  )
+
 (use-package fish-mode
   )
 
