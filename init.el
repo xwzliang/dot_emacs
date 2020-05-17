@@ -1776,6 +1776,11 @@
         (pippel-python-command "python3")
   )
 
+(use-package doctest-mode
+  :custom
+        (doctest-python-command "python3")
+  )
+
 (use-package elisp-slime-nav
   :hook
         (emacs-lisp-mode . elisp-slime-nav-mode)
