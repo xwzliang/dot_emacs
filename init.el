@@ -1778,6 +1778,9 @@
         (pippel-python-command "python3")
   )
 
+(use-package mmm-mode
+  )
+
 (use-package doctest-mode
   :mode "\\.doctest\\'"
   :general
