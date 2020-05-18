@@ -1610,6 +1610,8 @@
         (my-space-leader-def
             :prefix (concat my-space-leader " x")
             "x" 'aweshell-dedicated-toggle
+            "o" 'aweshell-new
+            "n" 'aweshell-next
          )
   )
 
@@ -1777,6 +1779,11 @@
   )
 
 (use-package doctest-mode
+  :mode "\\.doctest\\'"
+  :general
+        (my-space-leader-def
+            "t p" 'doctest-execute
+         )
   :custom
         (doctest-python-command "python3")
   )
