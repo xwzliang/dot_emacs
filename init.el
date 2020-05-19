@@ -144,6 +144,8 @@
 (use-package doom-modeline
   :config
         (doom-modeline-mode 1)
+  :custom
+        (doom-modeline-buffer-file-name-style (quote truncate-with-project))
   :custom-face
         (doom-modeline-buffer-modified ((t (:inherit bold :foreground "brightblack"))))
         (doom-modeline-debug ((t nil)))
