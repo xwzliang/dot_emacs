@@ -1570,7 +1570,8 @@
 (use-package define-word
   :bind
         (
-            ("C-c m w" . define-word)
+            ("C-c m W" . define-word)
+            ("C-c m w" . define-word-at-point)
          )
   )
 
@@ -1789,6 +1790,8 @@
         (my-space-leader-def
             "t p" 'doctest-execute
          )
+  :config
+        (doctest-register-mmm-classes t t)
   :custom
         (doctest-python-command "python3")
   )
