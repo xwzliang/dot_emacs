@@ -1648,6 +1648,10 @@
         (my-space-leader-def
             "x b" 'quickrun
          )
+  :config
+        (quickrun-add-command "python"
+          '((:command . "python3"))
+          :override t)
   )
 
 (use-package fish-mode
