@@ -1254,6 +1254,12 @@
         (evil org org-agenda)
   :config
         (evil-org-agenda-set-keys)
+        (general-define-key
+            :states 'motion
+            :keymaps 'org-agenda-mode-map
+            "i" 'org-agenda-clock-in
+            "o" 'org-agenda-clock-out
+         )
   )
 
 (use-package org-expiry
