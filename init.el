@@ -1958,6 +1958,11 @@
          )
   )
 
+(use-package vlf
+  :config
+        (require 'vlf-setup)
+  )
+
 
 ;; my packages with use-package
 
