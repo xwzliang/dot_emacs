@@ -1858,6 +1858,11 @@
         (lsp-mode . lsp-enable-which-key-integration)
   )
 
+(use-package lsp-java
+  :hook
+        (java-mode . lsp)
+  )
+
 (use-package helm-lsp
   )
 
