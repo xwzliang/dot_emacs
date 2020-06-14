@@ -1866,6 +1866,11 @@
 (use-package helm-lsp
   )
 
+(use-package company-lsp
+  :config
+        (push 'company-lsp company-backends)
+  )
+
 (use-package rainbow-delimiters
   )
 
