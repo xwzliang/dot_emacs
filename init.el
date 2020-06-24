@@ -1871,6 +1871,11 @@
         (push 'company-lsp company-backends)
   )
 
+(use-package dap-mode
+  :hook
+        (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
+  )
+
 (use-package rainbow-delimiters
   )
 
