@@ -127,6 +127,11 @@
             (general-key-dispatch 'self-insert-command
                 :timeout 0.25
                 "," 'evil-normal-state))
+        ;; Use fd to <esc> keybinding in insert state
+        (general-imap "f"
+            (general-key-dispatch 'self-insert-command
+                :timeout 0.25
+                "d" 'evil-normal-state))
   )
 
 (use-package clues-theme
