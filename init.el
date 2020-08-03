@@ -1192,6 +1192,8 @@
             "D" 'org-agenda-day-view
             "W" 'org-agenda-week-view
             "g a" 'org-agenda
+            "g i" 'org-pomodoro
+            "g q" 'org-agenda-columns
             "g l" 'org-agenda-log-mode
             "g ]" 'org-next-link
             "g [" 'org-previous-link
@@ -1205,6 +1207,11 @@
         ;; Org agenda start from day view
         (setq org-agenda-span 'day)
         (setq org-agenda-start-with-log-mode t)
+        ;; Display pomodoro's in agenda clock report
+        (setq org-agenda-clockreport-parameter-plist
+            '(:fileskip0 t :link t :maxlevel 2 :formula "$5=($3+$4)*(60/25);t"))
+        ;; Add Effort to column view in agenda, default: "%25ITEM %TODO %3PRIORITY %TAGS"
+        (setq org-columns-default-format "%1PRIORITY %50ITEM(Task) %TODO %5CLOCKSUM_T(Clock) %9Effort(Estimate){:} %9CLOCKSUM %TAGS")
         ;; Add custom view for agenda
         (add-to-list 'org-agenda-custom-commands
             '("L" "Agenda and non-scheduled TODO|SOMEDAY tasks" (
