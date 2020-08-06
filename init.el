@@ -1415,8 +1415,8 @@
          )
   :custom
         (org-pomodoro-audio-player (executable-find "mpv"))
-        ;; Long break 30 minutes
-        (org-pomodoro-long-break-length 30)
+        ;; Long break 25 minutes
+        (org-pomodoro-long-break-length 25)
         (org-pomodoro-short-break-sound (expand-file-name "~/Dropbox/Sounds/Alert/Sunny_Day.mp3"))
         (org-pomodoro-long-break-sound (expand-file-name "~/Dropbox/Sounds/Alert/Sunny_Day.mp3"))
         (org-pomodoro-finished-sound (expand-file-name "~/Dropbox/Sounds/Alert/Little_Crystal.mp3"))
