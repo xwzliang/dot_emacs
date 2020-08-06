@@ -1103,6 +1103,9 @@
         (setq org-refile-allow-creating-parent-nodes 'confirm)
         ;; makes org-refile outline working with helm/ivy
         (setq org-outline-path-complete-in-steps nil)
+        ;; For latex exporting
+        (add-to-list 'org-latex-packages-alist '("" "tabularx" nil))
+
         (setq org-enforce-todo-dependencies t)
         (setq org-enforce-todo-checkbox-dependencies t)
         (setq org-track-ordered-property-with-tag t)
