@@ -1055,6 +1055,7 @@
             ("C-c o a" . org-agenda)
             ("C-c o l" . org-store-link)
             ("C-c o s" . org-schedule)
+            ("C-c o z" . org-toggle-archive-tag)
             :map org-mode-map
             ("C-c a" . org-agenda)
             ("M-RET" . org-insert-todo-heading)
