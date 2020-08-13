@@ -2021,6 +2021,14 @@
         (require 'vlf-setup)
   )
 
+(use-package leetcode
+  :config
+        (setq leetcode-prefer-language "python3")
+        (setq leetcode-prefer-sql "mysql")
+        (setq leetcode-save-solutions t)
+        (setq leetcode-directory "~/git/my_leetcode")
+  )
+
 
 ;; my packages with use-package
 
