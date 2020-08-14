@@ -1416,6 +1416,11 @@
          )
   :custom
         (org-pomodoro-audio-player (executable-find "mpv"))
+        ;; Play ticking sound
+        (org-pomodoro-ticking-sound-p t)
+        (org-pomodoro-ticking-frequency 5)
+        ;; (org-pomodoro-ticking-sound-states '(:pomodoro :short-break :long-break))
+        (org-pomodoro-ticking-sound-states '(:pomodoro))
         ;; Long break 25 minutes
         (org-pomodoro-long-break-length 25)
         (org-pomodoro-short-break-sound (expand-file-name "~/Dropbox/Sounds/Alert/Sunny_Day.mp3"))
