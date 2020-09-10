@@ -9,9 +9,11 @@ all:
 	ln -sf $(REPO_DIR)/init.el $(EMACS_DIR)/init.el
 	ln -sf $(REPO_DIR)/$(MY_INIT_DIR) $(EMACS_DIR)/$(MY_INIT_DIR)
 	ln -sf $(REPO_DIR)/$(MY_PACKAGE_DIR) $(EMACS_DIR)/$(MY_PACKAGE_DIR)
+	mkdir -p $(EMACS_DIR)/eshell
 	ln -sf $(REPO_DIR)/$(OTHERS_DIR)/eshell_alias $(EMACS_DIR)/eshell/alias
 
 clean:
 	rm -f $(EMACS_DIR)/init.el
 	rm -f $(EMACS_DIR)/$(MY_INIT_DIR)
 	rm -f $(EMACS_DIR)/$(MY_PACKAGE_DIR)
+	rm -f $(EMACS_DIR)/eshell/alias
