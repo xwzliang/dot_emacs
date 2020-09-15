@@ -2034,6 +2034,9 @@
         (setq leetcode-directory "~/git/my_leetcode")
   )
 
+(use-package typescript-mode
+  )
+
 
 ;; my packages with use-package
 
