@@ -555,10 +555,10 @@
             ;; helm-echo-input-in-header-line		t
         )
         ; Don't show the first two lines (current dir and parent dir)
-        (advice-add 'helm-ff-filter-candidate-one-by-one
-                :around (lambda (fcn file)
-                        (unless (string-match "\\(?:/\\|\\`\\)\\.\\{1,2\\}\\'" file)
-                            (funcall fcn file))))
+        ;; (advice-add 'helm-ff-filter-candidate-one-by-one
+        ;;         :around (lambda (fcn file)
+        ;;                 (unless (string-match "\\(?:/\\|\\`\\)\\.\\{1,2\\}\\'" file)
+        ;;                     (funcall fcn file))))
         ;; helm-mini
         (setq helm-buffers-fuzzy-matching t
             helm-recentf-fuzzy-match    t)
