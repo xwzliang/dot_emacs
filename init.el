@@ -1886,6 +1886,7 @@
         (lsp-mode . lsp-enable-which-key-integration)
         (scala-mode . lsp)
         (typescript-mode . lsp)
+        (js-mode . lsp)
   )
 
 (use-package lsp-java
