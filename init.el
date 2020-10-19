@@ -1977,6 +1977,10 @@
   :mode "\\.jq\\'"
   )
 
+(use-package yaml-mode
+  :mode "\\.yml\\'"
+  )
+
 (use-package dockerfile-mode
   :mode "Dockerfile\\'"
   )
