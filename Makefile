@@ -14,6 +14,6 @@ all:
 
 clean:
 	rm -f $(EMACS_DIR)/init.el
-	rm -f $(EMACS_DIR)/$(MY_INIT_DIR)
-	rm -f $(EMACS_DIR)/$(MY_PACKAGE_DIR)
+	rm -rf $(EMACS_DIR)/$(MY_INIT_DIR)
+	rm -rf $(EMACS_DIR)/$(MY_PACKAGE_DIR)
 	rm -f $(EMACS_DIR)/eshell/alias
