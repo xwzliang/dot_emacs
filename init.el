@@ -1894,6 +1894,14 @@
         (java-mode . lsp)
   )
 
+(use-package emmet-mode
+  :config
+        (setq emmet-move-cursor-between-quotes t)
+  :hook
+        (css-mode)
+        (html-mode)
+  )
+
 (use-package scala-mode
   :mode "\\.s\\(cala\\|bt\\)$"
   )
