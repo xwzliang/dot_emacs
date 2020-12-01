@@ -2040,6 +2040,10 @@
         (require 'vlf-setup)
   )
 
+(use-package vue-mode
+  :mode "\\.vue\\'"
+  )
+
 (use-package leetcode
   :config
         (setq leetcode-prefer-language "python3")
