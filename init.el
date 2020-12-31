@@ -49,6 +49,9 @@
 ;; Disable tabs by default
 (setq-default indent-tabs-mode nil)
 
+;; disable semantic-idle-scheduler-function
+(advice-add 'semantic-idle-scheduler-function :around #'ignore)
+
 ;; Settings for MacOS
 (cond ((string-equal system-type "darwin")
        (progn
