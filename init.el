@@ -2101,6 +2101,9 @@
         ;; Change height of the font in modeline
         (set-face-attribute 'mode-line nil :height 102)
         (set-face-attribute 'mode-line-inactive nil :height 102)
+  :custom-face
+        ;; default font size
+        (default ((t (:height 128))))
   )
 
 (use-package dabbrev
