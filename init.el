@@ -152,6 +152,9 @@
 (use-package doom-modeline
   :config
         (doom-modeline-mode 1)
+        (setq doom-modeline-icon nil)
+        ;; Change height of the modeline
+        (setq doom-modeline-height 20)
   :custom
         (doom-modeline-buffer-file-name-style (quote truncate-with-project))
   :custom-face
@@ -166,6 +169,7 @@
         (doom-modeline-info ((t (:inherit bold))))
         (doom-modeline-project-dir ((t (:inherit bold))))
         (doom-modeline-warning ((t nil)))
+        (doom-modeline-bar-inactive ((t (:background "#af5f00"))))
   )
 
 (use-package macrostep
@@ -2094,6 +2098,9 @@
         (set-face-foreground 'mode-line "black")
         ;; Change color for prompt in mini-buffer
         (set-face-foreground 'minibuffer-prompt "white")
+        ;; Change height of the font in modeline
+        (set-face-attribute 'mode-line nil :height 102)
+        (set-face-attribute 'mode-line-inactive nil :height 102)
   )
 
 (use-package dabbrev
@@ -2140,6 +2147,14 @@
         (
             ("C-c m f" . toggle-frame-fullscreen)
          )
+  :config
+        (window-divider-mode)
+  :custom
+        (window-divider-default-right-width 10)
+  :custom-face
+        (window-divider ((t (:foreground "#af5f00"))))
+        (window-divider-first-pixel ((t (:foreground "#af5f00"))))
+        (window-divider-last-pixel ((t (:foreground "#af5f00"))))
   )
 
 (use-package executable
