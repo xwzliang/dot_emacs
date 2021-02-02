@@ -1889,6 +1889,7 @@
         (setq gc-cons-threshold 100000000)
         (setq read-process-output-max (* 1024 1024)) ;; 1mb
         ;; (setq lsp-log-io t)
+        (setq lsp-sqls-server "~/go/bin/sqls")
   :hook
         (lsp-mode . lsp-enable-which-key-integration)
         (scala-mode . lsp)
