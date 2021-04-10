@@ -70,6 +70,7 @@
  )
 
 (use-package helm-firefox
+  :disabled
   :config
 		(cond ((string-equal system-type "darwin")
 			(progn

@@ -49,6 +49,9 @@
 ;; Disable tabs by default
 (setq-default indent-tabs-mode nil)
 
+;; disable semantic-idle-scheduler-function
+(advice-add 'semantic-idle-scheduler-function :around #'ignore)
+
 ;; Settings for MacOS
 (cond ((string-equal system-type "darwin")
        (progn
@@ -149,6 +152,9 @@
 (use-package doom-modeline
   :config
         (doom-modeline-mode 1)
+        (setq doom-modeline-icon nil)
+        ;; Change height of the modeline
+        (setq doom-modeline-height 20)
   :custom
         (doom-modeline-buffer-file-name-style (quote truncate-with-project))
   :custom-face
@@ -163,6 +169,7 @@
         (doom-modeline-info ((t (:inherit bold))))
         (doom-modeline-project-dir ((t (:inherit bold))))
         (doom-modeline-warning ((t nil)))
+        (doom-modeline-bar-inactive ((t (:background "#af5f00"))))
   )
 
 (use-package macrostep
@@ -1884,6 +1891,7 @@
         (setq gc-cons-threshold 100000000)
         (setq read-process-output-max (* 1024 1024)) ;; 1mb
         ;; (setq lsp-log-io t)
+        (setq lsp-sqls-server "~/go/bin/sqls")
   :hook
         (lsp-mode . lsp-enable-which-key-integration)
         (scala-mode . lsp)
@@ -1894,6 +1902,14 @@
 (use-package lsp-java
   :hook
         (java-mode . lsp)
+  )
+
+(use-package emmet-mode
+  :config
+        (setq emmet-move-cursor-between-quotes t)
+  :hook
+        (css-mode)
+        (html-mode)
   )
 
 (use-package scala-mode
@@ -1979,6 +1995,10 @@
   :mode "\\.jq\\'"
   )
 
+(use-package yaml-mode
+  :mode "\\.yml\\'"
+  )
+
 (use-package dockerfile-mode
   :mode "Dockerfile\\'"
   )
@@ -2030,6 +2050,10 @@
         (require 'vlf-setup)
   )
 
+(use-package vue-mode
+  :mode "\\.vue\\'"
+  )
+
 (use-package leetcode
   :config
         (setq leetcode-prefer-language "python3")
@@ -2077,6 +2101,12 @@
         (set-face-foreground 'mode-line "black")
         ;; Change color for prompt in mini-buffer
         (set-face-foreground 'minibuffer-prompt "white")
+        ;; Change height of the font in modeline
+        (set-face-attribute 'mode-line nil :height 102)
+        (set-face-attribute 'mode-line-inactive nil :height 102)
+  :custom-face
+        ;; default font size
+        (default ((t (:height 128))))
   )
 
 (use-package dabbrev
@@ -2123,6 +2153,14 @@
         (
             ("C-c m f" . toggle-frame-fullscreen)
          )
+  :config
+        (window-divider-mode)
+  :custom
+        (window-divider-default-right-width 10)
+  :custom-face
+        (window-divider ((t (:foreground "#af5f00"))))
+        (window-divider-first-pixel ((t (:foreground "#af5f00"))))
+        (window-divider-last-pixel ((t (:foreground "#af5f00"))))
   )
 
 (use-package executable
