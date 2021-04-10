@@ -1275,6 +1275,8 @@
             :keymaps 'org-agenda-mode-map
             "i" 'org-agenda-clock-in
             "o" 'org-agenda-clock-out
+            "H" 'org-agenda-earlier
+            "L" 'org-agenda-later
          )
   )
 
