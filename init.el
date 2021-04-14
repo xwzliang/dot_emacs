@@ -2050,6 +2050,17 @@
         (require 'vlf-setup)
   )
 
+(use-package prettier-js
+  :config
+        (setq prettier-js-args '(
+            "--trailing-comma" "all"
+            "--single-quote"
+        ))
+  :hook
+        (vue-mode . prettier-js-mode)
+        (js-mode . prettier-js-mode)
+  )
+
 (use-package vue-mode
   :mode "\\.vue\\'"
   )
