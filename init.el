@@ -1829,6 +1829,10 @@
   )
 
 (use-package mmm-mode
+  :init
+        (add-hook 'mmm-mode-hook
+          (lambda ()
+            (set-face-background 'mmm-default-submode-face nil)))
   )
 
 (use-package doctest-mode
