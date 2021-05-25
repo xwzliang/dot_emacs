@@ -857,10 +857,10 @@
         (after-save . magit-after-save-refresh-status)
   )
 
-(use-package evil-magit
-  :after
-        (evil magit)
-  )
+;; (use-package evil-magit
+;;   :after
+;;         (evil magit)
+;;   )
 
 (use-package magit-gitflow
   :after
@@ -1938,10 +1938,10 @@
 (use-package helm-lsp
   )
 
-(use-package company-lsp
-  :config
-        (push 'company-lsp company-backends)
-  )
+;; (use-package company-lsp
+;;   :config
+;;         (push 'company-lsp company-backends)
+;;   )
 
 (use-package dap-mode
   :hook
