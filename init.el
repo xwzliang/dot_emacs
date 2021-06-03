@@ -1143,6 +1143,7 @@
             '(
                 (shell . t)
                 (dot . t)
+                (restclient . t)
             ))
         ; Don't ask for confirmation when execute the code block
         (setq org-confirm-babel-evaluate nil)
@@ -2103,6 +2104,12 @@
   )
 
 (use-package typescript-mode
+  )
+
+(use-package restclient
+  )
+
+(use-package ob-restclient
   )
 
 
