@@ -2112,6 +2112,9 @@
 (use-package ob-restclient
   )
 
+(use-package ejc-sql
+  )
+
 
 ;; my packages with use-package
 
