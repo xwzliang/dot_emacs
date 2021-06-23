@@ -1137,11 +1137,13 @@
         (add-to-list 'org-export-backends "beamer")
         ; Enable org-habit
         (add-to-list 'org-modules 'org-habit)
+        (setq org-babel-python-command "python3")
         ; Use other source code languages in org
         (org-babel-do-load-languages
             'org-babel-load-languages
             '(
                 (shell . t)
+                (python . t)
                 (dot . t)
                 (restclient . t)
             ))
@@ -1196,7 +1198,7 @@
 
 (use-package org-agenda
   :after
-        (org)
+        (org f)
   :general
         (
             :states 'motion
