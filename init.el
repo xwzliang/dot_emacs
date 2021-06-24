@@ -278,6 +278,8 @@
          )
   :config
         (evil-mode 1)
+        (global-undo-tree-mode)
+        (evil-set-undo-system 'undo-tree)
         ; change granularity level of undo
         (setq evil-want-fine-undo t)
         (general-define-key
