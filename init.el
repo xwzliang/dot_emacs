@@ -65,6 +65,7 @@
   (normal-top-level-add-subdirs-to-load-path))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/my_inits"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/my_packages"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/local_setting"))
 
 
 ;; Package settings
