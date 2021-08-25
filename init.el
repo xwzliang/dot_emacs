@@ -1257,6 +1257,9 @@
         )))
   )
 
+(use-package org-analyzer
+  )
+
 (use-package org-timeline
   :hook
         (org-agenda-finalize . org-timeline-insert-timeline)
