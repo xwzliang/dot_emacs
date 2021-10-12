@@ -335,8 +335,14 @@
   )
 
 (use-package evil-replace-with-register
+  :general
+        (
+            :states '(normal visual)
+            :keymaps 'override
+            "g r" 'evil-replace-with-register
+         )
   :config
-        (setq evil-replace-with-register-key (kbd "gr"))
+        ;; (setq evil-replace-with-register-key (kbd "gr"))
         (evil-replace-with-register-install)
   )
 
