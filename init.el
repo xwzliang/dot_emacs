@@ -1403,9 +1403,147 @@
 
 (use-package org-ref
   :after
-        (org)
+        (org ebib)
   :config
-        (setq org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib"))
+        (setq org-ref-default-bibliography ebib-preload-bib-files)
+        (setq org-ref-pdf-directory ebib-file-search-dirs)
+  )
+
+(use-package biblio
+  )
+
+(use-package ebib
+  :after
+        (org)
+  :preface
+        (defun my-ebib-get-author-names (key)
+            (-->
+            (ebib-get-field-value "author" key ebib--cur-db "default" 'unbraced)
+            (s-split " and " it)
+            (--map (car (s-split "," it)) it)
+            (if (< 2 (length it))
+                (concat (car it) " et al")
+            (s-join " and " it))))
+
+        (defun my-ebib-get-year (key)
+            (or
+            (ebib-get-field-value "year" key ebib--cur-db 'noerror 'unbraced)
+            (ebib-get-field-value "date" key ebib--cur-db 'noerror 'unbraced)))
+
+        (defun my-ebib-get-title (key)
+            (-->
+            (ebib-get-field-value "title" key ebib--cur-db "default" 'unbraced)
+            (s-split ":" it)
+            (car it)
+            (replace-regexp-in-string "[{}]" "" it)
+            (s-trim it)
+            (s-truncate 100 it "")))
+
+        (defun my-ebib-generate-filename (key)
+            (let ((names (my-ebib-get-author-names key))
+                (year (my-ebib-get-year key))
+                (title (my-ebib-get-title key)))
+            (->> (list names year title)
+            (-filter #'identity) ; remove nil values
+            (s-join "_")
+            ;; (replace-regexp-in-string " " "_")
+            )))
+
+        (defun my-ebib-add-newest-pdf-from-downloads ()
+            "Add the most recently-downloaded PDF in the ~/Downloads directory to the current entry in ebib."
+            (interactive)
+            ;; pull out the most recent file from ~/Downloads with the .pdf extension.
+            (let ((newest-pdf (caar (sort (mapcan (lambda (x) (when (string-equal (file-name-extension (nth 0 x)) "pdf") (cons x nil)))
+                                                (directory-files-and-attributes my-pdf-download-dir))
+                                        (lambda (x y) (not (time-less-p (nth 6 x) (nth 6 y))))))))
+            (if newest-pdf
+                ;; https://nullprogram.com/blog/2017/10/27/
+                ;; need to override `read-file-name' because ebib normally prompts us for the file to import
+                (let ((fpath (concat (file-name-as-directory my-pdf-download-dir) newest-pdf))
+                        (bibkey (ebib--get-key-at-point)))
+                    (cl-letf (((symbol-function 'read-file-name) (lambda (&rest _) fpath)))
+                        (call-interactively #'ebib-import-file))
+                    (message "my-ebib: Imported %s for %s" fpath bibkey))
+                (message "my-ebib: No PDF files found in %s." my-pdf-download-dir))))
+
+        (defun my-ebib-edit-url ()
+            (interactive)
+            (goto-char (point-min))
+            (search-forward "url")
+            (ebib-edit-field)
+          )
+
+        (defun my-ebib-edit-keywords ()
+            (interactive)
+            (goto-char (point-min))
+            (search-forward "keywords")
+            (ebib-edit-field)
+          )
+  :config
+        (setq ebib-bibtex-dialect 'biblatex)
+        (defvar my-ebib-dir (f-join org-directory "ebib")
+            "my ebib directory")
+        (defvar my-pdf-download-dir "~/Downloads/books"
+            "my pdf download directory")
+        (setq ebib-file-search-dirs (list (f-join my-ebib-dir "files")))
+        (setq ebib-notes-directory (f-join my-ebib-dir "notes"))
+        (setq ebib-preload-bib-files
+            (f-files my-ebib-dir (lambda (file) (equal (f-ext file) "bib")))
+         )
+        ;; (setq ebib-file-associations '(("pdf" . "nohup evince %s")))
+        (setq ebib-file-associations '(("pdf" . "zathura")))
+        (setq ebib-name-transform-function #'my-ebib-generate-filename)
+        (setq ebib-reading-list-file (f-join org-directory "0_4_reading.org"))
+  :general
+        (my-space-leader-def
+            "r e" 'ebib
+         )
+        (
+            :states 'normal
+            :keymaps 'ebib-index-mode-map
+            "w" 'ebib-save-current-database
+            "W" 'ebib-write-database
+            "t" 'ebib-push-citation
+            "T" 'ebib-browse-doi
+            "s" 'ebib-jump-to-entry
+            "i" 'isbn-to-bibtex
+            "I" 'my-ebib-add-newest-pdf-from-downloads
+         )
+        (
+            :states 'normal
+            :keymaps 'ebib-entry-mode-map
+            "w" 'ebib-save-current-database
+            "W" 'ebib-write-database
+            "i" 'isbn-to-bibtex
+            "I" 'my-ebib-add-newest-pdf-from-downloads
+            "u" 'my-ebib-edit-url
+            "t" 'my-ebib-edit-keywords
+         )
+        (
+            :states 'normal
+            :keymaps 'ebib-log-mode-map
+            "q" 'ebib-quit-log-buffer
+         )
+  )
+
+(use-package ebib-biblio
+  :after
+        (ebib biblio)
+  :bind
+        (
+            :map biblio-selection-mode-map
+            ("i" . ebib-biblio-selection-import)
+         )
+  )
+
+(use-package helm-bibtex
+  :after
+        (ebib)
+  :config
+        (setq bibtex-completion-bibliography ebib-preload-bib-files)
+        (setq bibtex-completion-library-path '(ebib-file-search-dirs))
+        (setq bibtex-completion-pdf-field "file")
+        (setq bibtex-completion-notes-path ebib-notes-directory)
   )
 
 (use-package org-web-tools
@@ -2526,3 +2664,19 @@
   :init
         (setq-default term-prompt-regexp "^[^$%>»]*[#$%>»] ")
 )
+
+(use-package bibtex
+  :config
+        (setq bibtex-dialect 'biblatex)
+        (setq bibtex-autokey-year-length 4)
+        (setq bibtex-autokey-titleword-separator "_")
+        (setq bibtex-autokey-name-year-separator "_")
+        (setq bibtex-autokey-year-title-separator "_")
+        (setq bibtex-autokey-titleword-length 8)
+        (setq bibtex-autokey-titlewords 3)
+        (setq bibtex-autokey-titleword-ignore
+        '("A" "An" "The" "[^[:upper:]].*" ".*[^[:upper:][:lower:]0-9].*"))
+        ;; (setq bibtex-completion-pdf-open-function
+        ;;     (lambda (fpath)
+        ;;         (call-process "evince" nil 0 nil fpath)))
+  )
