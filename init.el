@@ -2142,6 +2142,9 @@
   :mode "\\.json\\'"
   )
 
+(use-package csv-mode
+  )
+
 (use-package web-mode
   :config
         (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
