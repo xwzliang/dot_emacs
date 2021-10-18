@@ -1805,13 +1805,6 @@
   )
 
 (use-package aweshell
-  :general
-        (my-space-leader-def
-            :prefix (concat my-space-leader " x")
-            "x" 'aweshell-dedicated-toggle
-            "o" 'aweshell-new
-            "n" 'aweshell-next
-         )
   )
 
 (use-package eshell-prompt-extras
@@ -2268,6 +2261,20 @@
   )
 
 (use-package ejc-sql
+  )
+
+(use-package vterm
+  )
+
+(use-package multi-vterm
+  :general
+        (my-space-leader-def
+            :prefix (concat my-space-leader " x")
+            "x" 'multi-vterm-dedicated-toggle
+            "o" 'multi-vterm
+            "j" 'multi-vterm-next
+            "k" 'multi-vterm-prev
+         )
   )
 
 
