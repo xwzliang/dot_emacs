@@ -855,6 +855,7 @@
             ("C-c g s" . magit-status)
             :map magit-mode-map
             ("o" . magit-file-checkout)
+            ("gR" . magit-refresh)
          )
   :general
         (my-space-leader-def
