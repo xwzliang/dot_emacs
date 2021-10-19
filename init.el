@@ -1683,17 +1683,23 @@
         (
             :prefix "C-c n"
             "r" 'org-roam
-            "f" 'org-roam-find-file
-            "g" 'org-roam-show-graph
-            "l" 'org-roam-insert
+            "f" 'org-roam-node-find
+            "g" 'org-roam-graph
+            "l" 'org-roam-node-insert
+            "c" 'org-roam-capture
+            ;; Dailies
+            "j" 'org-roam-dailies-capture-today
          )
         (my-space-leader-def
             "n" (general-simulate-key "C-c n")
          )
+  :init
+        (setq org-roam-v2-ack t)
   :config
         (setq org-roam-completion-system 'helm)
-  :hook
-        (after-init . org-roam-mode)
+        (org-roam-db-autosync-mode)
+  ;; :hook
+  ;;       (after-init . org-roam-mode)
   :custom
         (org-roam-directory (f-join org-directory "wiki"))
   )
