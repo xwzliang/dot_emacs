@@ -1447,7 +1447,7 @@
             (->> (list names year title)
             (-filter #'identity) ; remove nil values
             (s-join "_")
-            ;; (replace-regexp-in-string " " "_")
+            (replace-regexp-in-string " " "-")
             )))
 
         (defun my-ebib-add-newest-pdf-from-downloads ()
@@ -1480,6 +1480,45 @@
             (search-forward "keywords")
             (ebib-edit-field)
           )
+
+        (defun my-ebib-browse-url (arg)
+            "Browse the URL in the \"url\" field.
+            If the \"url\" field contains more than one URL, ask the user
+            which one to open.  Alternatively, the user can provide a numeric
+            prefix argument ARG."
+            (interactive "P")
+            (ebib--execute-when
+                (entries
+                (let ((urls (ebib-get-field-value "url" (ebib--get-key-at-point) ebib--cur-db 'noerror 'unbraced 'xref)))
+                (if urls
+                    (progn
+                        ;; (ebib--call-browser (ebib--select-url urls (if (numberp arg) arg nil)))
+                        (multi-vterm-dedicated-open)
+                        (vterm-send-string (concat "browsh --firefox.with-gui --startup-url " (ebib--select-url urls (if (numberp arg) arg nil))) t)
+                        (vterm-send-return)
+                    )
+                    (error "[Ebib] No URL found in url field"))))
+                (default
+                (beep))))
+
+        (defun my-ebib-view-pdf (arg)
+            "View a file in the \"file\" field.
+            The \"file\" field may contain more than one filename.  In that
+            case, a numeric prefix argument ARG can be used to specify which
+            file to choose."
+            (interactive "P")
+            (ebib--execute-when
+                (entries
+                (let ((file (ebib-get-field-value "file" (ebib--get-key-at-point) ebib--cur-db 'noerror 'unbraced 'xref))
+                        (num (if (numberp arg) arg nil)))
+                    (progn
+                        (multi-vterm-dedicated-open)
+                        (vterm-send-string (concat "browsh_my_pdf '" (ebib--expand-file-name (ebib--select-file file num (ebib--get-key-at-point)))"'") t)
+
+                        (vterm-send-return)
+                    )))
+                (default
+                    (beep))))
   :config
         (setq ebib-bibtex-dialect 'biblatex)
         (defvar my-ebib-dir (f-join org-directory "ebib")
@@ -1495,6 +1534,7 @@
         (setq ebib-file-associations '(("pdf" . "zathura")))
         (setq ebib-name-transform-function #'my-ebib-generate-filename)
         (setq ebib-reading-list-file (f-join org-directory "0_4_reading.org"))
+        ;; (setq ebib-browser-command "browsh --firefox.with-gui --startup-url %s")
   :general
         (my-space-leader-def
             "r e" 'ebib
@@ -1509,6 +1549,9 @@
             "s" 'ebib-jump-to-entry
             "i" 'isbn-to-bibtex
             "I" 'my-ebib-add-newest-pdf-from-downloads
+            "Fo" 'ebib-view-file
+            "u" 'my-ebib-browse-url
+            "f" 'my-ebib-view-pdf
          )
         (
             :states 'normal
@@ -2680,13 +2723,17 @@
   :config
         (setq bibtex-dialect 'biblatex)
         (setq bibtex-autokey-year-length 4)
-        (setq bibtex-autokey-titleword-separator "_")
+        (setq bibtex-autokey-titleword-separator "")
         (setq bibtex-autokey-name-year-separator "_")
         (setq bibtex-autokey-year-title-separator "_")
-        (setq bibtex-autokey-titleword-length 8)
+        (setq bibtex-autokey-titleword-length 100)
         (setq bibtex-autokey-titlewords 3)
+        ;; (setq bibtex-autokey-titlewords-stretch 1)
+        ;; (setq bibtex-autokey-name-case-convert-function 'capitalize)
+        (setq bibtex-autokey-titleword-case-convert-function 'capitalize)
         (setq bibtex-autokey-titleword-ignore
-        '("A" "An" "The" "[^[:upper:]].*" ".*[^[:upper:][:lower:]0-9].*"))
+        '("A" "An" "The" "And"))
+        ;; '("A" "An" "The" "[^[:upper:]].*" ".*[^[:upper:][:lower:]0-9].*"))
         ;; (setq bibtex-completion-pdf-open-function
         ;;     (lambda (fpath)
         ;;         (call-process "evince" nil 0 nil fpath)))
