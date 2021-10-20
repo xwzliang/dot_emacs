@@ -2314,6 +2314,8 @@
   )
 
 (use-package vterm
+  :custom
+        (vterm-shell "/bin/zsh")
   )
 
 (use-package multi-vterm
