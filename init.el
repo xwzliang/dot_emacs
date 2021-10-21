@@ -2263,6 +2263,10 @@
         (ielm-mode . elisp-slime-nav-mode)
   )
 
+(use-package lispy
+;; This package reimagines Paredit - a popular method to navigate and edit LISP code in Emacs
+  )
+
 (use-package eros
 ;; Evaluation Result inline OverlayS for Emacs Lisp
   :hook
