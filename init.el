@@ -1,8 +1,19 @@
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
+;; Bootstrap code for straight.el package manager
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(setq package-enable-at-startup nil)
+(setq straight-use-package-by-default t)
+
 
 ;; Enable debugging on error (this will cause describe-bindings not working)
 ;; (toggle-debug-on-error)
@@ -71,39 +82,14 @@
 ;; Package settings
 
 ;; use-package
-(eval-when-compile
-  (require 'use-package))
-(require 'bind-key)
+;; The use-package macro allows you to isolate package configuration in your .emacs file in a way that is both performance-oriented and, well, tidy
+(straight-use-package 'use-package)
 
 
 ;; Third party packages with use-package
 
-(use-package f
-  )
-
-(use-package delight
-  )
-
-(use-package el-patch
-  )
-
-(use-package fzf
-  :bind
-        (
-            ("C-c f z" . fzf)
-         )
-  )
-
-(use-package auto-package-update
-  :config
-        (setq package-archives '(
-            ("gnu" . "http://elpa.gnu.org/packages/")
-            ("melpa" . "https://melpa.org/packages/")
-            ("org" . "https://orgmode.org/elpa/")
-         ))
-  )
-
 (use-package general
+;; Convenience wrappers for keybindings
   :config
         (general-auto-unbind-keys)
         (general-create-definer my-prefix-key-evil-def :prefix "C-c e")
@@ -138,12 +124,48 @@
                 "d" 'evil-normal-state))
   )
 
+(use-package hydra
+;; This is a package for GNU Emacs that can be used to tie related commands into a family of short bindings with a common prefix - a Hydra.
+  :custom-face
+        (hydra-face-red ((t (:foreground "green"))))
+  )
+
+(use-package dash
+;; A modern list API for Emacs
+  )
+
+(use-package f
+;; Modern API for working with files and directories in Emacs
+  )
+
+(use-package delight
+;; Enables you to customise the mode names displayed in the mode line.
+  )
+
+(use-package el-patch
+;; el-patch provides a way to customize the behavior of Emacs Lisp functions
+  )
+
+(use-package fzf
+;; A front-end for fzf, fzf is a general-purpose command-line fuzzy file finder
+  :bind
+        (
+            ("C-c f z" . fzf)
+         )
+  :general
+        (my-space-leader-def
+            "S" 'fzf
+        )
+  )
+
 (use-package clues-theme
+;; An Emacs theme, which is approaching awesomeness
   :init
         (load-theme 'clues t)
   )
 
 (use-package restart-emacs
+;; This is a simple package to restart Emacs for within Emacs.
   :general
         (my-space-leader-def
             "r r" 'restart-emacs
@@ -151,6 +173,7 @@
   )
 
 (use-package doom-modeline
+;; A fancy and fast mode-line inspired by minimalism design
   :config
         (doom-modeline-mode 1)
         (setq doom-modeline-icon nil)
@@ -174,9 +197,11 @@
   )
 
 (use-package macrostep
+;; interactive macro-expander for Emacs
   )
 
 (use-package transpose-frame
+;; Transpose windows arrangement in a frame
   :general
         (
             :prefix "C-c f"
@@ -187,6 +212,7 @@
   )
 
 (use-package persp-mode
+;; named perspectives(set of buffers/window configs) for emacs
   :delight
   :init
         (add-hook 'after-init-hook 'persp-mode)
@@ -209,6 +235,7 @@
 
 ;; company-mode
 (use-package company
+;; Modular in-buffer completion framework for Emacs
   :delight
   :init
         (add-hook 'after-init-hook 'global-company-mode)
@@ -241,11 +268,15 @@
   )
 
 (use-package company-statistics
+;; Sort completion candidates by previous completion choices
   :hook
         (after-init . company-statistics-mode)
   )
 
 (use-package evil
+;; The extensible vi layer for Emacs.
+  :after
+        (hydra undo-tree)
   :init
         (setq evil-want-keybinding nil)		;; required by evil-collection
         ; Don't use TAB to jump forward
@@ -297,6 +328,9 @@
  )
 
 (use-package evil-collection
+;; A set of keybindings for evil-mode
+  :init
+        (setq evil-want-keybinding nil)		;; required by evil-collection
   :config
         ;; Don't use evil-collection in w3m
         (delete 'w3m evil-collection-mode-list)
@@ -306,6 +340,7 @@
   )
 
 (use-package linum-relative
+;; Display relative line number in the left margin in emacs
   :general
         (my-space-leader-def
             ";" 'linum-relative-toggle
@@ -316,6 +351,7 @@
   )
 
 (use-package smartparens
+;; Minor mode for Emacs that deals with parens pairs and tries to be smart about it.
   :config
         (require 'smartparens-config)
         (smartparens-global-mode 1)
@@ -325,16 +361,19 @@
   )
 
 (use-package evil-surround
+;; "surroundings": parentheses, brackets, quotes, XML tags, and more, ys<textobject>, cs<old-textobject><new-textobject>, ds<textobject>
   :config
         (global-evil-surround-mode 1)
   )
 
 (use-package evil-exchange
+;; Easy text exchange operator for Evil, gx for exchange, gX for cancel
   :config
         (evil-exchange-install)
   )
 
 (use-package evil-replace-with-register
+;; Replace text with the contents of a register, ["x]gR{motion}
   :general
         (
             :states '(normal visual)
@@ -347,6 +386,7 @@
   )
 
 (use-package evil-visualstar
+;; Start a * or # search from the visual selection. Make a visual selection with v or V, and then hit * to search that selection forward, or # to search that selection backward
   :config
         ;; allowing for repeated * or #
         (setq evil-visualstar/persistent t)
@@ -354,16 +394,19 @@
   )
 
 (use-package evil-nerd-commenter
+;; Comment/uncomment lines efficiently. Like Nerd Commenter in Vim
   :config
         (evilnc-default-hotkeys)
   )
 
 (use-package evil-lion
+;; Evil align operator. Align bashed on CHAR with gl MOTION CHAR or right-align with gL MOTION CHAR. Use CHAR / to enter regular expression if a single character wouldn't suffice. Use CHAR RET to align with align.el's default rules for the active major mode.
   :config
         (evil-lion-mode)
   )
 
 (use-package evil-numbers
+;; Increment and decrement numbers in Emacs
   :bind
         (
             ("C-c +" . evil-numbers/inc-at-pt)
@@ -372,6 +415,7 @@
   )
 
 (use-package evil-args
+;; Motions and text objects for delimited arguments in Evil
   :bind
         (
             ;; "cia" change arg, "daa" delete arg
@@ -383,23 +427,35 @@
   )
 
 (use-package evil-indent-plus
+;; Better indent textobjects for evil
+;; It provides six new text objects to evil based on indentation:
+;; ii: A block of text with the same or higher indentation.
+;; ai: The same as ii, plus whitespace.
+;; iI: A block of text with the same or higher indentation, including the first line above with less indentation.
+;; aI: The same as iI, plus whitespace.
+;; iJ: A block of text with the same or higher indentation, including the first line above and below with less indentation.
+;; aJ: The same as iJ, plus whitespace
   :config
         (evil-indent-plus-default-bindings)
   )
 
 (use-package evil-visual-mark-mode
+;; Display evil marks on buffer
   )
 
 (use-package anzu
+;; anzu.el provides a minor mode which displays current match and total matches information in the mode-line
   :delight
   :config
         (global-anzu-mode)
   )
 
 (use-package evil-anzu
+;; anzu for Evil
   )
 
 (use-package evil-mc
+;; Multiple cursors implementation for evil-mode
   :delight
   :general
         (
@@ -411,31 +467,46 @@
   )
 
 (use-package evil-textobj-line
+;; Evil Line text object. Default: "l"
   )
 
-;; This package provides the x text object to manipulate html/xml tag attributes.
 (use-package exato
+;; This package provides the x text object to manipulate html/xml tag attributes. Try using dax, vix and gUix
   )
 
-;; This package provides h text objects for consecutive items with same syntax highlight.
 (use-package evil-textobj-syntax
+;; This package provides h text objects for consecutive items with same syntax highlight.
   )
 
-;; Evil operator g~ to cycle text objects through camelCase, kebab-case, snake_case and UPPER_CASE.
 (use-package evil-string-inflection
+;; Evil operator g~ to cycle text objects through camelCase, kebab-case, snake_case and UPPER_CASE.
   )
 
-;; This package provides the f,c,d text object
 (use-package evil-cleverparens
+;; Evil normal-state minor-mode for editing lisp-like languages
+;; This package provides the f,c,d text object
+;; Form bound to f. Form is a pair-delimited range as defined by smartparens
+;; Comment bound to c
+;; Defun bound to d
+;; H	Move backward by sexp
+;; L	Move forward by sexp
+;; (	Move backward up a sexp.
+;; )	Move forward up a sexp.
+;; [	Move to the previous opening parentheses
+;; ]	Move to the next closing parentheses
+;; {	Move to the next opening parentheses
+;; }	Move to the previous closing parentheses
   ;; :hook
   ;;        ((lisp-mode emacs-lisp-mode) . evil-cleverparens-mode)
   )
 
 (use-package undo-tree
+;; Treat undo history as a tree
   :delight
   )
 
 (use-package avy
+;; Jump to things in Emacs tree-style
   :general
         ;; (my-space-leader-def
         ;;     :prefix (concat my-space-leader " v")
@@ -456,6 +527,7 @@
   )
 
 (use-package git-gutter
+;; Emacs port of GitGutter
   :delight
   :init
         (add-hook 'after-init-hook 'global-git-gutter-mode)
@@ -490,6 +562,7 @@
 
 
 (use-package neotree
+;; A Emacs tree plugin like NerdTree for Vim.
   :bind
         (
             ([f8] . 'neotree-toggle)
@@ -518,6 +591,7 @@
 
 
 (use-package helm
+;; Helm is an Emacs framework for incremental completions and narrowing selections.
   :delight
   :init
         (global-set-key (kbd "C-c h") 'helm-command-prefix)
@@ -602,12 +676,18 @@
         ))
 )
 
+(use-package helm-company
+;; Helm interface for company-mode
+)
+
 (use-package helm-descbinds
+;; Helm Descbinds provides an interface to emacs’ describe-bindings making the currently active key bindings interactively searchable with helm.
   :config
         (helm-descbinds-mode)
   )
 
 (use-package helm-swoop
+;; helm-swoop allows to show interactively lines (in one or multiple buffers) that match a pattern in another (helm) buffer
   :after
         (helm)
   :bind
@@ -635,6 +715,7 @@
   )
 
 (use-package helm-ag
+;; The silver searcher with helm interface
   :bind
         (
             :map helm-command-map
@@ -643,12 +724,17 @@
             ("g b" . helm-do-ag-buffers)
             ("g p" . helm-do-ag-project-root)
          )
+  :general
+        (my-space-leader-def
+            "F" 'helm-do-ag-project-root
+        )
   :custom
         ;; Enable helm-follow-mode by default
         (helm-follow-mode-persistent t)
   )
 
 (use-package helm-make
+;; Select a Makefile target with helm. A call to helm-make will give you a helm selection of this directory Makefile's targets
   :bind
         (
             :map helm-command-map
@@ -656,12 +742,8 @@
          )
   )
 
-(use-package hydra
-  :custom-face
-        (hydra-face-red ((t (:foreground "green"))))
-  )
-
 (use-package projectile
+;; a project interaction library for Emacs
   :delight
   :bind-keymap
         ("C-c p" . projectile-command-map)
@@ -680,6 +762,7 @@
   )
 
 (use-package helm-projectile
+;; Helm integration for Projectile
   :config
         (helm-projectile-on)
         ;; (setq projectile-switch-project-action 'helm-projectile)
@@ -690,6 +773,9 @@
   )
 
 (use-package iedit
+;; Edit multiple regions simultaneously in a buffer or a region
+  :after
+        (hydra)
   :bind
         (
             ("C-c s" . iedit-mode)
@@ -720,6 +806,7 @@
   )
 
 (use-package evil-iedit-state
+;; Slick Evil states for iedit.
   :after
         (evil iedit)
   :hook
@@ -728,6 +815,7 @@
   )
 
 (use-package ggtags
+;; Emacs frontend to GNU Global source code tagging system.
   :hook
         (c-mode-common . (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
@@ -739,6 +827,7 @@
   )
 
 (use-package helm-gtags
+;; GNU GLOBAL helm interface
   :after
         (ggtags)
   :bind
@@ -760,6 +849,7 @@
   )
 
 (use-package yasnippet
+;; A template system for Emacs, It allows you to type an abbreviation and automatically expand it into function templates.
   :config
         (yas-global-mode 1)
   :custom
@@ -767,7 +857,12 @@
         (yas-alias-to-yas/prefix-p nil)
   )
 
+(use-package yasnippet-snippets
+;; a collection of yasnippet snippets for many languages
+  )
+
 (use-package helm-c-yasnippet
+;; Helm source for yasnippet
   :after
         (helm yasnippet)
   :bind
@@ -779,7 +874,12 @@
         (setq helm-yas-space-match-any-greedy t)
   )
 
+(use-package auto-yasnippet
+;; quickly create disposable yasnippets
+  )
+
 (use-package rg
+;; Emacs search tool based on ripgrep
   :config
         (rg-enable-default-bindings)
   :custom-face
@@ -789,6 +889,7 @@
   )
 
 (use-package helm-rg
+;; Search massive codebases extremely fast, using ripgrep and helm
   :bind
         (
             :map helm-command-map
@@ -809,14 +910,21 @@
   )
 
 (use-package bookmark+
+;; Bookmark+ enhances vanilla Emacs bookmarks in many ways, Bookmarks record locations so you can return to them later
+;; Bookmark the file you are editing: ‘C-x x m’
+;; Jump to a bookmark: ‘C-x j j’
+;; Tag a file (creates an autofile bookmark): `C-x x t + a’
+;; List/edit your bookmarks: ‘C-x r l’
   :custom
         (bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
   )
 
 (use-package bm
+;; This package provides visible, buffer local, bookmarks and the ability to jump forward and backward to the next bookmark.
   )
 
 (use-package expand-region
+;; Emacs extension to increase selected region by semantic units.
   :bind
         (
             ("M-+" . er/expand-region)
@@ -824,6 +932,7 @@
   )
 
 (use-package ibuffer-vc
+;; Group buffers in ibuffer list by VC project
   :after
         (ibuffer)
   :config
@@ -845,7 +954,12 @@
                 (ibuffer-do-sort-by-alphabetic))))
   )
 
+(use-package project
+  ;; Operations on the current project
+  )
+
 (use-package magit
+;; Magit is an interface to the version control system Git, implemented as an Emacs package. Magit aspires to be a complete Git porcelain.
   :bind
         (
             ("C-x g" . magit-status)
@@ -873,6 +987,7 @@
 ;;   )
 
 (use-package magit-gitflow
+;; GitFlow plugin for magit
   :after
         (magit)
   :general
@@ -885,11 +1000,13 @@
   )
 
 (use-package forge
+;; Work with Git forges from the comfort of Magit
   :after
         (magit)
   )
 
 (use-package hl-todo
+;; Highlight TODO keywords
   :general
         (
             :prefix "C-c t"
@@ -911,6 +1028,7 @@
   )
 
 (use-package magit-todos
+;; Show source files' TODOs (and FIXMEs, etc) in Magit status buffer
   :bind
         (
             ("C-c g t" . magit-todos-mode)
@@ -925,15 +1043,19 @@
   )
 
 (use-package gitignore-mode
+;; Emacs major modes for Git ignore files
   )
 
 (use-package gitconfig-mode
+;; Emacs major modes for Git config files
   )
 
 (use-package gitattributes-mode
+;; Emacs major modes for Git attributes files
   )
 
 (use-package git-timemachine
+;; Git time machine
   :bind
         (
             ("C-c g r" . git-timemachine)
@@ -965,6 +1087,7 @@
   )
 
 (use-package insert-shebang
+;; Insert shebang line automatically for Emacs.
   ;; :hook
         ;; For file extension in my_insert_file_type_list and file has not been created yet, insert shebang, two newline and enter evil-insert-state
         ;; (find-file . (lambda ()
@@ -1012,6 +1135,7 @@
   )
 
 (use-package flycheck
+;; On the fly syntax checking for GNU Emacs
   :delight
   :config
         (add-to-list 'flycheck-gcc-include-path (getenv "unity_path"))
@@ -1025,12 +1149,14 @@
   )
 
 (use-package company-c-headers
+;; Auto-completion for C/C++ headers using Company
   :config
         (add-to-list 'company-backends 'company-c-headers)
         (add-to-list 'company-c-headers-path-system (getenv "unity_path"))
   )
 
 (use-package golden-ratio
+;; Automatic resizing of Emacs windows to the golden ratio
   :delight
   :config
         (golden-ratio-mode 1)
@@ -1048,6 +1174,7 @@
   )
 
 (use-package pdf-tools
+;; Emacs support library for PDF files.
   :mode
         ("\\.pdf\\'" . doc-view-mode)
   :hook
@@ -1059,6 +1186,7 @@
   )
 
 (use-package page-break-lines
+;; display ugly ^L page breaks as tidy horizontal lines
   ;; :hook
   ;;       (text-mode . page-break-lines-mode)
   )
@@ -1155,7 +1283,6 @@
                 (shell . t)
                 (python . t)
                 (dot . t)
-                (restclient . t)
             ))
         ; Don't ask for confirmation when execute the code block
         (setq org-confirm-babel-evaluate nil)
@@ -1194,10 +1321,14 @@
   )
 
 (use-package org-indent
+  :straight org
+  :after
+        (org)
   :delight
   )
 
 (use-package org-id
+  :straight org
   :after
         (org)
   :config
@@ -1207,6 +1338,7 @@
   )
 
 (use-package org-agenda
+  :straight org
   :after
         (org f)
   :general
@@ -1265,9 +1397,11 @@
   )
 
 (use-package org-analyzer
+;; org-analyzer creates an interactive visualization of org-mode time-tracking data, displays it in a web page in browser
   )
 
 (use-package org-timeline
+;; Add graphical view of agenda timeline to agenda buffer
   :hook
         (org-agenda-finalize . org-timeline-insert-timeline)
   :custom-face
@@ -1279,6 +1413,7 @@
   )
 
 (use-package evil-org
+;; Supplemental evil-mode keybindings to emacs org-mode
   :delight
   :after
         (evil org)
@@ -1289,21 +1424,29 @@
   )
 
 (use-package evil-org-agenda
+  :straight evil-org
   :after
         (evil org org-agenda)
-  :config
-        (evil-org-agenda-set-keys)
-        (general-define-key
+  :general
+        (
             :states 'motion
             :keymaps 'org-agenda-mode-map
             "i" 'org-agenda-clock-in
             "o" 'org-agenda-clock-out
             "H" 'org-agenda-earlier
             "L" 'org-agenda-later
+            "TAB" 'org-agenda-goto
          )
+  :config
+        (evil-org-agenda-set-keys)
+  )
+
+(use-package org-contrib
+;; Org-mode Contributed Packages (https://orgmode.org/worg/org-contrib/)
   )
 
 (use-package org-expiry
+  :straight org-contrib
   :config
         ;; Log creation time when a TODO item is added.
         ;; (org-expiry-insinuate)
@@ -1314,6 +1457,7 @@
   )
 
 (use-package org-super-agenda
+;; Supercharge your Org daily/weekly agenda by grouping items
   :general
         (
             :keymaps 'org-agenda-mode-map
@@ -1338,6 +1482,7 @@
   )
 
 (use-package origami
+;; A folding minor mode for Emacs (works with org agenda)
   :after
         (org-super-agenda)
   :bind
@@ -1350,6 +1495,7 @@
   )
 
 (use-package helm-org-rifle
+;; searches rapidly through org files
   :general
         (
             :prefix "C-c o g"
@@ -1369,12 +1515,15 @@
   )
 
 (use-package org-ql
+;; An Org-mode query language, including search commands and saved views
   )
 
 (use-package calfw
+;; A calendar framework for Emacs
   )
 
 (use-package calfw-org
+;; A calendar framework for Emacs org-mode
   :after
         (org calfw)
   :bind
@@ -1386,6 +1535,7 @@
   )
 
 (use-package org-brain
+;; Org-mode wiki + concept-mapping
   :after
         (org)
   :hook
@@ -1394,6 +1544,7 @@
   )
 
 (use-package org-projectile
+;; Manage org-mode TODOs for your projectile projects
   :config
         ;; (setq org-projectile-projects-directory (f-join org-directory "projectile"))
         (setq org-projectile-projects-file (f-join org-directory "1_2_projects.org"))
@@ -1403,6 +1554,7 @@
   )
 
 (use-package org-ref
+;; org-mode modules for citations, cross-references, bibliographies in org-mode and useful bibtex tools to go with it.
   :after
         (org ebib)
   :config
@@ -1411,9 +1563,11 @@
   )
 
 (use-package biblio
+;; Browse and import bibliographic references from CrossRef, DBLP, HAL, arXiv, Dissemin, and doi.org from Emacs
   )
 
 (use-package ebib
+;; A BibTeX database manager for Emacs. Ebib is a program for managing BibTeX and biblatex databases that runs inside Emacs. It allows you to manage bibliography files without having to edit the raw .bib files
   :after
         (org)
   :preface
@@ -1571,6 +1725,7 @@
   )
 
 (use-package ebib-biblio
+  :straight ebib
   :after
         (ebib biblio)
   :bind
@@ -1581,16 +1736,18 @@
   )
 
 (use-package helm-bibtex
+;; A bibliography manager based on Helm
   :after
         (ebib)
   :config
         (setq bibtex-completion-bibliography ebib-preload-bib-files)
-        (setq bibtex-completion-library-path '(ebib-file-search-dirs))
+        (setq bibtex-completion-library-path ebib-file-search-dirs)
         (setq bibtex-completion-pdf-field "file")
         (setq bibtex-completion-notes-path ebib-notes-directory)
   )
 
 (use-package org-web-tools
+;; View, capture, and archive Web pages in Org-mode
   :general
         (
             :prefix "C-c o w"
@@ -1604,16 +1761,19 @@
   )
 
 (use-package org-download
+;; Drag and drop images to Emacs org-mode
   :hook
         (org-mode . org-download-enable)
   )
 
 (use-package org-board
+;; Org mode's web archiver
   :bind-keymap
         ("C-c o b" . org-board-keymap)
   )
 
 (use-package org-pomodoro
+;; pomodoro technique for org-mode
   :after
         (org)
   :bind
@@ -1635,9 +1795,11 @@
   )
 
 (use-package hide-mode-line
+;; An Emacs plugin that hides (or masks) the current buffer's mode-line
   )
 
 (use-package org-present
+;; Ultra-minimalist presentation minor-mode for Emacs org-mode
   :after
         (org)
   :config
@@ -1669,6 +1831,7 @@
   )
 
 (use-package org-noter
+;; Emacs document annotator, using Org-mode. Org-noter is compatible with docview, pdf-tools, and nov.el. These modes make it possible to annotate PDF, EPUB, Microsoft Office, DVI, PS, and OpenDocument
   :general
         (
             :prefix "C-c n"
@@ -1679,6 +1842,7 @@
   )
 
 (use-package org-roam
+;; Rudimentary Roam replica with Org-mode
   :general
         (
             :prefix "C-c n"
@@ -1705,6 +1869,7 @@
   )
 
 (use-package org-journal
+;; A simple org-mode based journaling mode
   :bind
         (
             ("C-c o j" . org-journal-new-entry)
@@ -1716,6 +1881,7 @@
   )
 
 (use-package nov
+;; Major mode for reading EPUBs in Emacs
   :mode
         ("\\.epub\\'" . nov-mode)
   :general
@@ -1737,9 +1903,16 @@
   )
 
 (use-package deft
+;; Deft is an Emacs mode for quickly browsing, filtering, and editing directories of plain text notes
   :bind
         (
             ("C-c n d" . deft)
+         )
+  :general
+        (
+            :states 'normal
+            :keymaps 'deft-mode-map
+            "q" 'kill-current-buffer
          )
   :config
         (setq deft-directory (f-join org-directory "wiki"))
@@ -1749,15 +1922,17 @@
             (evil-set-initial-state 'deft-mode 'insert)))
   )
 
-(use-package howm
-  :config
-        (setq howm-directory (f-join org-directory "howm"))
-  :custom-face
-        (howm-mode-title-face ((t (:foreground "#BDBA9F"))))
-        (howm-reminder-today-face ((t (:foreground "#55C0D2"))))
-  )
+;; (use-package howm
+;; ;; a note-taking tool on Emacs. It is similar to emacs-wiki.el
+;;   :config
+;;         (setq howm-directory (f-join org-directory "howm"))
+;;   :custom-face
+;;         (howm-mode-title-face ((t (:foreground "#BDBA9F"))))
+;;         (howm-reminder-today-face ((t (:foreground "#55C0D2"))))
+;;   )
 
 (use-package anki-editor
+;; Emacs minor mode for making Anki cards with Org
   :after
         (org org-expiry)
   :bind
@@ -1814,14 +1989,18 @@
   )
 
 (use-package define-word
+;; Lets you see the definition of a word or a phrase at point, without having to switch to a browser
   :bind
         (
             ("C-c m W" . define-word)
             ("C-c m w" . define-word-at-point)
          )
+  :custom
+        (define-word-default-service 'webster)
   )
 
 (use-package emamux
+;; tmux manipulation from Emacs
   :bind-keymap
         ("C-c x" . emamux:keymap)
   :bind
@@ -1854,11 +2033,11 @@
             "^\\(buffer[0-9]+\\): +\\([0-9]+\\) +\\(bytes\\): +[\"]\\(.*\\)[\"]")
   )
 
-(use-package aweshell
-  )
+;; (use-package aweshell
+  ;; )
 
 (use-package eshell-prompt-extras
-  :after aweshell
+;; Display extra information and color for your eshell prompt
   :config
         (with-eval-after-load "esh-opt"
             (autoload 'epe-theme-lambda "eshell-prompt-extras")
@@ -1872,17 +2051,21 @@
   )
 
 (use-package exec-path-from-shell
+;; Make Emacs use the PATH set up by the user's shell
   )
 
 (use-package eshell-up
+;; Quickly go to a specific parent directory in eshell using the eshell-up function, which can be bound to an eshell alias such as up
   )
 
 (use-package eshell-did-you-mean
+;; command not found ("did you mean…" feature) in Eshell
   :config
         (eshell-did-you-mean-setup)
   )
 
 (use-package quickrun
+;; Run command quickly, quickrun.el is a extension to execute editing buffer. quickrun.el execute not only script languages(Perl, Ruby, Python etc), but also compiling languages(C, C++, Go, Java etc) and markup language
   :general
         (my-space-leader-def
             "x b" 'quickrun
@@ -1894,9 +2077,11 @@
   )
 
 (use-package fish-mode
+;; Emacs major mode for fish shell scripts
   )
 
 (use-package fish-completion
+;; Emacs fish completion
   :config
         (when (and (executable-find "fish")
                 (require 'fish-completion nil t))
@@ -1904,7 +2089,13 @@
   )
 
 (use-package which-key
+;; Emacs package that displays available keybindings in popup
   :delight
+  :general
+        (
+            :prefix "C-h"
+            "K" 'which-key-C-h-dispatch
+         )
   :config
         (setq which-key-allow-evil-operators t)
         (setq which-key-show-operator-state-maps t)
@@ -1912,6 +2103,7 @@
   )
 
 (use-package helpful
+;; A better Emacs *help* buffer
   :general
         (
             :prefix "C-h"
@@ -1928,6 +2120,7 @@
   )
 
 (use-package undo-propose
+;; Navigate the emacs undo history by staging undo's in a temporary buffer
   ;; :config
   ;;        (global-undo-tree-mode -1)
   :general
@@ -1938,6 +2131,7 @@
   )
 
 (use-package eshell-z
+;; cd to frequent directory in eshell. Instead of using cd in eshell, just use z, can jump by giving a keyword
   :hook
         (eshell-mode . (lambda ()
             (require 'eshell-z)
@@ -1945,6 +2139,7 @@
   )
 
 (use-package popup
+;; Visual Popup Interface Library for Emacs
   :custom-face
         (popup-face ((t (:inherit company-tooltip))))
         (popup-menu-selection-face ((t (:inherit company-tooltip-selection :foreground "white"))))
@@ -1952,6 +2147,7 @@
   )
 
 (use-package company-quickhelp
+;; Documentation popup for Company
   :bind
         (
             :map company-active-map
@@ -1963,34 +2159,39 @@
   )
 
 (use-package company-quickhelp-terminal
+;; Terminal support for company-quickhelp
   :config
-        (company-quickhelp-terminal-mode 1)
+        (with-eval-after-load 'company-quickhelp
+            (company-quickhelp-terminal-mode 1))
   )
 
 (use-package highlight-indentation
+;; Minor modes to highlight indentation guides in emacs. This minor mode highlights indentation levels via font-lock
   :custom-face
         (highlight-indentation-face ((t (:background "color-235"))))
   )
 
-(use-package elpy
-  :general
-        (
-            :states 'normal
-            :keymaps 'elpy-mode-map
-            "M-." 'elpy-goto-definition
-         )
-  :config
-        (setq elpy-rpc-python-command "python3")
-        (setq python-shell-interpreter "python3")
-  :hook
-        (python-mode . (lambda ()
-            (elpy-enable)
-            ;; Don't enable highlight-indentation-mode by default
-            (highlight-indentation-mode -1)
-         ))
-  )
+;; (use-package elpy
+;; Emacs Python Development Environment
+;;   :general
+;;         (
+;;             :states 'normal
+;;             :keymaps 'elpy-mode-map
+;;             "M-." 'elpy-goto-definition
+;;          )
+;;   :config
+;;         (setq elpy-rpc-python-command "python3")
+;;         (setq python-shell-interpreter "python3")
+;;   :hook
+;;         (python-mode . (lambda ()
+;;             (elpy-enable)
+;;             ;; Don't enable highlight-indentation-mode by default
+;;             (highlight-indentation-mode -1)
+;;          ))
+;;   )
 
 (use-package blacken
+;; Use the python black package to reformat your python buffers
   :config
         (setq blacken-line-length '88)
   :hook
@@ -1998,6 +2199,7 @@
   )
 
 (use-package py-isort
+;; py-isort.el integrates isort into Emacs
   :config
         (setq py-isort-options '("--lines=88" "-m=3" "-tc" "-ca"))
   :hook
@@ -2005,26 +2207,31 @@
   )
 
 (use-package python-docstring
+;; Emacs minor-mode for editing Python docstrings
   :config
         (python-docstring-install)
   )
 
 (use-package sphinx-doc
+;; Generate Sphinx friendly docstrings for Python functions in Emacs
   :hook
         (python-mode . sphinx-doc-mode)
   )
 
 (use-package pyenv-mode
+;; Integrate pyenv with python-mode, pyenv lets you easily switch between multiple versions of Python
   :hook
         (python-mode . pyenv-mode)
   )
 
 (use-package pippel
+;; Emacs frontend to python package manager pip
   :custom
         (pippel-python-command "python3")
   )
 
 (use-package mmm-mode
+;; a minor mode for Emacs that allows Multiple Major Modes to coexist in one buffer
   :init
         (add-hook 'mmm-mode-hook
           (lambda ()
@@ -2032,6 +2239,12 @@
   )
 
 (use-package doctest-mode
+;; doctest-mode.el --- Major mode for editing Python doctest files
+  :straight
+        (
+            :host github
+            :repo "xwzliang/el-doctest-mode"
+         )
   :mode "\\.doctest\\'"
   :general
         (my-space-leader-def
@@ -2044,17 +2257,20 @@
   )
 
 (use-package elisp-slime-nav
+;; Slime-style navigation of Emacs Lisp source with M-. & M-,
   :hook
         (emacs-lisp-mode . elisp-slime-nav-mode)
         (ielm-mode . elisp-slime-nav-mode)
   )
 
 (use-package eros
+;; Evaluation Result inline OverlayS for Emacs Lisp
   :hook
         (emacs-lisp-mode . eros-mode)
   )
 
 (use-package realgud
+;; The Grand "Cathedral" Debugger rewrite
   :general
         (
             :prefix "C-c d"
@@ -2069,7 +2285,12 @@
          )
   )
 
+;; (use-package ert-runner
+;; ;; Ert-runner is a tool for Emacs projects tested using Ert
+;;   )
+
 (use-package overseer
+;; Ert-runner Integration Into Emacs
   :general
         (my-space-leader-def
             "t e" 'overseer-test-this-buffer
@@ -2084,6 +2305,7 @@
   )
 
 (use-package lsp-mode
+;; Emacs client/library for the Language Server Protocol
   :init
         (setq lsp-keymap-prefix "C-c l")
   :config
@@ -2100,11 +2322,14 @@
   )
 
 (use-package lsp-java
+;; Emacs Java IDE using Eclipse JDT Language Server
   :hook
         (java-mode . lsp)
   )
 
 (use-package emmet-mode
+;; Emmet's support for emacs, Emmet is a plugin for many popular text editors which greatly improves HTML & CSS workflow
+;; Place point in an emmet snippet and press C-j to expand it, and you'll transform your snippet into the appropriate tag structure
   :config
         (setq emmet-move-cursor-between-quotes t)
   :hook
@@ -2113,10 +2338,12 @@
   )
 
 (use-package scala-mode
+;; The definitive scala-mode for emacs
   :mode "\\.s\\(cala\\|bt\\)$"
   )
 
 (use-package sbt-mode
+;; An emacs mode for interacting with scala sbt and projects
   :commands sbt-start sbt-command
   :config
         ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
@@ -2130,8 +2357,11 @@
 )
 
 (use-package lsp-metals)
+;; Emacs Scala IDE using lsp-mode to connect to Metals
 
 (use-package helm-lsp
+;; Helm lsp integration.
+;; helm-lsp-workspace-symbol - workspace symbols for the current workspace
   )
 
 ;; (use-package company-lsp
@@ -2140,14 +2370,17 @@
 ;;   )
 
 (use-package dap-mode
+;; Emacs client/library for Debug Adapter Protocol is a wire protocol for communication between client and Debug Server. It’s similar to the LSP but provides integration with debug server
   :hook
         (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
   )
 
 (use-package rainbow-delimiters
+;; Emacs rainbow delimiters mode which highlights delimiters such as parentheses, brackets or braces according to their depth
   )
 
 (use-package emr
+;; language-specific refactoring in Emacs
   :bind
         (
             ("C-c t r" . emr-show-refactor-menu)
@@ -2161,9 +2394,11 @@
   )
 
 (use-package list-environment
+;; A tabulated process environment editor
   )
 
 (use-package company-web
+;; Emacs company backend for html, jade, slim
   :hook
         (html-mode . (lambda ()
             (set (make-local-variable 'company-backends) '(company-web-html))
@@ -2171,6 +2406,7 @@
   )
 
 (use-package proxy-mode
+;; A minor mode to toggle proxy for Emacs. Supports HTTP proxy and socks v4, v5 proxy with Emacs built-in functions
   :bind
         (
             ("C-c m u" . proxy-mode)
@@ -2178,17 +2414,21 @@
   )
 
 (use-package nix-mode
+;; An Emacs major mode for editing Nix expressions
   :mode "\\.nix\\'"
   )
 
 (use-package json-mode
+;; Major mode for editing JSON files with emacs
   :mode "\\.json\\'"
   )
 
 (use-package csv-mode
+;; Major mode for editing comma/char separated values
   )
 
 (use-package web-mode
+;; an emacs major mode for editing web templates aka HTML files embedding parts (CSS/JavaScript) and blocks
   :config
         (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
         (add-hook 'web-mode-hook
@@ -2200,6 +2440,7 @@
   )
 
 (use-package tide
+;; TypeScript Interactive Development Environment for Emacs
   :after web-mode
   :config
         (tide-setup)
@@ -2214,24 +2455,30 @@
   )
 
 (use-package json-reformat
+;; Reformat tool for JSON
   )
 
 (use-package json-snatcher
+;; Get the path to a JSON element in Emacs
   )
 
 (use-package jq-mode
+;; Emacs major mode for editing jq queries, can also be used interactively in a JSON buffer
   :mode "\\.jq\\'"
   )
 
 (use-package yaml-mode
+;; The emacs major mode for editing files in the YAML data serialization format
   :mode "\\.yml\\'"
   )
 
 (use-package dockerfile-mode
+;; An emacs mode for handling Dockerfiles
   :mode "Dockerfile\\'"
   )
 
 (use-package docker
+;; Manage docker from Emacs
   :bind
         (
             ("C-c d k" . docker)
@@ -2239,6 +2486,7 @@
   )
 
 (use-package format-all
+;; Auto-format source code in many languages with one command
   :bind
         (
             ("C-c f m" . format-all-buffer)
@@ -2246,6 +2494,7 @@
   )
 
 (use-package keyfreq
+;; Track Emacs commands frequency
   :config
         (keyfreq-mode 1)
         (keyfreq-autosave-mode 1)
@@ -2263,6 +2512,7 @@
   )
 
 (use-package ace-window
+;; Quickly switch windows in Emacs
   :bind
         (
             ("M-o" . ace-window)
@@ -2274,11 +2524,13 @@
   )
 
 (use-package vlf
+;; View Large Files in Emacs
   :config
         (require 'vlf-setup)
   )
 
 (use-package prettier-js
+;; prettier-js is a function that formats the current buffer using prettier
   :config
         (setq prettier-js-args '(
             "--trailing-comma" "all"
@@ -2290,10 +2542,12 @@
   )
 
 (use-package vue-mode
+;; Emacs major mode for vue.js based on mmm-mode
   :mode "\\.vue\\'"
   )
 
 (use-package leetcode
+;; An Emacs LeetCode client
   :config
         (setq leetcode-prefer-language "python3")
         (setq leetcode-prefer-sql "mysql")
@@ -2302,23 +2556,35 @@
   )
 
 (use-package typescript-mode
+;; TypeScript-support for Emacs
   )
 
 (use-package restclient
+;; HTTP REST client tool for emacs
   )
 
 (use-package ob-restclient
+;; An extension to restclient.el for emacs that provides org-babel support.
+  :after
+        (org)
+  :config
+        (org-babel-do-load-languages
+            'org-babel-load-languages
+            '((restclient . t)))
   )
 
 (use-package ejc-sql
+;; ejc-sql turns Emacs into a simple SQL client; it uses a JDBC connection to databases via clojure/java.jdbc lib
   )
 
 (use-package vterm
+;; A fully-fledged terminal emulator inside GNU Emacs based on libvterm
   :custom
         (vterm-shell "/bin/zsh")
   )
 
 (use-package multi-vterm
+;; Managing multiple vterm buffers in Emacs
   :general
         (my-space-leader-def
             :prefix (concat my-space-leader " x")
@@ -2329,10 +2595,93 @@
          )
   )
 
+(use-package w3m
+;; An Emacs interface to w3m
+  :bind
+        (
+            :map w3m-mode-map
+            ("o" . w3m-goto-url)
+            ("O" . w3m-goto-url-new-session)
+            ("f" . w3m-lnum-follow)
+            ("F" . w3m-lnum-goto)
+            ("c" . w3m-submit-form)
+            ("P" . w3m-print-current-url)
+            ("p" . w3m-print-this-url)
+            ("i" . w3m-view-this-url)
+            ("g" . beginning-of-buffer)
+            ("G" . end-of-buffer)
+            ("D" . w3m-delete-buffer)
+            ("m" . w3m-bookmark-view-new-session)
+            ("M" . helm-firefox-bookmarks)
+            ("V" . w3m-view-url-with-browse-url)
+            ("u" . w3m-scroll-down-or-previous-url)
+            ("y" . evil-yank)
+            ("M-k" . evil-window-up)
+            (":" . evil-ex)
+            ("/" . evil-search-forward)
+            (";" . evil-repeat-find-char)
+            ("?" . evil-search-backward)
+            ("n" . evil-search-next)
+            ("w" . evil-forward-word-begin)
+            ("b" . evil-backward-word-begin)
+            ("v" . evil-visual-char)
+            ("M-l" . evil-window-right)
+            ("M-p" . w3m-previous-buffer)
+            ("M-n" . w3m-next-buffer)
+            ("C-j" . w3m-scroll-up)
+            ("C-k" . w3m-scroll-down)
+            ("x" . w3m-delete-buffer)
+            ("X" . w3m-delete-other-buffers)
+         )
+  :config
+        ;; Settings for proxy
+        (setq w3m-command-arguments
+            (nconc w3m-command-arguments
+                    '("-o" "https_proxy=https://127.0.0.1:8118/")))
+        (setq w3m-no-proxy-domains '(
+                                        "stackoverflow.com"
+                                        "stackexchange.com"
+                                    ))
+        ;; Change home page
+        (setq w3m-home-page "https://github.com/xwzliang?tab=repositories")
+        ;; Default download dir
+        (setq w3m-default-save-directory "~/Downloads")
+
+        ;; Default search engine
+        (setq w3m-search-default-engine "google-en")
+        ; Use gg to replace google-en engine
+        (add-to-list 'w3m-uri-replace-alist
+                        '("\\`gg:" w3m-search-uri-replace "google-en"))
+        ;; Use cookies
+        (setq w3m-use-cookies t)
+        (setq w3m-cookie-file "~/.emacs.d/cookie")
+  :hook
+        (w3m-mode . (lambda ()
+            (setq left-margin-width 5)
+            (setq right-margin-width 5)
+            ; Wrap lines in w3m
+            (visual-line-mode 1)
+            (face-remap-add-relative 'default
+                                    :background "white"
+                                    :foreground "black")
+        ))
+ )
+
+(use-package helm-firefox
+;; Display firefox bookmarks with emacs helm interface
+  :disabled
+  :config
+        (cond ((string-equal system-type "darwin")
+            (progn
+                (setq helm-firefox-default-directory "~/Library/Application Support/Firefox/")
+        )))
+  )
+
 
 ;; my packages with use-package
 
 (use-package my_macros
+  :straight nil
   :commands my_macro_org_copy_agenda_link_line_to_journal_checklist
   :bind
         (
@@ -2348,13 +2697,11 @@
          )
   )
 
-(use-package init_emacs-w3m
-  )
-
 
 ;; built-in packages with use-package
 
 (use-package faces
+  :straight nil
   :after
         (clues-theme)
   :config
@@ -2374,6 +2721,7 @@
   )
 
 (use-package dabbrev
+  :straight nil
   :commands
         (dabbrev-expand)
   :bind
@@ -2382,9 +2730,16 @@
             ;; Use shift tab (<backtab>) to insert tab
             ("<backtab>" . (lambda () (interactive) (insert "\t")))
          )
+  :general
+        (
+            :states '(insert normal)
+            "TAB" 'dabbrev-expand
+            "M-TAB" 'dabbrev-expand
+        )
   )
 
 (use-package whitespace
+  :straight nil
   :commands
         (whitespace-mode)
   :bind
@@ -2398,6 +2753,7 @@
   )
 
 (use-package simple
+  :straight nil
   :commands
         (visual-line-mode)
   :bind
@@ -2411,6 +2767,7 @@
   )
 
 (use-package frame
+  :straight nil
   :commands
         (toggle-frame-fullscreen)
   :bind
@@ -2428,29 +2785,34 @@
   )
 
 (use-package executable
+  :straight nil
   :hook
         ;; Automatically give executable permissions if file begins with shebang
         (after-save . executable-make-buffer-file-executable-if-script-p)
   )
 
 (use-package elec-pair
+  :straight nil
   :config
         ;; Enable electric-pair-mode for automatic parens pairing
         (electric-pair-mode 1)
   )
 
 (use-package autorevert
+  :straight nil
   :config
         ;; Automatically reload changed file in buffer
         (global-auto-revert-mode t)
   )
 
 (use-package gdb-mi
+  :straight nil
   :config
         (setq gdb-many-windows t)
   )
 
 (use-package cc-mode
+  :straight nil
   :commands
         (c-set-style)
   :hook
@@ -2460,6 +2822,7 @@
   )
 
 (use-package sh-script
+  :straight nil
   :mode
         ("\\.bats\\'" . sh-mode)
   :custom-face
@@ -2467,6 +2830,7 @@
   )
 
 (use-package linum
+  :straight nil
   :bind*
         (
             ("C-c [" . linum-mode)
@@ -2482,6 +2846,7 @@
   )
 
 (use-package dired
+  :straight nil
   :bind
         (
             :map dired-mode-map
@@ -2504,6 +2869,7 @@
   )
 
 (use-package wdired
+  :straight nil
   :config
         (setq
             wdired-allow-to-change-permissions t   ; allow to edit permission bits
@@ -2512,6 +2878,7 @@
   )
 
 (use-package ibuffer
+  :straight nil
   :bind
         (
             ("C-x C-b" . ibuffer)
@@ -2525,12 +2892,14 @@
   )
 
 (use-package saveplace
+  :straight nil
   :config
         ;; saveplace: remembers your location in a file when saving files
         (toggle-save-place-globally 1)
   )
 
 (use-package compile
+  :straight nil
   :bind*
         (
             ("C-c c" . compile)
@@ -2546,6 +2915,7 @@
   )
 
 (use-package windmove
+  :straight nil
   :general
         (
             :states '(normal motion emacs)
@@ -2565,6 +2935,7 @@
   )
 
 (use-package custom
+  :straight nil
   :config
         (setq custom-file "~/.emacs.d/emacs-custom.el")
   )
@@ -2574,10 +2945,12 @@
 ;;   )
 
 (use-package eldoc
+  :straight nil
   :delight
   )
 
 (use-package auth-source
+  :straight nil
   :custom
         (auth-sources (quote (
             "~/.authinfo"
@@ -2586,6 +2959,7 @@
 )
 
 (use-package eshell
+  :straight nil
   :bind
         (
             ("C-c e s" . eshell)
@@ -2632,6 +3006,7 @@
   )
 
 (use-package eww
+  :straight nil
   :hook
         (eww-mode . (lambda ()
             (setq left-margin-width 5)
@@ -2643,11 +3018,13 @@
 )
 
 (use-package hideshow
+  :straight nil
   :hook
         (prog-mode . hs-minor-mode)
 )
 
 (use-package xref
+  :straight nil
   :general
         (
             :states '(normal motion visual)
@@ -2660,6 +3037,7 @@
 )
 
 (use-package descr-text
+  :straight nil
   :bind
         (
             ("C-h c" . describe-char)
@@ -2667,6 +3045,7 @@
 )
 
 (use-package elisp-mode
+  :straight nil
   :general
         (my-space-leader-def
             "e b" 'eval-buffer
@@ -2677,6 +3056,7 @@
 )
 
 (use-package vc
+  :straight nil
   :general
         (my-space-leader-def
             "v u" 'vc-revert
@@ -2684,6 +3064,7 @@
 )
 
 (use-package edebug
+  :straight nil
   :bind
         (
             ("C-c d e" . edebug-defun)
@@ -2691,6 +3072,7 @@
   )
 
 (use-package ert
+  :straight nil
   :preface
         (defun add-pwd-into-load-path ()
             "add current directory into load-path, useful for elisp developers"
@@ -2716,6 +3098,7 @@
   )
 
 (use-package files
+  :straight nil
   :general
         (my-space-leader-def
             "w" 'save-buffer
@@ -2723,11 +3106,19 @@
 )
 
 (use-package term
+  :straight nil
   :init
         (setq-default term-prompt-regexp "^[^$%>»]*[#$%>»] ")
 )
 
+(use-package browse-url
+  :straight nil
+  :custom
+        (browse-url-browser-function (quote w3m-browse-url))
+  )
+
 (use-package bibtex
+  :straight nil
   :config
         (setq bibtex-dialect 'biblatex)
         (setq bibtex-autokey-year-length 4)
