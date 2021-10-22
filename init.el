@@ -88,6 +88,18 @@
 
 ;; Third party packages with use-package
 
+(use-package dash
+;; A modern list API for Emacs
+  )
+
+(use-package f
+;; Modern API for working with files and directories in Emacs
+  )
+
+(use-package project
+  ;; Operations on the current project
+  )
+
 (use-package general
 ;; Convenience wrappers for keybindings
   :config
@@ -128,14 +140,6 @@
 ;; This is a package for GNU Emacs that can be used to tie related commands into a family of short bindings with a common prefix - a Hydra.
   :custom-face
         (hydra-face-red ((t (:foreground "green"))))
-  )
-
-(use-package dash
-;; A modern list API for Emacs
-  )
-
-(use-package f
-;; Modern API for working with files and directories in Emacs
   )
 
 (use-package delight
@@ -954,10 +958,6 @@
                 (ibuffer-do-sort-by-alphabetic))))
   )
 
-(use-package project
-  ;; Operations on the current project
-  )
-
 (use-package magit
 ;; Magit is an interface to the version control system Git, implemented as an Emacs package. Magit aspires to be a complete Git porcelain.
   :bind
@@ -967,9 +967,9 @@
             ("C-c g c" . magit-blame)
             ("C-c g b" . magit-branch)
             ("C-c g s" . magit-status)
-            :map magit-mode-map
-            ("o" . magit-file-checkout)
-            ("gR" . magit-refresh)
+            ;; :map magit-mode-map
+            ;; ("o" . magit-file-checkout)
+            ;; ("gR" . magit-refresh)
          )
   :general
         (my-space-leader-def
