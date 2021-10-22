@@ -1430,18 +1430,20 @@
   :straight evil-org
   :after
         (evil org org-agenda)
-  :general
-        (
-            :states 'motion
-            :keymaps 'org-agenda-mode-map
-            "i" 'org-agenda-clock-in
-            "o" 'org-agenda-clock-out
-            "H" 'org-agenda-earlier
-            "L" 'org-agenda-later
-            "TAB" 'org-agenda-goto
-         )
-  :config
-        (evil-org-agenda-set-keys)
+  :hook
+        (org-agenda-mode . (lambda ()
+            (require 'evil-org-agenda)
+            (evil-org-agenda-set-keys)
+            (general-define-key
+                :states 'motion
+                :keymaps 'org-agenda-mode-map
+                "i" 'org-agenda-clock-in
+                "o" 'org-agenda-clock-out
+                "H" 'org-agenda-earlier
+                "L" 'org-agenda-later
+                "TAB" 'org-agenda-goto
+            )
+        ))
   )
 
 (use-package org-contrib
