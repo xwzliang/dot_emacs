@@ -587,6 +587,9 @@
             :keymaps 'neotree-mode-map
             "s" 'neotree-enter-vertical-split
             "S" 'neotree-enter-horizontal-split
+            "TAB" (neotree-make-executor
+                      :file-fn 'neo-open-file
+                      :dir-fn 'neo-open-dir)
          )
   :custom
         (neo-confirm-create-directory (quote off-p))
