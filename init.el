@@ -1044,14 +1044,17 @@
 
 (use-package gitignore-mode
 ;; Emacs major modes for Git ignore files
+  :straight git-modes
   )
 
 (use-package gitconfig-mode
 ;; Emacs major modes for Git config files
+  :straight git-modes
   )
 
 (use-package gitattributes-mode
 ;; Emacs major modes for Git attributes files
+  :straight git-modes
   )
 
 (use-package git-timemachine
