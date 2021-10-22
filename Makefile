@@ -15,7 +15,7 @@ all:
 	ln -sf $(REPO_DIR)/$(LOCAL_SETTING_DIR) $(EMACS_DIR)/$(LOCAL_SETTING_DIR)
 	mkdir -p $(EMACS_DIR)/eshell
 	ln -sf $(REPO_DIR)/$(OTHERS_DIR)/eshell_alias $(EMACS_DIR)/eshell/alias
-	mkdir -p STRAIGHT_DIR
+	mkdir -p $(STRAIGHT_DIR)
 	ln -sf $(REPO_DIR)/versions.el $(STRAIGHT_VERSIONS_FILE)
 
 clean:
