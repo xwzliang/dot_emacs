@@ -13,6 +13,8 @@
   (load bootstrap-file nil 'nomessage))
 (setq package-enable-at-startup nil)
 (setq straight-use-package-by-default t)
+;; Configure straight package version lockfile
+(setq straight-profiles '((nil . "~/git/dot_emacs/versions.el")))
 
 
 ;; Enable debugging on error (this will cause describe-bindings not working)
