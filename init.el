@@ -1211,7 +1211,6 @@
             ("C-c o z" . org-toggle-archive-tag)
             :map org-mode-map
             ("C-c a" . org-agenda)
-            ("M-RET" . org-insert-todo-heading)
             ("C-c C-x M-d" . org-clock-remove-overlays)
             ("C-c M-o" . org-mark-ring-goto)
          )
@@ -1226,6 +1225,7 @@
             "g ]" 'org-next-link
             "g [" 'org-previous-link
             "g s" 'org-set-property
+            ;; "M-RET" 'org-insert-todo-heading-respect-content
          )
         (
             :keymaps 'org-mode-map
