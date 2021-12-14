@@ -3077,6 +3077,10 @@
          )
 )
 
+(use-package smerge-mode
+  :straight nil
+)
+
 (use-package edebug
   :straight nil
   :bind
