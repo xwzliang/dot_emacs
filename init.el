@@ -523,7 +523,7 @@
         ;;     "r" 'avy-resume
         ;;  )
         (my-space-leader-def
-            "z" 'avy-goto-char
+            "z" 'avy-goto-char-timer
          )
   :custom-face
         (avy-lead-face ((t (:background "blue" :foreground "white"))))
