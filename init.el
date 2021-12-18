@@ -312,6 +312,7 @@
             "J p" 'evil-jump-backward
             "u" 'evil-scroll-up
             "d" 'evil-scroll-down
+            "w" 'evil-write-all
             "<escape>" 'hydra-move/body
          )
   :config
@@ -3120,10 +3121,10 @@
 
 (use-package files
   :straight nil
-  :general
-        (my-space-leader-def
-            "w" 'save-buffer
-         )
+  ;; :general
+  ;;       (my-space-leader-def
+  ;;           "w" 'save-buffer
+  ;;        )
 )
 
 (use-package term
