@@ -315,6 +315,7 @@
             "w" 'evil-write-all
             "W s" 'evil-window-split
             "W v" 'evil-window-vsplit
+            "q" 'evil-quit
             "<escape>" 'hydra-move/body
          )
   :config
@@ -2524,7 +2525,7 @@
         ;;  ))
   :general
         (my-space-leader-def
-            "q" 'keyfreq-show
+            "Q" 'keyfreq-show
          )
   )
 
