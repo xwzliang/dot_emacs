@@ -1213,6 +1213,7 @@
             ("C-c o l" . org-store-link)
             ("C-c o s" . org-schedule)
             ("C-c o z" . org-toggle-archive-tag)
+            ("C-c o o" . org-open-at-point)
             :map org-mode-map
             ("C-c a" . org-agenda)
             ("C-c C-x M-d" . org-clock-remove-overlays)
