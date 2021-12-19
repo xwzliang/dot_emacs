@@ -313,6 +313,8 @@
             "u" 'evil-scroll-up
             "d" 'evil-scroll-down
             "w" 'evil-write-all
+            "W s" 'evil-window-split
+            "W v" 'evil-window-vsplit
             "<escape>" 'hydra-move/body
          )
   :config
