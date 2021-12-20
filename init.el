@@ -1866,6 +1866,8 @@
             "g" 'org-roam-graph
             "l" 'org-roam-node-insert
             "c" 'org-roam-capture
+            ;; Show backlinks
+            "v" 'org-roam-buffer-toggle
             ;; Dailies
             "j" 'org-roam-dailies-capture-today
          )
