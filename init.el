@@ -2111,10 +2111,11 @@
             :prefix "C-h"
             "K" 'which-key-C-h-dispatch
          )
+  :init
+        (which-key-mode)
   :config
         (setq which-key-allow-evil-operators t)
         (setq which-key-show-operator-state-maps t)
-        (which-key-mode)
   )
 
 (use-package helpful
