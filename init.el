@@ -1891,6 +1891,8 @@
 
 (use-package org-roam-ui
 ;; A graphical frontend for exploring your org-roam Zettelkasten
+  :custom
+        (org-roam-ui-browser-function 'browse-url-chrome)
   )
 
 (use-package org-journal
