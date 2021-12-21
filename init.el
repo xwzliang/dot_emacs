@@ -1889,6 +1889,10 @@
 ;; Connector between Org-roam, BibTeX-completion, and Org-ref
   )
 
+(use-package org-roam-ui
+;; A graphical frontend for exploring your org-roam Zettelkasten
+  )
+
 (use-package org-journal
 ;; A simple org-mode based journaling mode
   :bind
