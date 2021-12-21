@@ -1885,6 +1885,10 @@
         (org-roam-directory (f-join org-directory "wiki"))
   )
 
+(use-package org-roam-bibtex
+;; Connector between Org-roam, BibTeX-completion, and Org-ref
+  )
+
 (use-package org-journal
 ;; A simple org-mode based journaling mode
   :bind
