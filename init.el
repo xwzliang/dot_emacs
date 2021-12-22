@@ -318,6 +318,7 @@
             "q" 'evil-quit
             "<escape>" 'hydra-move/body
          )
+        ([remap evil-search-forward] 'helm-occur)
   :config
         (evil-mode 1)
         (global-undo-tree-mode)
