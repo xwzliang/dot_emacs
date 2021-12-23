@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Bootstrap code for straight.el package manager
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -1689,6 +1691,11 @@
                     )))
                 (default
                     (beep))))
+
+        (defun my-ebib-popup-note (key)
+            (interactive (list (ebib--get-key-at-point)))
+            (my-orb-edit-note key)
+          )
   :config
         (setq ebib-bibtex-dialect 'biblatex)
         (defvar my-ebib-dir (f-join org-directory "ebib")
@@ -1722,6 +1729,7 @@
             "Fo" 'ebib-view-file
             "u" 'my-ebib-browse-url
             "f" 'my-ebib-view-pdf
+            ;; "n" 'my-ebib-popup-note
          )
         (
             :states 'normal
@@ -1738,6 +1746,15 @@
             :keymaps 'ebib-log-mode-map
             "q" 'ebib-quit-log-buffer
          )
+  :hook
+        (ebib-index-mode . (lambda ()
+            (require 'org-roam-bibtex)
+            (general-define-key
+                :states 'normal
+                :keymaps 'ebib-index-mode-map
+                "n" 'my-ebib-popup-note
+            )
+        ))
   )
 
 (use-package ebib-biblio
@@ -1859,6 +1876,53 @@
 
 (use-package org-roam
 ;; Rudimentary Roam replica with Org-mode
+  :preface
+        (defun my-org-roam-filter-by-tag (tag-name)
+          (lambda (node)
+            (member tag-name (org-roam-node-tags node))))
+
+        (defun my-org-roam-list-notes-by-tag (tag-name)
+          (mapcar #'org-roam-node-file
+                  (seq-filter
+                   (my-org-roam-filter-by-tag tag-name)
+                   (org-roam-node-list))))
+
+        (defun my-org-roam-find-literature ()
+          (interactive)
+          ;; Select a literature note to open, creating it if necessary
+          (org-roam-node-find
+           nil
+           nil
+           (my-org-roam-filter-by-tag "literature")
+           :templates
+           '(
+                ("r" "bibliography reference" plain "%?"
+                    :if-new
+                    (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: literature")
+                    :immediate-finish t
+                    :unnarrowed t)
+                )
+           ))
+
+        (defun my-org-roam-filter-exclude-tag (tag-name)
+          (lambda (node)
+            (not (member tag-name (org-roam-node-tags node)))))
+
+        (defun my-org-roam-list-notes-exclude-tag (tag-name)
+          (mapcar #'org-roam-node-file
+                  (seq-filter
+                   (my-org-roam-filter-exclude-tag tag-name)
+                   (org-roam-node-list))))
+
+        (defun my-org-roam-find-ever-green ()
+          (interactive)
+          ;; Select a ever green note to open (exclude literature notes), creating it if necessary
+          (org-roam-node-find
+           nil
+           nil
+           (my-org-roam-filter-exclude-tag "literature")
+           ))
+
   :general
         (
             :prefix "C-c n"
@@ -1871,6 +1935,10 @@
             "v" 'org-roam-buffer-toggle
             ;; Dailies
             "j" 'org-roam-dailies-capture-today
+            "." 'org-roam-dailies-goto-today
+            ;; Customised functions
+            "s" 'my-org-roam-find-ever-green
+            "r" 'my-org-roam-find-literature
          )
         (my-space-leader-def
             "n" (general-simulate-key "C-c n")
@@ -1880,14 +1948,47 @@
   :config
         (setq org-roam-completion-system 'helm)
         (org-roam-db-autosync-mode)
+        (setq org-roam-capture-templates
+            '(
+                ("d" "default" plain "%?"
+                    :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+                    :immediate-finish t
+                    :unnarrowed t)
+                ;; ("r" "bibliography reference" plain "%?"
+                ;;     :if-new
+                ;;     (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+                ;;     :immediate-finish t
+                ;;     :unnarrowed t)
+                ;; ("d" "default" plain "%?" :target
+                    ;; (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+                    ;; :unnarrowed t)
+            )
+        )
   ;; :hook
   ;;       (after-init . org-roam-mode)
   :custom
-        (org-roam-directory (f-join org-directory "wiki"))
+        (org-roam-directory (f-join org-directory "roam"))
+        (org-roam-dailies-directory "fleeting/")
   )
 
 (use-package org-roam-bibtex
 ;; Connector between Org-roam, BibTeX-completion, and Org-ref
+  :preface
+        (defun my-orb-edit-note (citekey)
+          (let ((org-roam-capture-templates
+                   '(
+                        ("r" "bibliography reference" plain "%?"
+                            :if-new
+                            (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: literature")
+                            :immediate-finish t
+                            :unnarrowed t)
+                    )
+                 ))
+              (orb-edit-note citekey)))
+  :config
+        (org-roam-bibtex-mode)
+  :custom
+        (orb-roam-ref-format 'org-ref-v3)
   )
 
 (use-package org-roam-ui
