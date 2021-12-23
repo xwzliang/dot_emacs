@@ -1754,6 +1754,11 @@
                 :keymaps 'ebib-index-mode-map
                 "n" 'my-ebib-popup-note
             )
+            (general-define-key
+                :states 'normal
+                :keymaps 'ebib-entry-mode-map
+                "n" 'my-ebib-popup-note
+            )
         ))
   )
 
