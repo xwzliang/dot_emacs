@@ -1929,7 +1929,7 @@
             "r" 'org-roam
             "f" 'org-roam-node-find
             "g" 'org-roam-graph
-            "l" 'org-roam-node-insert
+            "i" 'org-roam-node-insert
             "c" 'org-roam-capture
             ;; Show backlinks
             "v" 'org-roam-buffer-toggle
@@ -1938,7 +1938,7 @@
             "." 'org-roam-dailies-goto-today
             ;; Customised functions
             "s" 'my-org-roam-find-ever-green
-            "r" 'my-org-roam-find-literature
+            "l" 'my-org-roam-find-literature
          )
         (my-space-leader-def
             "n" (general-simulate-key "C-c n")
