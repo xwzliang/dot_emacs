@@ -169,6 +169,7 @@
  ("names" . "d8baba5360e5253938a25d3e005455b6d2d86971")
  ("nix-mode" . "1ac42cd103ba11c37e8566e240a2272966e6f813")
  ("nov.el" . "b3c7cc28e95fe25ce7b443e5f49e2e45360944a3")
+ ("npm-mode" . "3ee7c0bad5b7a041d4739ef3aaa06a3dc764e5eb")
  ("ob-restclient.el" . "bfbc4d8e8a348c140f9328542daf5d979f0993e2")
  ("org" . "fbccf09c740a298e39daa9170bceaa92684f2fe0")
  ("org-board" . "1393bd46d11a81328ed4fb8471831415a3efe224")

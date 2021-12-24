@@ -2701,6 +2701,17 @@
 ;; TypeScript-support for Emacs
   )
 
+(use-package npm-mode
+;; An Emacs minor mode for working with NPM projects
+  ;; :mode "\\(\\.js\\|\\.ts\\|package\\.json\\)\\'"
+  :general
+        (my-space-leader-def
+            "m" (general-simulate-key "C-c m")
+         )
+  :custom
+        (npm-mode-command-prefix "C-c m")
+  )
+
 (use-package restclient
 ;; HTTP REST client tool for emacs
   )
