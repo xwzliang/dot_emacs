@@ -2590,10 +2590,10 @@
             (eldoc-mode +1)
             (tide-hl-identifier-mode +1)
             (company-mode +1))
-  :config
+  ;; :config
         ;; formats the buffer before saving
         ;; (add-hook 'before-save-hook 'tide-format-before-save)
-        (add-hook 'typescript-mode-hook #'setup-tide-mode)
+        ;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
   )
 
 (use-package json-reformat
@@ -2671,16 +2671,25 @@
         (require 'vlf-setup)
   )
 
+(use-package add-node-modules-path
+;; Adds the node_modules/.bin directory to the buffer exec_path. E.g. support project local eslint installations
+  :config
+        (eval-after-load
+            'typescript-mode
+            '(add-hook 'typescript-mode-hook #'add-node-modules-path))
+  )
+
 (use-package prettier-js
 ;; prettier-js is a function that formats the current buffer using prettier
-  :config
-        (setq prettier-js-args '(
-            "--trailing-comma" "all"
-            "--single-quote"
-        ))
+  ;; :config
+  ;;       (setq prettier-js-args '(
+  ;;           "--trailing-comma" "all"
+  ;;           "--single-quote"
+  ;;       ))
   :hook
         (vue-mode . prettier-js-mode)
         (js-mode . prettier-js-mode)
+        (typescript-mode . prettier-js-mode)
   )
 
 (use-package vue-mode

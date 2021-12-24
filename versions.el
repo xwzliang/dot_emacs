@@ -1,6 +1,7 @@
 (("Emacs-wgrep" . "f9687c28bbc2e84f87a479b6ce04407bb97cfb23")
  ("Highlight-Indentation-for-Emacs" . "d88db4248882da2d4316e76ed673b4ac1fa99ce3")
  ("ace-window" . "c7cb315c14e36fded5ac4096e158497ae974bec9")
+ ("add-node-modules-path" . "7d9be65b3be062842b7ead862dec15d6f25db4a2")
  ("alert" . "7046393272686c7a1a9b3e7f7b1d825d2e5250a6")
  ("all-the-icons.el" . "b7002b5aa152b56a2a852c3aae2f2e1a0e963277")
  ("anki-editor" . "546774a453ef4617b1bcb0d1626e415c67cc88df")
