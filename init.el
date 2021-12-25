@@ -603,6 +603,8 @@
   :custom
         (neo-confirm-create-directory (quote off-p))
         (neo-confirm-create-file (quote off-p))
+        (neo-autorefresh t)
+        (neo-smart-open t)
   )
 
 
