@@ -2049,7 +2049,7 @@
             "q" 'kill-current-buffer
          )
   :config
-        (setq deft-directory (f-join org-directory "wiki"))
+        (setq deft-directory org-directory)
         (setq deft-recursive t)
   :hook
         (deft-mode . (lambda ()
