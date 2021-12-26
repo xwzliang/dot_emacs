@@ -1219,6 +1219,7 @@
             ("C-c o s" . org-schedule)
             ("C-c o z" . org-toggle-archive-tag)
             ("C-c o o" . org-open-at-point)
+            ("C-c o i" . org-insert-structure-template)  ;; Insert #+BEGIN_SRC block
             :map org-mode-map
             ("C-c a" . org-agenda)
             ("C-c C-x M-d" . org-clock-remove-overlays)
