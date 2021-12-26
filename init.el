@@ -1935,9 +1935,9 @@
   :general
         (
             :prefix "C-c n"
-            "r" 'org-roam
+            ;; "r" 'org-roam
             "f" 'org-roam-node-find
-            "g" 'org-roam-graph
+            ;; "g" 'org-roam-graph
             "i" 'org-roam-node-insert
             "c" 'org-roam-capture
             ;; Show backlinks
