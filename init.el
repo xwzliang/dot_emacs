@@ -1988,7 +1988,14 @@
                    '(
                         ("r" "bibliography reference" plain "%?"
                             :if-new
-                            (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: literature")
+                            (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
+#+filetags: literature
+
+* ${title}
+:PROPERTIES:
+:NOTER_DOCUMENT: ${file}
+:END:
+")
                             :immediate-finish t
                             :unnarrowed t)
                     )
