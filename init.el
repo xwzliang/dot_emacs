@@ -368,9 +368,10 @@
   :config
         (require 'smartparens-config)
         (smartparens-global-mode 1)
-  :hook
-        (emacs-lisp-mode . show-smartparens-mode)
-        (ielm-mode . show-smartparens-mode)
+        (show-smartparens-global-mode)
+  ;; :hook
+  ;;       (emacs-lisp-mode . show-smartparens-mode)
+  ;;       (ielm-mode . show-smartparens-mode)
   )
 
 (use-package evil-surround
