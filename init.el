@@ -1973,6 +1973,15 @@
                     ;; :unnarrowed t)
             )
         )
+        (add-to-list 'safe-local-variable-values
+            '(eval setq-local org-roam-db-location
+                    (expand-file-name "~/.emacs.d/org-roam-wiki.db"))
+        )
+        (add-to-list 'safe-local-variable-values
+            '(eval setq-local org-roam-directory
+                (expand-file-name
+                    (locate-dominating-file default-directory ".dir-locals.el")))
+        )
   ;; :hook
   ;;       (after-init . org-roam-mode)
   :custom
