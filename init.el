@@ -630,7 +630,6 @@
             :map helm-map
             ("C-l" . helm-select-action) ; list actions
             ("C-u" . helm-find-files-up-one-level)
-            ("TAB" . helm-execute-persistent-action)
             :map minibuffer-local-map
             ("C-c C-l" . helm-minibuffer-history)
         )
@@ -640,6 +639,7 @@
             :keymaps 'helm-map
             "C-j" 'helm-next-line
             "C-k" 'helm-previous-line
+            "TAB" 'helm-execute-persistent-action
         )
         (my-space-leader-def
             "SPC" 'helm-M-x
