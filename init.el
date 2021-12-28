@@ -626,6 +626,7 @@
             :map helm-command-map
             ("o" . helm-occur)
             ("y" . helm-yas-complete)
+            ("r" . helm-resume)
             :map helm-map
             ("C-l" . helm-select-action) ; list actions
             ("C-u" . helm-find-files-up-one-level)
@@ -1782,6 +1783,11 @@
 ;; A bibliography manager based on Helm
   :after
         (ebib)
+  :bind
+        (
+            :map helm-command-map
+            ("b" . helm-bibtex)
+        )
   :config
         (setq bibtex-completion-bibliography ebib-preload-bib-files)
         (setq bibtex-completion-library-path ebib-file-search-dirs)
