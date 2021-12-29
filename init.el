@@ -2866,6 +2866,17 @@
         )))
   )
 
+(use-package emms
+;; the Emacs Multi-Media System. Emms organizes playlists, allows browsing through track and album metadata, and plays files by calling external players
+  :config
+        (require 'emms-setup)
+        (emms-all)
+        (emms-default-players)
+  :custom
+        (emms-source-file-default-directory "~/Music/")
+        (emms-player-list '(emms-player-mpv))
+  )
+
 
 ;; my packages with use-package
 

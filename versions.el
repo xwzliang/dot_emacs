@@ -76,6 +76,7 @@
  ("emacsql" . "9dca5996168c4963eb67e61c7f17fdcb8228e314")
  ("emamux" . "6172131d78038f0b1490e24bac60534bf4ad3b30")
  ("emmet-mode" . "6b2e554f7fd27f732810f4b14ea01e3c54b7b3da")
+ ("emms" . "32ff8a70ca9726dd0e3b8ad68430bc6fd66bf387")
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
  ("eros" . "dd8910279226259e100dab798b073a52f9b4233a")
  ("eshell-did-you-mean" . "7cb6ef8e2274d0a50a9e114d412307a6543533d5")
