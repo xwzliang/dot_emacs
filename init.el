@@ -563,6 +563,8 @@
             "v s" 'git-gutter:stage-hunk
             "v r" 'git-gutter:revert-hunk
             "v SPC" 'git-gutter:mark-hunk
+            "v f" 'straight-freeze-versions
+            "v R" 'straight-thaw-versions
          )
   :config
         (add-to-list 'git-gutter:update-hooks 'focus-in-hook)
