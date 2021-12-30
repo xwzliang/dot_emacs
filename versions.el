@@ -45,6 +45,7 @@
  ("el-doctest-mode" . "e6ec921dad4e87af3cb5becd020d44698d2d3719")
  ("el-get" . "960f3fb962c35d3196bab20b2a3f6d6228119277")
  ("el-patch" . "14c35cee52b415fe9892440014c4b8dc045103df")
+ ("elfeed" . "162d7d545ed41c27967d108c04aa31f5a61c8e16")
  ("elisp-refs" . "c06aec4486c034d0d4efae98cb7054749f9cc0ec")
  ("elisp-slime-nav" . "8588d80d414aee1fafce5b9da0e913612ee0bcdd")
  ("elmacro" . "d2e05012cee4f54fab6d8d8d6aced6e5eeef4f31")

@@ -2974,6 +2974,19 @@
             :complete #'my-org-mpv-complete-link)
   )
 
+(use-package elfeed
+  ;; an extensible web feed reader for Emacs, supporting both Atom and RSS
+  :config
+        (setq elfeed-feeds '(
+                ("http://nullprogram.com/feed/" blog emacs)
+                ("https://planet.emacslife.com/atom.xml" blog emacs)
+                ("http://emacstidbits.blogspot.com/atom.xml" blog emacs)
+                ("https://mousecradle.wordpress.com/tag/emacs/feed/" blog emacs)
+                ("http://oremacs.com/atom.xml" blog emacs)
+                ("https://with-emacs.com/rss.xml" blog emacs)
+            ))
+  )
+
 
 ;; my packages with use-package
 
