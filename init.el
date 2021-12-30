@@ -1701,6 +1701,11 @@
             (interactive (list (ebib--get-key-at-point)))
             (my-orb-edit-note key)
           )
+
+        (defun my-ebib-popup-video-note (key)
+            (interactive (list (ebib--get-key-at-point)))
+            (my-orb-edit-video-note key)
+          )
   :config
         (setq ebib-bibtex-dialect 'biblatex)
         (defvar my-ebib-dir (f-join org-directory "ebib")
@@ -1759,11 +1764,13 @@
                 :states 'normal
                 :keymaps 'ebib-index-mode-map
                 "n" 'my-ebib-popup-note
+                "N" 'my-ebib-popup-video-note
             )
             (general-define-key
                 :states 'normal
                 :keymaps 'ebib-entry-mode-map
                 "n" 'my-ebib-popup-note
+                "N" 'my-ebib-popup-video-note
             )
         ))
   )
@@ -2005,11 +2012,30 @@
                         ("r" "bibliography reference" plain "%?"
                             :if-new
                             (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-#+filetags: literature
+#+filetags: :document:literature:
 
 * ${title}
 :PROPERTIES:
 :NOTER_DOCUMENT: ${file}
+:END:
+")
+                            :immediate-finish t
+                            :unnarrowed t)
+                    )
+                 ))
+              (orb-edit-note citekey)))
+        (defun my-orb-edit-video-note (citekey)
+          (let ((orb-process-file-keyword nil)		;; Don't check file since it will be a directory most of time
+                (org-roam-capture-templates
+                   '(
+                        ("r" "bibliography reference" plain "%?"
+                            :if-new
+                            (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
+#+filetags: :video:literature:
+
+* ${title}
+:PROPERTIES:
+:MPV_VIDEO_DIRECTORY: ${file}
 :END:
 ")
                             :immediate-finish t
@@ -2096,16 +2122,16 @@
 ;; Emacs minor mode for making Anki cards with Org
   :after
         (org org-expiry)
-  :bind
-        (
-            ("C-c m i" . anki-editor-insert-note)
-            ("C-c m p" . anki-editor-push-tree)
-            ("C-c m P" . anki-editor-push-notes)
-            ("C-c m z z" . anki-editor-cloze-dwim)
-            ("C-c m z a" . anki-editor-cloze-region-auto-incr)
-            ("C-c m z p" . anki-editor-cloze-region-dont-incr)
-            ("C-c m z r" . anki-editor-reset-cloze-number)
-         )
+  ;; :bind
+  ;;       (
+  ;;           ("C-c m i" . anki-editor-insert-note)
+  ;;           ("C-c m p" . anki-editor-push-tree)
+  ;;           ("C-c m P" . anki-editor-push-notes)
+  ;;           ("C-c m z z" . anki-editor-cloze-dwim)
+  ;;           ("C-c m z a" . anki-editor-cloze-region-auto-incr)
+  ;;           ("C-c m z p" . anki-editor-cloze-region-dont-incr)
+  ;;           ("C-c m z r" . anki-editor-reset-cloze-number)
+  ;;        )
   :general
         (my-space-leader-def
             "m" (general-simulate-key "C-c m")
@@ -2877,18 +2903,87 @@
         (emms-player-list '(emms-player-mpv))
   )
 
+(use-package pulseaudio-control
+;; control PulseAudio volumes from Emacs, via pactl
+  :bind
+        (
+            ("C-c m +" . pulseaudio-control-increase-volume)
+            ("C-c m =" . pulseaudio-control-increase-volume)
+            ("C-c m -" . pulseaudio-control-decrease-volume)
+         )
+  :custom
+        (pulseaudio-control-use-default-sink t)
+  )
+
+(use-package mpv
+;; control mpv for easy note taking
+  :preface
+        (defun my-mpv-play-at-point ()
+            ;; Play current file in a dired buffer
+            (interactive)
+            (mpv-play (or (dired-get-filename nil t) default-directory))
+        )
+
+        (defun my-org-mpv-complete-link (&optional arg)
+            (replace-regexp-in-string
+                "file:" "mpv:"
+                (org-link-complete-file arg)
+                t t))
+
+        (defun my-mpv-org-roam-play-video-at-note ()
+          (interactive)
+          (let (
+                (mpv-video-directory (org-entry-get nil "MPV_VIDEO_DIRECTORY" t))
+                (mpv-video-filename (org-entry-get nil "MPV_VIDEO_FILENAME" t))
+                (mpv-video-position (org-entry-get nil "MPV_POSITION_START" t))
+                )
+            (if mpv-video-directory
+                (if mpv-video-filename
+                    (progn
+                      (mpv-play (concat mpv-video-directory mpv-video-filename))
+                      (if mpv-video-position
+                          (mpv-seek (org-timer-hms-to-secs mpv-video-position))
+                          )
+                      )
+                  (mpv-play mpv-video-directory)
+                    )
+              (error "Must be issued inside a heading")
+                )
+            )
+          )
+  :bind
+        (
+            ("C-c m v" . my-mpv-play-at-point)
+            ("C-c m p" . mpv-playlist-prev)
+            ("C-c m n" . mpv-playlist-next)
+            ("C-c m l" . mpv-seek-forward)
+            ("C-c m h" . mpv-seek-backward)
+            ("C-c m x" . mpv-pause)
+            ("C-c m X" . mpv-kill)
+            ("C-c m i" . mpv-insert-playback-position)
+            ("C-c m r" . mpv-seek-to-position-at-point)
+            ("C-c m o" . my-mpv-org-roam-play-video-at-note)
+         )
+  :custom
+        (mpv-seek-step 10)
+  :config
+        (org-link-set-parameters "mpv"
+            :follow #'mpv-play
+            :complete #'my-org-mpv-complete-link)
+  )
+
 
 ;; my packages with use-package
 
 (use-package my_macros
   :straight nil
-  :commands my_macro_org_copy_agenda_link_line_to_journal_checklist
-  :bind
-        (
-            ("C-c m j" . my_macro_copy_all_agenda_items_link_to_journal)
-            ("C-c m k" . my_macro_close_checklist_item_and_linked_todo_item)
-            ("C-c m s" . my_macro_save_html_and_url)
-         )
+  ;; :commands my_macro_org_copy_agenda_link_line_to_journal_checklist
+  ;; :bind
+  ;;       (
+  ;;           ("C-c m j" . my_macro_copy_all_agenda_items_link_to_journal)
+  ;;           ("C-c m k" . my_macro_close_checklist_item_and_linked_todo_item)
+  ;;           ("C-c m s" . my_macro_save_html_and_url)
+  ;;        )
   :general
         (
             :keymaps 'org-mode-map
