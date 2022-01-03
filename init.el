@@ -2985,6 +2985,16 @@
 
 (use-package elfeed
   ;; an extensible web feed reader for Emacs, supporting both Atom and RSS
+  :bind
+        (
+            ("C-c m e" . elfeed)
+         )
+  :general
+        (
+            :states 'normal
+            :keymaps 'elfeed-search-mode-map
+            "r" 'elfeed-search-fetch
+         )
   :config
         (setq elfeed-feeds '(
                 ("http://nullprogram.com/feed/" blog emacs)
@@ -2993,6 +3003,7 @@
                 ("https://mousecradle.wordpress.com/tag/emacs/feed/" blog emacs)
                 ("http://oremacs.com/atom.xml" blog emacs)
                 ("https://with-emacs.com/rss.xml" blog emacs)
+                ("https://www.youtube.com/feeds/videos.xml?channel_id=UCAiiOTio8Yu69c3XnR7nQBQ" youtube emacs)
             ))
   )
 
