@@ -1366,12 +1366,16 @@
         (org f)
   :preface
         (defun my-org-agenda-find-and-clock-in-remotely (item)
-            (ignore-errors (org-agenda-clock-out))
-            (switch-to-buffer "*Org Agenda*")
-            (goto-char (point-min))
-            (search-forward item)
-            (org-agenda-clock-in)
-            (org-agenda-redo)
+          ;; Clock in item in org agenda buffer, and don't change current buffer
+            (with-current-buffer
+                ;; (switch-to-buffer "*Org Agenda*")
+                (set-buffer "*Org Agenda*")
+                (ignore-errors (org-agenda-clock-out))
+                (goto-char (point-min))
+                (search-forward item)
+                (org-agenda-clock-in)
+                (org-agenda-redo)
+            )
         )
   :general
         (
