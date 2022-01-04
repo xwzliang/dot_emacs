@@ -611,6 +611,14 @@
   )
 
 
+(use-package counsel
+;; a collection of Ivy-enhanced versions of common Emacs commands
+  :custom
+        ;; Don't show app path
+        (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  )
+
+
 (use-package helm
 ;; Helm is an Emacs framework for incremental completions and narrowing selections.
   :delight
@@ -3065,7 +3073,8 @@
         (setq exwm-input-global-keys `(
             ;; Switch to line-mode; exit fullscreen mode; refresh layout
             ([?\M-r] . exwm-reset)
-            ([?\M-f] . counsel-linux-app)
+            ([?\M-f] . exwm-layout-toggle-fullscreen)
+            ([?\M-\ ] . counsel-linux-app)		;; Use alt+space
         ))
 
         (add-hook 'exwm-update-class-hook #'my-exwm-update-class)
