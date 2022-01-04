@@ -3026,12 +3026,24 @@
         ;; (exwm-randr-enable)
         ;; (start-process-shell-command "xrandr" nil "xrandr --output eDP --primary --mode 3840x2160 --pos 0x0 --rotate normal --output DisplayPort-0 --off --output DisplayPort-1 --off --output DisplayPort-2 --off")
 
+        ;; setup background image (wallpaper), if resolution needs to be set also, make sure resolution is set before background image
+        (start-process-shell-command "feh" nil "feh --bg-scale ~/Dropbox/Devices_backup/WallPaper0.JPG")
+
         ;; setup keyboard
         (start-process-shell-command "xmodmap" nil "xmodmap ~/git/dot_emacs/exwm/Xmodmap")
 
-  		;; Load the system tray
-  		(require 'exwm-systemtray)
+        ;; Load the system tray
+        (require 'exwm-systemtray)
+        (setq exwm-systemtray-height 32)
         (exwm-systemtray-enable)
+
+        ;; Set Emacs transparency
+        (defvar my-emacs-transparency '(90 . 90))
+        (set-frame-parameter (selected-frame) 'alpha my-emacs-transparency)
+        (add-to-list 'default-frame-alist `(alpha . ,my-emacs-transparency))
+        ;; Maxmize Emacs by default
+        (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+        (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
         ;; These keys should always pass through to Emacs
         (setq exwm-input-prefix-keys '(
