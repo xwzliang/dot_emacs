@@ -3074,6 +3074,20 @@
         (exwm-enable)
   )
 
+(use-package desktop-environment
+  ;; The package desktop-environment provides commands and a global minor mode to control your GNU/Linux desktop from Emacs.
+  ;; With desktop-environment, you can control the brightness and volume as well as take screenshots and lock your screen
+  :after exwm
+  :config
+        (desktop-environment-mode)
+  :custom
+        (desktop-environment-volume-get-command "pactl list sinks | grep '^[[:space:]]Volume:' | head -n 1 | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'")
+        (desktop-environment-volume-set-command "pactl set-sink-volume @DEFAULT_SINK@ %s")
+        (desktop-environment-volume-toggle-command "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+        (desktop-environment-volume-normal-increment "+5%")
+        (desktop-environment-volume-normal-decrement "-5%")
+  )
+
 
 ;; my packages with use-package
 
