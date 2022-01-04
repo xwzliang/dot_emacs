@@ -3025,6 +3025,10 @@
         (defun my-exwm-update-class ()
             (exwm-workspace-rename-buffer exwm-class-name)
         )
+        (defun my-exwm-update-title ()
+            (pcase exwm-class-name
+              ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title))))
+        )
   :config
         ;; (require 'exwm-config)
         ;; (exwm-config-example)
@@ -3077,7 +3081,11 @@
             ([?\M-\ ] . counsel-linux-app)		;; Use alt+space
         ))
 
+        ;; When window "class" updates, use it to set the buffer name
         (add-hook 'exwm-update-class-hook #'my-exwm-update-class)
+
+        ;; When window title updates, use it to set the buffer name
+        (add-hook 'exwm-update-title-hook #'my-exwm-update-title)
 
         ;; Put this to the last line
         (exwm-enable)
