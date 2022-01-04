@@ -3011,6 +3011,57 @@
             ))
   )
 
+(use-package exwm
+  ;; EXWM (Emacs X Window Manager) is a full-featured tiling X window manager for Emacs built on top of XELB
+  :preface
+        (defun my-exwm-update-class ()
+            (exwm-workspace-rename-buffer exwm-class-name)
+        )
+  :config
+        ;; (require 'exwm-config)
+        ;; (exwm-config-example)
+
+        ;; setup resolution
+        ;; (require 'exwm-randr)
+        ;; (exwm-randr-enable)
+        ;; (start-process-shell-command "xrandr" nil "xrandr --output eDP --primary --mode 3840x2160 --pos 0x0 --rotate normal --output DisplayPort-0 --off --output DisplayPort-1 --off --output DisplayPort-2 --off")
+
+        ;; setup keyboard
+        (start-process-shell-command "xmodmap" nil "xmodmap ~/git/dot_emacs/exwm/Xmodmap")
+
+  		;; Load the system tray
+  		(require 'exwm-systemtray)
+        (exwm-systemtray-enable)
+
+        ;; These keys should always pass through to Emacs
+        (setq exwm-input-prefix-keys '(
+            ?\M-h
+            ?\M-j
+            ?\M-k
+            ?\M-l
+            ?\C-x
+            ?\M-x
+        ))
+        ;; Ctrl+q will enable the next key to be sent directly
+        (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
+
+        ;; Use :bind or :general before :config won't work
+        (my-space-leader-def
+            "W f" 'counsel-linux-app
+         )
+
+        (setq exwm-input-global-keys `(
+            ;; Switch to line-mode; exit fullscreen mode; refresh layout
+            ([?\M-r] . exwm-reset)
+            ([?\M-f] . counsel-linux-app)
+        ))
+
+        (add-hook 'exwm-update-class-hook #'my-exwm-update-class)
+
+        ;; Put this to the last line
+        (exwm-enable)
+  )
+
 
 ;; my packages with use-package
 

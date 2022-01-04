@@ -18,6 +18,7 @@ all:
 	ln -sf $(REPO_DIR)/$(OTHERS_DIR)/eshell_alias $(EMACS_DIR)/eshell/alias
 	mkdir -p $(STRAIGHT_DIR)
 	ln -sf $(REPO_DIR)/versions.el $(STRAIGHT_VERSIONS_FILE)
+	sudo ln -sf $(REPO_DIR)/exwm/EXWM.desktop /usr/share/xsessions/EXWM.desktop
 
 clean:
 	rm -f $(EMACS_DIR)/init.el
