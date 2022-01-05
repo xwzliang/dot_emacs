@@ -40,12 +40,17 @@
     auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
  )
 
-;; Disable bars
+;; Disable bars and change modeline color
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(defvar my-modeline-color "#af5f00")
 (if (display-graphic-p)
     ; GUI
-    (toggle-scroll-bar -1))
+    (progn
+        (toggle-scroll-bar -1)
+        (setq my-modeline-color "dim gray")
+      )
+  )
 
 ;; Disable the startup splash screen
 (setq inhibit-splash-screen t)
@@ -184,10 +189,11 @@
 ;; A fancy and fast mode-line inspired by minimalism design
   :config
         (doom-modeline-mode 1)
-        (setq doom-modeline-icon nil)
-        ;; Change height of the modeline
-        (setq doom-modeline-height 20)
   :custom
+        (doom-modeline-icon nil)
+        ;; Change height of the modeline
+        (doom-modeline-bar-width 2)
+        (doom-modeline-height 20)
         (doom-modeline-buffer-file-name-style (quote truncate-with-project))
   :custom-face
         (doom-modeline-buffer-modified ((t (:inherit bold :foreground "brightblack"))))
@@ -201,7 +207,10 @@
         (doom-modeline-info ((t (:inherit bold))))
         (doom-modeline-project-dir ((t (:inherit bold))))
         (doom-modeline-warning ((t nil)))
-        (doom-modeline-bar-inactive ((t (:background "#af5f00"))))
+        (mode-line ((t (:height 0.8))))
+        (mode-line-inactive ((t (:height 0.8))))
+        (doom-modeline-bar ((t (:background ,my-modeline-color))))
+        (doom-modeline-bar-inactive ((t (:background ,my-modeline-color))))
   )
 
 (use-package macrostep
@@ -3143,8 +3152,8 @@
         (clues-theme)
   :config
         ;; Change background color for modeline to dark orange
-        (set-face-background 'mode-line "#af5f00")
-        (set-face-background 'mode-line-inactive "#af5f00")
+        (set-face-background 'mode-line my-modeline-color)
+        (set-face-background 'mode-line-inactive my-modeline-color)
         ;; Change foreground color for active modeline to black
         (set-face-foreground 'mode-line "black")
         ;; Change color for prompt in mini-buffer
@@ -3216,9 +3225,9 @@
   :custom
         (window-divider-default-right-width 10)
   :custom-face
-        (window-divider ((t (:foreground "#af5f00"))))
-        (window-divider-first-pixel ((t (:foreground "#af5f00"))))
-        (window-divider-last-pixel ((t (:foreground "#af5f00"))))
+        (window-divider ((t (:foreground ,my-modeline-color))))
+        (window-divider-first-pixel ((t (:foreground ,my-modeline-color))))
+        (window-divider-last-pixel ((t (:foreground ,my-modeline-color))))
   )
 
 (use-package executable
