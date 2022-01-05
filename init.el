@@ -3029,6 +3029,12 @@
             (pcase exwm-class-name
               ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title))))
         )
+        (defun my-exwm-configure-window-by-class ()
+            (interactive)
+            (pcase exwm-class-name
+                ("realvnc-vncserverui-service" (exwm-floating-hide))
+            )
+        )
   :config
         ;; (require 'exwm-config)
         ;; (exwm-config-example)
@@ -3045,9 +3051,9 @@
         (start-process-shell-command "xmodmap" nil "xmodmap ~/git/dot_emacs/exwm/Xmodmap")
 
         ;; Load the system tray
-        (require 'exwm-systemtray)
-        (setq exwm-systemtray-height 32)
-        (exwm-systemtray-enable)
+        ;; (require 'exwm-systemtray)
+        ;; (setq exwm-systemtray-height 32)
+        ;; (exwm-systemtray-enable)
 
         ;; Set Emacs transparency
         (defvar my-emacs-transparency '(90 . 90))
@@ -3086,6 +3092,9 @@
 
         ;; When window title updates, use it to set the buffer name
         (add-hook 'exwm-update-title-hook #'my-exwm-update-title)
+
+        ;; Configure windows as they're created
+        (add-hook 'exwm-manage-finish-hook #'my-exwm-configure-window-by-class)
 
         ;; Put this to the last line
         (exwm-enable)
