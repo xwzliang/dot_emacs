@@ -1738,6 +1738,13 @@
             (interactive (list (ebib--get-key-at-point)))
             (my-orb-edit-video-note key)
           )
+
+        (defun my-ebib-add-reading-list-item-for-learning ()
+            (interactive)
+            (let ((ebib-reading-list-file (f-join org-directory "0_5_learning.org")))
+              (ebib-add-reading-list-item)
+            )
+          )
   :config
         (setq ebib-bibtex-dialect 'biblatex)
         (defvar my-ebib-dir (f-join org-directory "ebib")
@@ -1773,6 +1780,7 @@
             "u" 'my-ebib-browse-url
             "f" 'my-ebib-view-pdf
             ;; "n" 'my-ebib-popup-note
+            "RA" 'my-ebib-add-reading-list-item-for-learning
          )
         (
             :states 'normal
