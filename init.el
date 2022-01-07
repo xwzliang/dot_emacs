@@ -2943,6 +2943,23 @@
         (emms-player-list '(emms-player-mpv))
   )
 
+(use-package later-do
+;; execute lisp code ... later (required by emms-player-mpv)
+  )
+
+(use-package emms-player-simple-mpv
+;; an extension of emms-player-simple.el for mpv JSON IPC. It provides basic functions for interface defined in EMMS
+  :general
+        (
+            :states 'normal
+            :keymaps 'emms-playlist-mode-map
+            "F" 'emms-player-simple-mpv-fullscreen
+         )
+  :config
+        ;; This plugin provides control functions (e.g. ab-loop, speed, fullscreen).
+        (require 'emms-player-simple-mpv-control-functions)
+  )
+
 (use-package pulseaudio-control
 ;; control PulseAudio volumes from Emacs, via pactl
   :bind
