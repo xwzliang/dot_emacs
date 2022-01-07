@@ -2052,7 +2052,7 @@
                         ("r" "bibliography reference" plain "%?"
                             :if-new
                             (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-#+filetags: :document:literature:
+#+filetags: :${citekey}:book:literature:
 
 * ${title}
 :PROPERTIES:
@@ -2071,7 +2071,7 @@
                         ("r" "bibliography reference" plain "%?"
                             :if-new
                             (file+head "literature/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-#+filetags: :video:literature:
+#+filetags: :${citekey}:video:literature:
 
 * ${title}
 :PROPERTIES:
