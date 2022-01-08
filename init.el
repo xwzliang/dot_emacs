@@ -3421,6 +3421,14 @@
 ;;   :delight visual-line-mode
 ;;   )
 
+(use-package fill
+  :straight nil
+  :general
+        (my-comma-leader-def
+            "f" 'fill-paragraph		;; Auto format and wrap long string
+         )
+  )
+
 (use-package eldoc
   :straight nil
   :delight
