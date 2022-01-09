@@ -1384,9 +1384,9 @@
   :preface
         (defun my-org-agenda-find-and-clock-in-remotely (item)
           ;; Clock in item in org agenda buffer, and don't change current buffer
-            (with-current-buffer
+            (with-current-buffer "*Org Agenda*"
                 ;; (switch-to-buffer "*Org Agenda*")
-                (set-buffer "*Org Agenda*")
+                ;; (set-buffer "*Org Agenda*")
                 (ignore-errors (org-agenda-clock-out))
                 (goto-char (point-min))
                 (search-forward item)
