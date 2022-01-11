@@ -1973,6 +1973,15 @@
                 )
            ))
 
+        (defun my-org-roam-find-wiki ()
+          (interactive)
+          (with-current-buffer (find-file-noselect (f-join org-directory "wiki" ".dir-locals.el"))
+            (save-excursion
+                (org-roam-node-find)
+              )
+            )
+          )
+
         (defun my-org-roam-filter-exclude-tag (tag-name)
           (lambda (node)
             (not (member tag-name (org-roam-node-tags node)))))
@@ -2008,6 +2017,7 @@
             ;; Customised functions
             "s" 'my-org-roam-find-ever-green
             "l" 'my-org-roam-find-literature
+            "w" 'my-org-roam-find-wiki
          )
         (my-space-leader-def
             "n" (general-simulate-key "C-c n")
