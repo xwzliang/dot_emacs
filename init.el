@@ -1926,6 +1926,12 @@
          ))
   )
 
+(use-package org-appear
+;; Toggle visibility of hidden Org mode element parts upon entering and leaving an element
+  :custom
+        (org-appear-autolinks t)
+  )
+
 (use-package org-noter
 ;; Emacs document annotator, using Org-mode. Org-noter is compatible with docview, pdf-tools, and nov.el. These modes make it possible to annotate PDF, EPUB, Microsoft Office, DVI, PS, and OpenDocument
   :general
