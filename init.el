@@ -2675,6 +2675,10 @@
 ;; Major mode for editing comma/char separated values
   )
 
+(use-package simple-httpd
+;; Extensible Emacs HTTP 1.1 server
+  )
+
 (use-package web-mode
 ;; an emacs major mode for editing web templates aka HTML files embedding parts (CSS/JavaScript) and blocks
   :config
