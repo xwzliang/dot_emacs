@@ -1241,6 +1241,7 @@
             ("C-c o z" . org-toggle-archive-tag)
             ("C-c o o" . org-open-at-point)
             ("C-c o i" . org-insert-structure-template)  ;; Insert #+BEGIN_SRC block
+            ("C-c o v" . org-latex-preview)
             :map org-mode-map
             ("C-c a" . org-agenda)
             ("C-c C-x M-d" . org-clock-remove-overlays)
@@ -1291,6 +1292,8 @@
         (setq org-outline-path-complete-in-steps nil)
         ;; For latex exporting
         (add-to-list 'org-latex-packages-alist '("" "tabularx" nil))
+        (setq org-preview-latex-default-process 'imagemagick)
+        (setq org-format-latex-options (plist-put org-format-latex-options :scale 5.0))			;; Make latex preview bigger
 
         (setq org-enforce-todo-dependencies t)
         (setq org-enforce-todo-checkbox-dependencies t)
