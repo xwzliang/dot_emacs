@@ -3090,7 +3090,9 @@
         )
         (defun my-exwm-update-title ()
             (pcase exwm-class-name
-              ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title))))
+              ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))
+              ("qutebrowser" (exwm-workspace-rename-buffer (format "qutebrowser: %s" exwm-title)))
+              )
         )
         (defun my-exwm-configure-window-by-class ()
             (interactive)
