@@ -3149,6 +3149,7 @@
             ;; Switch to line-mode; exit fullscreen mode; refresh layout
             ([?\M-r] . exwm-reset)
             ([?\M-f] . exwm-layout-toggle-fullscreen)
+            ([?\s-h] . exwm-floating-hide)
             ([?\M-\ ] . counsel-linux-app)		;; Use alt+space
         ))
 
