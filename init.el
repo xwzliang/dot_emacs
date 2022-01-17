@@ -1215,6 +1215,11 @@
 ;; Emacs support library for PDF files.
   :mode
         ("\\.pdf\\'" . doc-view-mode)
+  :general
+        (
+            :prefix "C-c n"
+            "b" 'pdf-annot-list-annotations
+         )
   :hook
         (doc-view-mode . (lambda ()
             (pdf-tools-install)
