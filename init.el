@@ -1220,6 +1220,17 @@
             :prefix "C-c n"
             "b" 'pdf-annot-list-annotations
          )
+  :custom
+        (pdf-annot-default-annotation-properties
+            `((t (label . ,user-full-name))
+                (text (icon . "Note")
+                    (color . "#ff0000"))
+                (highlight (color . "yellow")
+                           (opacity . 1))
+                (squiggly (color . "orange"))
+                (strike-out(color . "red"))
+                (underline (color . "blue")))
+         )
   :hook
         (doc-view-mode . (lambda ()
             (pdf-tools-install)
@@ -1954,6 +1965,175 @@
 (use-package org-roam
 ;; Rudimentary Roam replica with Org-mode
   :preface
+        (defun my-org-get-contents-of-entry ()
+          "Get the content text of the entry at point
+        Excludes the heading and any child subtrees."
+          (if (org-before-first-heading-p)
+              (message "Not in an org heading")
+            (save-excursion
+              ;; If inside heading contents, move the point back to the heading
+              ;; otherwise `org-agenda-get-some-entry-text' won't work.
+              (unless (org-on-heading-p) (org-previous-visible-heading 1))
+              (substring-no-properties
+                (org-agenda-get-some-entry-text
+                (point-marker)
+                most-positive-fixnum))
+            )))
+
+        (defun my-pdf-delete-all-annotations ()
+          (interactive)
+          (let (
+                 (my-pdf-annots (pdf-annot-getannots nil pdf-annot-list-listed-types))
+                 )
+            (dolist (my-pdf-annot my-pdf-annots)
+                (pdf-annot-delete my-pdf-annot)
+              )
+            )
+          )
+
+        (defun my-pdf-get-search-regex-string (str)
+          (s-replace " " "( |\\n)"
+            ;; (s-replace-regexp "[^[:ascii:]]" "." str)
+            (s-replace-regexp "[\]\[\(\)]" "."
+              (s-replace "." "\\." str)
+                )
+            )
+          )
+
+        (defun my-get-nth-from-list-fn (n)
+            (lambda (list)
+              (funcall 'nth n list))
+          )
+
+        (defun my-org-roam-highlight-pdf-by-excerpt ()
+          (interactive)
+          (let* (
+                (my-pdf-highlight-color-index-alist
+                 '(
+                    ;; Colors that marginnote use, they will change when marking more than once
+                    ;; (0 . "#ffffc3")		;; Yellow
+                    ;; (1 . "#d1fed0")		;; Green
+                    ;; (2 . "#c5dfff")		;; Blue
+                    ;; Colors that won't change when marking more than once
+                    (0 . "#ffff00")		;; Yellow
+                    (1 . "#03ff00")		;; Green
+                    (2 . "#02ffff")		;; Blue
+                  )
+                 )
+                (pdf-file-path (org-entry-get nil "NOTER_DOCUMENT" t))
+                ;; (pdf-file-name (file-name-nondirectory pdf-file-path))
+                (pdf-start-page (string-to-number (org-entry-get nil "NOTER_PAGE" t)))
+                (pdf-end-page (string-to-number (org-entry-get nil "NOTER_PAGE_END" t)))
+                (highlight-color-index (string-to-number (org-entry-get nil "HIGHLIGHT_COLOR_INDEX" t)))
+                (highlight-color (alist-get highlight-color-index my-pdf-highlight-color-index-alist))
+                (excerpt (my-org-get-contents-of-entry))
+                (paragraphs-of-excerpt (split-string excerpt "\n\n"))
+                )
+            (switch-to-buffer-other-window (or (get-file-buffer pdf-file-path)
+                                                (find-file-noselect pdf-file-path)))
+            (message "%s" highlight-color)
+            (dolist (paragraph paragraphs-of-excerpt)
+              (message (my-pdf-get-search-regex-string (substring paragraph -40)))
+              (let* (
+                    (case-fold-search nil)		;; Don't ignore case in search
+                    (search-string-length 40)
+                    ;; If paragraph is less than search-string-length, just use whole paragraph
+                    (search-string-head (or (substring paragraph 0 search-string-length) paragraph))
+                    (search-string-tail (or (substring paragraph (- search-string-length)) paragraph))
+                    (matches-head
+                        (pdf-info-search-regexp (my-pdf-get-search-regex-string search-string-head)
+                                                (cons pdf-start-page pdf-end-page) nil pdf-file-path)
+                      )
+                    (matches-tail
+                        (pdf-info-search-regexp (my-pdf-get-search-regex-string search-string-tail)
+                                                (cons pdf-start-page pdf-end-page) nil pdf-file-path)
+                      )
+                    (matches-head-alist (car matches-head))
+                    (matches-tail-alist (car matches-tail))
+                    (matches-head-page (alist-get 'page matches-head-alist))
+                    (matches-tail-page (alist-get 'page matches-tail-alist))
+                    (matches-head-edges (alist-get 'edges matches-head-alist))
+                    (matches-tail-edges (alist-get 'edges matches-tail-alist))
+                    (matches-coordinate-left (apply 'max (mapcar (my-get-nth-from-list-fn 0) matches-head-edges)))
+                    (matches-coordinate-top (apply 'min (mapcar (my-get-nth-from-list-fn 1) matches-head-edges)))
+                    (matches-coordinate-right (apply 'min (mapcar (my-get-nth-from-list-fn 2) matches-tail-edges)))
+                    (matches-coordinate-bottom (apply 'max (mapcar (my-get-nth-from-list-fn 3) matches-tail-edges)))
+                    )
+                (message "%s\n" matches-head)
+                (message "%s\n" matches-tail)
+                ;; Markup text between head and tail
+                (cond
+                 ((= matches-head-page matches-tail-page)
+                    (pdf-view-goto-page matches-head-page)
+                    (pdf-annot-add-markup-annotation (list
+                                                      matches-coordinate-left
+                                                      matches-coordinate-top
+                                                      matches-coordinate-right
+                                                      matches-coordinate-bottom)
+                                                     'highlight highlight-color)
+                  )
+                 ((< matches-head-page matches-tail-page)
+                    (pdf-view-goto-page matches-head-page)
+                    (let* (
+                          (page-edges (pdf-info-textregions matches-head-page))
+                          (page-edge-right (apply 'max (mapcar (my-get-nth-from-list-fn 2) page-edges)))
+                          (page-edge-bottom (apply 'max (mapcar (my-get-nth-from-list-fn 3) page-edges)))
+                          )
+                      (pdf-annot-add-markup-annotation (list
+                                                        matches-coordinate-left
+                                                        matches-coordinate-top
+                                                        page-edge-right
+                                                        page-edge-bottom)
+                                                        'highlight highlight-color)
+                      )
+                    (let ((current-processing-page (1+ matches-head-page)))
+                      (unless (= current-processing-page matches-tail-page)
+                        (pdf-view-goto-page current-processing-page)
+                        (let* (
+                              (page-edges (pdf-info-textregions current-processing-page))
+                              (page-edge-left (apply 'min (mapcar (my-get-nth-from-list-fn 0) page-edges)))
+                              (page-edge-top (apply 'min (mapcar (my-get-nth-from-list-fn 1) page-edges)))
+                              (page-edge-right (apply 'max (mapcar (my-get-nth-from-list-fn 2) page-edges)))
+                              (page-edge-bottom (apply 'max (mapcar (my-get-nth-from-list-fn 3) page-edges)))
+                              )
+                          (pdf-annot-add-markup-annotation (list
+                                                            page-edge-left
+                                                            page-edge-top
+                                                            page-edge-right
+                                                            page-edge-bottom)
+                                                            'highlight highlight-color)
+                          )
+                        (cl-incf current-processing-page)
+                        )
+                      )
+                    (pdf-view-goto-page matches-tail-page)
+                    (let* (
+                          (page-edges (pdf-info-textregions matches-tail-page))
+                          (page-edge-left (apply 'min (mapcar (my-get-nth-from-list-fn 0) page-edges)))
+                          (page-edge-top (apply 'min (mapcar (my-get-nth-from-list-fn 1) page-edges)))
+                          )
+                      (pdf-annot-add-markup-annotation (list
+                                                        page-edge-left
+                                                        page-edge-top
+                                                        matches-coordinate-right
+                                                        matches-coordinate-bottom)
+                                                        'highlight highlight-color)
+                      )
+                  )
+                 ((> matches-head-page matches-tail-page)
+                  (error "Search failed, please check the excerpt and matched strings")
+                  )
+                 )
+
+                ;; Markup all matches edges
+                (pdf-annot-add-markup-annotation matches-tail-edges 'highlight highlight-color)
+                (pdf-view-goto-page matches-head-page)
+                (pdf-annot-add-markup-annotation matches-head-edges 'highlight highlight-color)
+                )
+              )
+            )
+        )
+
         (defun my-org-roam-filter-by-tag (tag-name)
           (lambda (node)
             (member tag-name (org-roam-node-tags node))))
@@ -2026,6 +2206,8 @@
             "s" 'my-org-roam-find-ever-green
             "l" 'my-org-roam-find-literature
             "w" 'my-org-roam-find-wiki
+            "h" 'my-org-roam-highlight-pdf-by-excerpt
+            "k" 'my-pdf-delete-all-annotations
          )
         (my-space-leader-def
             "n" (general-simulate-key "C-c n")
