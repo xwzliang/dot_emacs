@@ -693,6 +693,11 @@
             "C-k" 'helm-previous-line
             "TAB" 'helm-execute-persistent-action
         )
+        (
+            :states '(insert normal)
+            :keymaps 'minibuffer-local-map
+            "C-r" 'helm-minibuffer-history
+        )
         (my-space-leader-def
             "SPC" 'helm-M-x
             "y" 'helm-show-kill-ring
