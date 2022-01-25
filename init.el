@@ -619,6 +619,21 @@
         (neo-smart-open t)
   )
 
+(use-package ivy
+;; a generic completion mechanism for Emacs
+  :general
+        (
+            :states '(insert normal)
+            :keymaps 'ivy-minibuffer-map
+            "C-j" 'ivy-next-line
+            "C-k" 'ivy-previous-line
+            "TAB" 'ivy-alt-done
+            "C-l" 'ivy-dispatching-done
+        )
+  :custom
+        ;; Don't start searches with ^
+        (ivy-initial-inputs-alist nil)
+  )
 
 (use-package counsel
 ;; a collection of Ivy-enhanced versions of common Emacs commands
@@ -3365,6 +3380,16 @@
         (desktop-environment-volume-toggle-command "pactl set-sink-mute @DEFAULT_SINK@ toggle")
         (desktop-environment-volume-normal-increment "+5%")
         (desktop-environment-volume-normal-decrement "-5%")
+  )
+
+(use-package aria2
+  :straight
+        (
+            :host github
+            :repo "LdBeth/aria2.el"
+         )
+  :custom
+        (aria2-add-evil-quirks t)
   )
 
 
