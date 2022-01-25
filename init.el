@@ -637,6 +637,18 @@
 
 (use-package counsel
 ;; a collection of Ivy-enhanced versions of common Emacs commands
+  :general
+        (
+            :states '(insert normal)
+            :keymaps 'ivy-minibuffer-map
+            ;; :keymaps 'minibuffer-local-map
+            "C-r" 'counsel-minibuffer-history
+        )
+        (my-comma-leader-def
+            "SPC" 'counsel-M-x
+            "b" 'counsel-ibuffer
+            "s" 'counsel-find-file
+        )
   :custom
         ;; Don't show app path
         (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
