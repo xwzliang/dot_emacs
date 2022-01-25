@@ -3887,3 +3887,12 @@
         ;;     (lambda (fpath)
         ;;         (call-process "evince" nil 0 nil fpath)))
   )
+
+(use-package emacs
+  :straight nil
+  :general
+        (my-space-leader-def
+            ;; Check for unbalanced parentheses in the current buffer
+            "e p" 'check-parens
+         )
+  )
