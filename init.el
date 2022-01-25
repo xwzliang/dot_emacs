@@ -642,6 +642,12 @@
         (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
   )
 
+(use-package ivy-rich
+;; This package comes with rich transformers for commands from ivy and counsel. It should be easy enough to define your own transformers too.
+  :config
+        (ivy-rich-mode 1)
+        ;; (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+  )
 
 (use-package helm
 ;; Helm is an Emacs framework for incremental completions and narrowing selections.
