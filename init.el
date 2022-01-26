@@ -123,14 +123,16 @@
         ;;      "" nil
         ;;   )
         (general-create-definer my-space-leader-def
-            :states '(normal motion visual)
+            :states '(normal motion visual emacs)
             :keymaps 'override
             :prefix my-space-leader
+            :global-prefix "M-SPC"
           )
         (general-create-definer my-comma-leader-def
-            :states '(normal motion visual)
+            :states '(normal motion visual emacs)
             :keymaps 'override
             :prefix my-comma-leader
+            ;; :global-prefix "M-,"
           )
         (general-evil-setup)
         ;; Use ,, to <esc> keybinding in insert state (jk will cause my macro to be broken somehow)
@@ -3375,7 +3377,7 @@
             ([?\M-r] . exwm-reset)
             ([?\M-f] . exwm-layout-toggle-fullscreen)
             ([?\s-h] . exwm-floating-hide)
-            ([?\M-\ ] . counsel-linux-app)		;; Use alt+space
+            ([?\s-\ ] . counsel-linux-app)
         ))
 
         ;; When window "class" updates, use it to set the buffer name
