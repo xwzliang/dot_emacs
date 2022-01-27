@@ -145,6 +145,23 @@
             (general-key-dispatch 'self-insert-command
                 :timeout 0.25
                 "d" 'evil-normal-state))
+        (my-space-leader-def
+            "a" (general-simulate-key "C-c h" :which-key "helm prefix")
+            "e" '(:ignore t :which-key "eval edit prefix")
+            "r" '(:ignore t :which-key "persp restart reading prefix")
+            "t" '(:ignore t :which-key "test debug prefix")
+            "v" '(:ignore t :which-key "git visual prefix")
+            "x" '(:ignore t :which-key "shell term prefix")
+            "o" (general-simulate-key "C-c o" :which-key "org closure prefix")
+            "t d" (general-simulate-key "C-c d" :which-key "debug prefix")
+            "n" (general-simulate-key "C-c n" :which-key "roam deft noter prefix")
+            "m" (general-simulate-key "C-c m" :which-key "misc prefix")
+            "i" (general-simulate-key "C-h" :which-key "help prefix")
+            "." (general-simulate-key "M-." :which-key "find definition")
+            "," (general-simulate-key "M-," :which-key "pop back")
+            "J" '(:ignore t :which-key "evil jump prefix")
+            "W" '(:ignore t :which-key "window prefix")
+         )
   )
 
 (use-package hydra
@@ -321,6 +338,8 @@
           )
   :general
         (my-space-leader-def
+            ;; Jump to matched parentheses, default key binding %
+            "J j" 'evil-jump-item
             "J n" 'evil-jump-forward
             "J p" 'evil-jump-backward
             "u" 'evil-scroll-up
@@ -705,7 +724,6 @@
             "y" 'helm-show-kill-ring
             "s" 'helm-find-files
             "f" 'helm-occur
-            "a" (general-simulate-key "C-c h")
         )
         (my-comma-leader-def
             :states '(normal motion visual insert)
@@ -1328,9 +1346,6 @@
             "v" 'org-clock-display
             "e" 'org-clock-modify-effort-estimate
             "s" 'org-resolve-clocks
-         )
-        (my-space-leader-def
-            "o" (general-simulate-key "C-c o")
          )
   :config
         ; Log into a logbook drawer
@@ -2249,9 +2264,6 @@
             "h" 'my-org-roam-highlight-pdf-by-excerpt
             "k" 'my-pdf-delete-all-annotations
          )
-        (my-space-leader-def
-            "n" (general-simulate-key "C-c n")
-         )
   :init
         (setq org-roam-v2-ack t)
   :config
@@ -2418,10 +2430,6 @@
   ;;           ("C-c m z p" . anki-editor-cloze-region-dont-incr)
   ;;           ("C-c m z r" . anki-editor-reset-cloze-number)
   ;;        )
-  :general
-        (my-space-leader-def
-            "m" (general-simulate-key "C-c m")
-         )
   :preface
         (defun anki-editor-cloze-region-auto-incr (&optional arg)
             "Cloze region without hint and increase card number."
@@ -2587,9 +2595,6 @@
             "x" 'helpful-at-point
             "F" 'helpful-function
             "D" 'helpful-command
-         )
-        (my-space-leader-def
-            "i" (general-simulate-key "C-h")
          )
   )
 
@@ -2757,9 +2762,6 @@
             "g" 'realgud:gdb
             "b" 'realgud:bashdb
             "z" 'realgud:zshdb
-         )
-        (my-space-leader-def
-            "t d" (general-simulate-key "C-c d")
          )
   )
 
@@ -3056,10 +3058,6 @@
 (use-package npm-mode
 ;; An Emacs minor mode for working with NPM projects
   ;; :mode "\\(\\.js\\|\\.ts\\|package\\.json\\)\\'"
-  :general
-        (my-space-leader-def
-            "m" (general-simulate-key "C-c m")
-         )
   :custom
         (npm-mode-command-prefix "C-c m")
   )
@@ -3777,10 +3775,6 @@
         (
             :states '(normal motion visual)
             "M-." 'xref-find-definitions
-         )
-        (my-space-leader-def
-            "." (general-simulate-key "M-.")
-            "," (general-simulate-key "M-,")
          )
 )
 
