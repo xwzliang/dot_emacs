@@ -3699,8 +3699,8 @@
   :straight nil
   :custom
         (auth-sources (quote (
-            "~/.authinfo"
-            "~/Dropbox/keys/emacs/authinfo"
+            ;; "~/.authinfo"
+            "~/Dropbox/org/keys/emacs/authinfo"
          )))
 )
 
