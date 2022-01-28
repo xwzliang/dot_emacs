@@ -670,6 +670,9 @@
             "b" 'counsel-ibuffer
             "s" 'counsel-find-file
         )
+        (my-space-leader-def
+            "`" 'counsel-M-x
+        )
   :custom
         ;; Don't show app path
         (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
