@@ -1434,6 +1434,14 @@
         (org-table ((t (:foreground "white"))))
   )
 
+(use-package visual-fill-column
+  :custom
+        (visual-fill-column-center-text t)
+        (visual-fill-column-width 86)
+  :hook
+        (visual-line-mode . visual-fill-column-mode)
+  )
+
 (use-package org-indent
   :straight org
   :after
