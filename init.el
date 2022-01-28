@@ -123,7 +123,7 @@
         ;;      "" nil
         ;;   )
         (general-create-definer my-space-leader-def
-            :states '(normal motion visual emacs)
+            :states '(normal insert motion visual emacs)
             :keymaps 'override
             :prefix my-space-leader
             :global-prefix "M-SPC"
