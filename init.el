@@ -2511,12 +2511,11 @@
          )
   :general
         (my-space-leader-def
-            :prefix (concat my-space-leader " x")
-            "y" 'emamux:copy-kill-ring
-            "p" 'emamux:yank-from-list-buffers
-            "e" 'eshell
-            "t" 'term
-            "i" 'ielm
+            "x y" 'emamux:copy-kill-ring
+            "x p" 'emamux:yank-from-list-buffers
+            "x e" 'eshell
+            "x t" 'term
+            "x i" 'ielm
          )
   :custom
         (emamux:completing-read-type 'helm)
@@ -3101,11 +3100,11 @@
 ;; Managing multiple vterm buffers in Emacs
   :general
         (my-space-leader-def
-            :prefix (concat my-space-leader " x")
-            "x" 'multi-vterm-dedicated-toggle
-            "o" 'multi-vterm
-            "j" 'multi-vterm-next
-            "k" 'multi-vterm-prev
+            ;; :prefix (concat my-space-leader " x")
+            "x x" 'multi-vterm-dedicated-toggle
+            "x o" 'multi-vterm
+            "x j" 'multi-vterm-next
+            "x k" 'multi-vterm-prev
          )
   )
 
