@@ -1335,6 +1335,7 @@
             "g ]" 'org-next-link
             "g [" 'org-previous-link
             "g s" 'org-set-property
+            "g w" 'org-babel-tangle
             ;; "M-RET" 'org-insert-todo-heading-respect-content
          )
         (
@@ -1364,6 +1365,8 @@
         (setq org-refile-allow-creating-parent-nodes 'confirm)
         ;; makes org-refile outline working with helm/ivy
         (setq org-outline-path-complete-in-steps nil)
+        ;; save org buffers after org-refile
+        (advice-add 'org-refile :after 'org-save-all-org-buffers)
         ;; For latex exporting
         (add-to-list 'org-latex-packages-alist '("" "tabularx" nil))
         (setq org-preview-latex-default-process 'imagemagick)
@@ -1403,6 +1406,11 @@
             ))
         ; Don't ask for confirmation when execute the code block
         (setq org-confirm-babel-evaluate nil)
+        ;; Add source block type
+        (add-to-list 'org-structure-template-alist '("sh" . "src bash"))
+        (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+        (add-to-list 'org-structure-template-alist '("py" . "src python"))
+
         ;; global Effort estimate values
         (setq org-global-properties
             '(("Effort_ALL" .
