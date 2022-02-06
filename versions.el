@@ -192,7 +192,7 @@
  ("org-ref" . "4c09ec02d2306d7f5e87c010b8c76bec9ee23f81")
  ("org-rifle" . "5e13a0e59606b40088927870dab116a8eab8e66c")
  ("org-roam" . "7068d63e966c0ca8d098ac4f7a90434f4c9b6822")
- ("org-roam-bibtex" . "196e5815dd13b014804122c4e32ee5f16f0ad66b")
+ ("org-roam-bibtex" . "070a7a732cf38f51245116ddd41aad8ac697c3b0")
  ("org-roam-ui" . "9ed0c5705a302a91fab2b8bcc777a12dcf9b3682")
  ("org-super-agenda" . "fb5e2ef277bc811a3b061106c99e4c47b6b86f80")
  ("org-timeline" . "af1b44e18048278a116da89faf138310f09c74c6")
