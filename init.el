@@ -273,25 +273,33 @@
 (use-package company
 ;; Modular in-buffer completion framework for Emacs
   :delight
-  :init
-        (add-hook 'after-init-hook 'global-company-mode)
+  ;; :init
+  ;;       (add-hook 'after-init-hook 'global-company-mode)
   :bind
-        ("C-j" . company-select-next)
-        ("C-k" . company-select-previous)
+        ;; ("C-j" . company-select-next)
+        ;; ("C-k" . company-select-previous)
+        (
+            :map company-active-map
+            ("TAB" . company-complete-selection)
+            :map lsp-mode-map
+            ("TAB" . company-indent-or-complete-common)
+        )
   :config
-        (setq company-idle-delay 0)
-        (setq company-backends
+        ; Solve the conflicts with yasnippet of tab key binding
+        (advice-add 'company-complete-common :before (lambda ()
+                                        (setq my-company-point (point))))
+        (advice-add 'company-complete-common :after (lambda ()
+                                        (when (equal my-company-point (point)) (yas-expand))))
+  :custom
+  		(company-idle-delay 0)
+        (company-minimum-prefix-length 1)
+        (company-backends
         '((company-files
             company-keywords
             company-capf	; completion-at-point-functions backend
             company-yasnippet
             )
             (company-abbrev company-dabbrev)))
-        ; Solve the conflicts with yasnippet of tab key binding
-        (advice-add 'company-complete-common :before (lambda ()
-                                        (setq my-company-point (point))))
-        (advice-add 'company-complete-common :after (lambda ()
-                                        (when (equal my-company-point (point)) (yas-expand))))
   :custom-face
         (company-preview ((t (:background "black" :foreground "brightblack"))))
         (company-preview-common ((t (:inherit company-preview :foreground "brightblack"))))
@@ -301,6 +309,8 @@
         (company-tooltip-annotation ((t (:foreground "yellow"))))
         (company-tooltip-common ((t (:foreground "gold3"))))
         (company-tooltip-selection ((t (:background "forestgreen"))))
+  :hook
+        (prog-mode . company-mode)
   )
 
 (use-package company-statistics
