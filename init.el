@@ -3778,10 +3778,18 @@
                          (general-define-key
                           :states 'insert
                           :keymaps 'eshell-mode-map
+                          "C-r" 'counsel-esh-history
                           "<escape>" (lambda () (interactive)
                                        (protect-eshell-prompt)
                                        (evil-normal-state)
                                        (evil-end-of-line)))))
+        ;; Save command history when typing new command
+        (eshell-pre-command . eshell-save-some-history)
+  :custom
+        (eshell-history-size 10000)
+        (eshell-buffer-maximum-lines 10000)
+        (eshell-hist-ignoredups t)
+        (eshell-scroll-to-bottom-on-input t)
   :custom-face
         (eshell-prompt ((t (:foreground "green" :weight bold))))
   )
