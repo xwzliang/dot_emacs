@@ -291,7 +291,7 @@
         (advice-add 'company-complete-common :after (lambda ()
                                         (when (equal my-company-point (point)) (yas-expand))))
   :custom
-  		(company-idle-delay 0)
+        (company-idle-delay 0)
         (company-minimum-prefix-length 1)
         (company-backends
         '((company-files
