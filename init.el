@@ -3110,8 +3110,15 @@
 
 (use-package vterm
 ;; A fully-fledged terminal emulator inside GNU Emacs based on libvterm
+  :general
+        (
+            :states '(insert normal)
+            :keymaps 'vterm-mode-map
+            "TAB" 'vterm-send-tab
+        )
   :custom
         (vterm-shell "/bin/zsh")
+        (vterm-max-scrollback 10000)
   )
 
 (use-package multi-vterm
@@ -3882,7 +3889,7 @@
 (use-package term
   :straight nil
   :init
-        (setq-default term-prompt-regexp "^[^$%>»]*[#$%>»] ")
+        (setq-default term-prompt-regexp "^[^$>»]*[#$>»] ")
 )
 
 (use-package browse-url
