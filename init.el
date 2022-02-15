@@ -281,8 +281,6 @@
         (
             :map company-active-map
             ("TAB" . company-complete-selection)
-            :map lsp-mode-map
-            ("TAB" . company-indent-or-complete-common)
         )
   :config
         ; Solve the conflicts with yasnippet of tab key binding
@@ -2822,6 +2820,11 @@
 ;; Emacs client/library for the Language Server Protocol
   :init
         (setq lsp-keymap-prefix "C-c l")
+  :bind
+        (
+            :map lsp-mode-map
+            ("TAB" . company-indent-or-complete-common)
+        )
   :config
         (setq lsp-prefer-capf t)
         (setq gc-cons-threshold 100000000)
