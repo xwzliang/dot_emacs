@@ -247,27 +247,75 @@
          )
   )
 
-(use-package persp-mode
-;; named perspectives(set of buffers/window configs) for emacs
+;; (use-package persp-mode
+;; ;; named perspectives(set of buffers/window configs) for emacs
+;;   :delight
+;;   :init
+;;         (add-hook 'after-init-hook 'persp-mode)
+;;   :config
+;;         ; Don't auto resume
+;;         (setq persp-auto-resume-time 0)
+;;         (persp-set-keymap-prefix (kbd "C-c r"))
+;;   :general
+;;         (my-space-leader-def
+;;             "r l" 'persp-load-state-from-file
+;;             "r w" 'persp-save-state-to-file
+;;             "r s" 'persp-frame-switch
+;;             "r R" 'persp-rename
+;;             "r a" 'persp-add-buffer
+;;             "r k" 'persp-remove-buffer
+;;             "r K" 'persp-kill-buffer
+;;             "b" 'persp-switch-to-buffer
+;;          )
+;;   )
+
+
+(use-package perspective
+;; The Perspective package provides multiple named workspaces (or "perspectives") in Emacs, similar to multiple desktops in window managers like Awesome and XMonad, and Spaces on the Mac.
   :delight
   :init
-        (add-hook 'after-init-hook 'persp-mode)
-  :config
-        ; Don't auto resume
-        (setq persp-auto-resume-time 0)
-        (persp-set-keymap-prefix (kbd "C-c r"))
+        (persp-mode)
+  :custom
+        (persp-mode-prefix-key (kbd "C-a"))
+        (persp-sort 'created)
+        (persp-state-default-file "~/Dropbox/org/persp/default")
   :general
         (my-space-leader-def
-            "r l" 'persp-load-state-from-file
-            "r w" 'persp-save-state-to-file
-            "r s" 'persp-frame-switch
+            "r l" 'persp-state-load
+            "r w" 'persp-state-save
+            "r s" 'persp-switch
             "r R" 'persp-rename
             "r a" 'persp-add-buffer
             "r k" 'persp-remove-buffer
-            "r K" 'persp-kill-buffer
+            "r d" 'persp-kill
             "b" 'persp-switch-to-buffer
          )
-  )
+  :config
+        ;; Change persp sort created order from newest first to oldest first
+        (el-patch-defun persp-names ()
+          "Return a list of the names of all perspectives on the `selected-frame'.
+        If `persp-sort' is 'name (the default), then return them sorted
+        alphabetically. If `persp-sort' is 'access, then return them
+        sorted by the last time the perspective was switched to, the
+        current perspective being the first. If `persp-sort' is 'created,
+        then return them in the order they were created, with the oldest
+        first."
+          (let ((persps (hash-table-values (perspectives-hash))))
+            (cond ((eq persp-sort 'name)
+                   (sort (mapcar 'persp-name persps) 'string<))
+                  ((eq persp-sort 'access)
+                   (mapcar 'persp-name
+                           (sort persps (lambda (a b)
+                                          (time-less-p (persp-last-switch-time b)
+                                                       (persp-last-switch-time a))))))
+                  ((eq persp-sort 'created)
+                   (mapcar 'persp-name
+                           (sort persps (lambda (a b)
+                                          (el-patch-wrap 1 1
+                                            (not
+                                              (time-less-p (persp-created-time b)
+                                                           (persp-created-time a)))))))))))
+      )
 
 ;; company-mode
 (use-package company
