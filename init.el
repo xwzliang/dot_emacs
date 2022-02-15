@@ -432,7 +432,13 @@
         (
             :states '(normal visual)
             :keymaps 'override
-            "g r" 'evil-replace-with-register
+            ;; "g r" 'evil-replace-with-register
+            "g r" (general-predicate-dispatch 'evil-replace-with-register
+                    (equal major-mode 'dired-mode) 'revert-buffer
+                    (derived-mode-p 'magit-mode) 'magit-refresh-all
+                    (derived-mode-p 'neotree-mode) 'neotree-refresh
+                    (equal major-mode 'elfeed-search-mode) 'elfeed-search-fetch
+                   )
          )
   :config
         ;; (setq evil-replace-with-register-key (kbd "gr"))
