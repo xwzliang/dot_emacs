@@ -4015,6 +4015,23 @@
         ;;         (call-process "evince" nil 0 nil fpath)))
   )
 
+(use-package desktop
+  :straight nil
+  :init
+        (setq desktop-dirname (expand-file-name "~/Dropbox/org/persp/"))
+  :config
+        (desktop-save-mode 1)
+        (save-place-mode 1)
+  :custom
+        (desktop-path (list "." desktop-dirname))
+        (desktop-load-locked-desktop t)
+        (desktop-base-file-name "emacs.desktop")
+        (desktop-files-not-to-save nil)
+        (desktop-save t)
+  ;; :hook
+  ;;       (server-after-make-frame . desktop-read)
+  )
+
 (use-package emacs
   :straight nil
   :general
