@@ -326,7 +326,7 @@
             "p" 'eyebrowse-prev-window-config
             "n" 'eyebrowse-next-window-config
             "'" 'eyebrowse-last-window-config
-            "x" 'eyebrowse-close-window-config
+            "X" 'eyebrowse-close-window-config
             "," 'eyebrowse-rename-window-config
             "." 'eyebrowse-switch-to-window-config
             "0" 'eyebrowse-switch-to-window-config-0
@@ -454,6 +454,12 @@
             "W v" 'evil-window-vsplit
             "q" 'evil-quit
             "<escape>" 'hydra-move/body
+         )
+        (
+            :prefix "C-a"
+            "s" 'evil-window-split
+            "v" 'evil-window-vsplit
+            "x" 'evil-quit
          )
         ([remap evil-search-forward] 'helm-occur)
   :config
@@ -3651,6 +3657,11 @@
         (
             ("C-c m f" . toggle-frame-fullscreen)
          )
+  :general
+        (
+            :prefix "C-a"
+            "m" 'set-frame-name
+         )
   :config
         (window-divider-mode)
   :custom
@@ -3804,6 +3815,13 @@
             "M-k" 'windmove-up
          )
         (my-space-leader-def
+            "h" 'windmove-left
+            "l" 'windmove-right
+            "j" 'windmove-down
+            "k" 'windmove-up
+         )
+        (
+            :prefix "C-a"
             "h" 'windmove-left
             "l" 'windmove-right
             "j" 'windmove-down
