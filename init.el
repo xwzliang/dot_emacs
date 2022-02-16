@@ -316,6 +316,8 @@
 
 (use-package eyebrowse
 ;; eyebrowse is a global minor mode for Emacs that allows you to manage your window configurations in a simple manner, just like tiling window managers like i3wm with their workspaces do.
+  :commands
+  		(eyebrowse--set)
   :config
         (eyebrowse-mode t)
   :general
@@ -343,6 +345,25 @@
         (eyebrowse-new-workspace t)
         (eyebrowse-wrap-around t)
         (eyebrowse-switch-back-and-forth t)
+  )
+
+(use-package eyebrowse-restore
+  :straight
+        (
+            :host github
+            :repo "FrostyX/eyebrowse-restore"
+            :branch "main"
+         )
+  :general
+        (
+            :prefix "C-a"
+            "C-s" 'eyebrowse-restore-save-all
+            "C-l" 'eyebrowse-restore
+         )
+  :custom
+        (eyebrowse-restore-dir "~/Dropbox/org/persp/eyebrowse")
+  :config
+        (eyebrowse-restore-mode)
   )
 
 ;; company-mode
