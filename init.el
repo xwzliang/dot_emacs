@@ -4027,6 +4027,11 @@
   ;;       (server-after-make-frame . desktop-read)
   )
 
+(use-package desktop+
+  :custom
+        (desktop+-base-dir "~/Dropbox/org/persp/")
+  )
+
 (use-package emacs
   :straight nil
   :general
