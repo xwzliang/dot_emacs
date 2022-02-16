@@ -94,9 +94,6 @@
 ;; The use-package macro allows you to isolate package configuration in your .emacs file in a way that is both performance-oriented and, well, tidy
 (straight-use-package 'use-package)
 
-
-;; Third party packages with use-package
-
 (use-package dash
 ;; A modern list API for Emacs
   )
@@ -3558,8 +3555,6 @@
          )
   )
 
-
-;; built-in packages with use-package
 
 (use-package faces
   :straight nil
