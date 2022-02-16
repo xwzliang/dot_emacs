@@ -4059,5 +4059,6 @@
         (my-space-leader-def
             ;; Check for unbalanced parentheses in the current buffer
             "e p" 'check-parens
+            "b" 'switch-to-buffer
          )
   )
