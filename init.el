@@ -2136,6 +2136,37 @@
          ))
   )
 
+(use-package org-tree-slide
+;; A presentation tool for org-mode based on the visibility of outline trees
+  :after
+        (org)
+  :config
+        ;; Some evil keybindings are made afterwards because of the eval-after-load. There's nothing general can do about this. You need to use with-eval-after-load/:config
+        (general-define-key
+            :definer 'minor-mode
+            :states 'motion
+            :keymaps 'org-tree-slide-mode
+            "<left>" 'org-tree-slide-move-previous-tree
+            "<right>" 'org-tree-slide-move-next-tree
+            "k" 'org-tree-slide-move-previous-tree
+            "j" 'org-tree-slide-move-next-tree
+         )
+  :hook
+        (org-tree-slide-play . (lambda ()
+            (org-display-inline-images)
+            ;; (setq text-scale-mode-amount 3)
+            ;; (text-scale-mode 1)
+            (visual-fill-column-mode 1)
+            (hide-mode-line-mode +1)
+         ))
+        (org-tree-slide-stop . (lambda ()
+            (org-remove-inline-images)
+            ;; (text-scale-mode 0)
+            (visual-fill-column-mode 0)
+            (hide-mode-line-mode -1)
+         ))
+  )
+
 (use-package org-appear
 ;; Toggle visibility of hidden Org mode element parts upon entering and leaving an element
   :custom
