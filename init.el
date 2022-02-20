@@ -1430,6 +1430,7 @@
         (
             ("C-c o c" . org-capture)
             ("C-c o a" . org-agenda)
+            ("C-c o e" . org-export-dispatch)
             ("C-c o l" . org-store-link)
             ("C-c o s" . org-schedule)
             ("C-c o z" . org-toggle-archive-tag)
