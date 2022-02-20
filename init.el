@@ -2167,6 +2167,14 @@
          ))
   )
 
+(use-package ox-reveal
+;; Exports Org-mode contents to Reveal.js HTML presentation
+  :custom
+        (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+        (org-reveal-hlevel 2)
+        (org-reveal-reveal-js-version 4)
+  )
+
 (use-package org-appear
 ;; Toggle visibility of hidden Org mode element parts upon entering and leaving an element
   :custom
