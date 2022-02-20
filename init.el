@@ -572,6 +572,8 @@
         (
             ("C-c +" . evil-numbers/inc-at-pt)
             ("C-c -" . evil-numbers/dec-at-pt)
+            ("C-c =" . evil-numbers/inc-at-pt-incremental)
+            ("C-c _" . evil-numbers/dec-at-pt-incremental)
          )
   )
 
