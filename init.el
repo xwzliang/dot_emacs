@@ -23,6 +23,7 @@
 ;; (toggle-debug-on-error)
 
 ;; Back up settings
+(defvar my-workspace-store-dir "~/Dropbox/org/persp/")
 ;; (setq backup-directory-alist `(("." . "~/.emacs.d/my_backups")))
 (defvar backup-directory "~/.emacs.d/my_backups")
 (if (not (file-exists-p backup-directory))
@@ -244,27 +245,31 @@
          )
   )
 
-;; (use-package persp-mode
-;; ;; named perspectives(set of buffers/window configs) for emacs
-;;   :delight
-;;   :init
-;;         (add-hook 'after-init-hook 'persp-mode)
-;;   :config
-;;         ; Don't auto resume
-;;         (setq persp-auto-resume-time 0)
-;;         (persp-set-keymap-prefix (kbd "C-c r"))
-;;   :general
-;;         (my-space-leader-def
-;;             "r l" 'persp-load-state-from-file
-;;             "r w" 'persp-save-state-to-file
-;;             "r s" 'persp-frame-switch
-;;             "r R" 'persp-rename
-;;             "r a" 'persp-add-buffer
-;;             "r k" 'persp-remove-buffer
-;;             "r K" 'persp-kill-buffer
-;;             "b" 'persp-switch-to-buffer
-;;          )
-;;   )
+(use-package persp-mode
+;; named perspectives(set of buffers/window configs) for emacs
+  :delight
+  :init
+        (add-hook 'after-init-hook 'persp-mode)
+  :config
+        ; Don't auto resume
+        (setq persp-auto-resume-time 0)
+        (persp-set-keymap-prefix (kbd "C-c r"))
+  :general
+        (my-space-leader-def
+            "r l" 'persp-load-state-from-file
+            "r w" 'persp-save-state-to-file
+            "r s" 'persp-frame-switch
+            "r R" 'persp-rename
+            "r a" 'persp-add-buffer
+            "r k" 'persp-remove-buffer
+            "r K" 'persp-kill-buffer
+            "r b" 'persp-switch-to-buffer
+            "r p" 'persp-prev
+            "r n" 'persp-next
+         )
+  :custom
+        (persp-save-dir my-workspace-store-dir)
+  )
 
 
 ;; (use-package perspective
@@ -275,7 +280,7 @@
 ;;   :custom
 ;;         (persp-mode-prefix-key (kbd "C-a"))
 ;;         (persp-sort 'created)
-;;         (persp-state-default-file "~/Dropbox/org/persp/default")
+;;         (persp-state-default-file my-workspace-store-dir)
 ;;   :general
 ;;         (my-space-leader-def
 ;;             "r l" 'persp-state-load
@@ -314,57 +319,109 @@
 ;;                                                            (persp-created-time a)))))))))))
 ;;       )
 
-(use-package eyebrowse
-;; eyebrowse is a global minor mode for Emacs that allows you to manage your window configurations in a simple manner, just like tiling window managers like i3wm with their workspaces do.
-  :commands
-  		(eyebrowse--set)
-  :config
-        (eyebrowse-mode t)
+;; (use-package eyebrowse
+;; ;; eyebrowse is a global minor mode for Emacs that allows you to manage your window configurations in a simple manner, just like tiling window managers like i3wm with their workspaces do.
+;;   :commands
+;;          (eyebrowse--set)
+;;   :config
+;;         (eyebrowse-mode t)
+;;   :general
+;;         (
+;;             :prefix "C-a"
+;;             "p" 'eyebrowse-prev-window-config
+;;             "n" 'eyebrowse-next-window-config
+;;             "'" 'eyebrowse-last-window-config
+;;             "X" 'eyebrowse-close-window-config
+;;             "," 'eyebrowse-rename-window-config
+;;             "." 'eyebrowse-switch-to-window-config
+;;             "0" 'eyebrowse-switch-to-window-config-0
+;;             "1" 'eyebrowse-switch-to-window-config-1
+;;             "2" 'eyebrowse-switch-to-window-config-2
+;;             "3" 'eyebrowse-switch-to-window-config-3
+;;             "4" 'eyebrowse-switch-to-window-config-4
+;;             "5" 'eyebrowse-switch-to-window-config-5
+;;             "6" 'eyebrowse-switch-to-window-config-6
+;;             "7" 'eyebrowse-switch-to-window-config-7
+;;             "8" 'eyebrowse-switch-to-window-config-8
+;;             "9" 'eyebrowse-switch-to-window-config-9
+;;             "c" 'eyebrowse-create-window-config
+;;          )
+;;   :custom
+;;         (eyebrowse-new-workspace t)
+;;         (eyebrowse-wrap-around t)
+;;         (eyebrowse-switch-back-and-forth t)
+;;   )
+
+;; (use-package eyebrowse-restore
+;;   :straight
+;;         (
+;;             :host github
+;;             :repo "FrostyX/eyebrowse-restore"
+;;             :branch "main"
+;;          )
+;;   :general
+;;         (
+;;             :prefix "C-a"
+;;             "C-s" 'eyebrowse-restore-save-all
+;;             "C-l" 'eyebrowse-restore
+;;          )
+;;   :custom
+;;         (eyebrowse-restore-dir "~/Dropbox/org/persp/eyebrowse")
+;;   :config
+;;         (eyebrowse-restore-mode)
+;;   )
+
+(use-package tab-bar
+;; frame-local tabs with named persistent window configurations
+  :straight nil
   :general
         (
             :prefix "C-a"
-            "p" 'eyebrowse-prev-window-config
-            "n" 'eyebrowse-next-window-config
-            "'" 'eyebrowse-last-window-config
-            "X" 'eyebrowse-close-window-config
-            "," 'eyebrowse-rename-window-config
-            "." 'eyebrowse-switch-to-window-config
-            "0" 'eyebrowse-switch-to-window-config-0
-            "1" 'eyebrowse-switch-to-window-config-1
-            "2" 'eyebrowse-switch-to-window-config-2
-            "3" 'eyebrowse-switch-to-window-config-3
-            "4" 'eyebrowse-switch-to-window-config-4
-            "5" 'eyebrowse-switch-to-window-config-5
-            "6" 'eyebrowse-switch-to-window-config-6
-            "7" 'eyebrowse-switch-to-window-config-7
-            "8" 'eyebrowse-switch-to-window-config-8
-            "9" 'eyebrowse-switch-to-window-config-9
-            "c" 'eyebrowse-create-window-config
+            "t" 'tab-bar-mode
+            "c" 'tab-new
+            "p" 'tab-bar-switch-to-prev-tab
+            "n" 'tab-next
+            "X" 'tab-close
+            "r" 'tab-bar-undo-close-tab
+            "," 'tab-rename
+            "." 'tab-bar-select-tab-by-name
+            "0" 'tab-bar-switch-to-recent-tab
+            "1" 'tab-bar-select-tab
+            "2" 'tab-bar-select-tab
+            "3" 'tab-bar-select-tab
+            "4" 'tab-bar-select-tab
+            "5" 'tab-bar-select-tab
+            "6" 'tab-bar-select-tab
+            "7" 'tab-bar-select-tab
+            "8" 'tab-bar-select-tab
+            "9" 'tab-bar-select-tab
          )
   :custom
-        (eyebrowse-new-workspace t)
-        (eyebrowse-wrap-around t)
-        (eyebrowse-switch-back-and-forth t)
+        (tab-bar-new-tab-choice "*scratch*")
+        (tab-bar-new-tab-to 'rightmost)
+        (tab-bar-close-button-show nil)
+        (tab-bar-new-button-show nil)
+        ;; Don't turn on tab-bar-mode when tabs are created
+        (tab-bar-show nil)
+        ;; Show absolute numbers on tabs in the tab bar before the tab name.
+        (tab-bar-tab-hints t)
+        (tab-bar-tab-name-function 'tab-bar-tab-name-truncated)
+        (tab-bar-tab-name-truncated-max 25)
+        (tab-bar-tab-name-ellipsis "...")
+        ;; List of modifier keys for selecting a tab by its index digit.
+        (tab-bar-select-tab-modifiers '(meta))
+  :custom-face
+        (tab-bar ((t (:inherit variable-pitch :background ,my-modeline-color :foreground "black"))))
+        (tab-bar-tab ((t (:inherit tab-bar :weight bold))))
+        (tab-bar-tab-inactive ((t (:inherit tab-bar))))
   )
 
-(use-package eyebrowse-restore
-  :straight
-        (
-            :host github
-            :repo "FrostyX/eyebrowse-restore"
-            :branch "main"
-         )
-  :general
-        (
-            :prefix "C-a"
-            "C-s" 'eyebrowse-restore-save-all
-            "C-l" 'eyebrowse-restore
-         )
-  :custom
-        (eyebrowse-restore-dir "~/Dropbox/org/persp/eyebrowse")
-  :config
-        (eyebrowse-restore-mode)
-  )
+;; (use-package burly
+;; ;; This package provides tools to save and restore frame and window configurations in Emacs, including buffers that may not be live anymore.
+;;   :disabled
+;;   :straight
+;;         (:branch "wip/tab-bar")
+;;   )
 
 ;; company-mode
 (use-package company
@@ -4094,23 +4151,32 @@
 (use-package desktop
   :straight nil
   :init
-        (setq desktop-dirname (expand-file-name "~/Dropbox/org/persp/"))
+        (setq desktop-dirname (expand-file-name my-workspace-store-dir))
+        ;; (setq desktop-dirname-default (expand-file-name "~/Dropbox/org/persp/default"))
+  ;; :general
+  ;;       (
+  ;;           :prefix "C-a"
+  ;;           "C-s" (lambda () (interactive) (desktop-save desktop-dirname))
+  ;;           "C-l" (lambda () (interactive) (desktop-read desktop-dirname))
+  ;;        )
   :config
         (desktop-save-mode 1)
         (save-place-mode 1)
+        ;; restoring the desktop in daemon mode is somewhat problematic for other reasons: e.g., the daemon cannot use GUI features, so parameters such as frame position, size, and decorations cannot be restored. For that reason, you may wish to delay restoring the desktop in daemon mode until the first client connects
+        (if (daemonp)
+            (add-hook 'server-after-make-frame-hook 'desktop-read)
+            )
   :custom
         (desktop-path (list "." desktop-dirname))
         (desktop-load-locked-desktop t)
         (desktop-base-file-name "emacs.desktop")
         (desktop-files-not-to-save nil)
         (desktop-save t)
-  ;; :hook
-  ;;       (server-after-make-frame . desktop-read)
   )
 
 (use-package desktop+
   :custom
-        (desktop+-base-dir "~/Dropbox/org/persp/")
+        (desktop+-base-dir my-workspace-store-dir)
   )
 
 (use-package emacs
