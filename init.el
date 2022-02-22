@@ -437,6 +437,8 @@
   ;;           "8" 'tab-bar-select-tab
   ;;           "9" 'tab-bar-select-tab
   ;;        )
+  :config
+  		(tab-bar-mode 0)
   :custom
         (tab-bar-new-tab-choice "*scratch*")
         (tab-bar-new-tab-to 'rightmost)
