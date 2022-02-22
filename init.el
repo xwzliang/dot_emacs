@@ -4201,6 +4201,7 @@
   ;;           "C-l" (lambda () (interactive) (desktop-read desktop-dirname))
   ;;        )
   :config
+        (setq desktop-dirname (expand-file-name my-workspace-store-dir))
         (desktop-save-mode 1)
         (save-place-mode 1)
         ;; restoring the desktop in daemon mode is somewhat problematic for other reasons: e.g., the daemon cannot use GUI features, so parameters such as frame position, size, and decorations cannot be restored. For that reason, you may wish to delay restoring the desktop in daemon mode until the first client connects
@@ -4213,11 +4214,17 @@
         (desktop-base-file-name "emacs.desktop")
         (desktop-files-not-to-save nil)
         (desktop-save t)
+  :hook
+        (desktop-after-read . (lambda ()
+            (setq desktop-dirname (expand-file-name my-workspace-store-dir))
+				))
   )
 
 (use-package desktop+
-  :custom
-        (desktop+-base-dir my-workspace-store-dir)
+  :init
+        (setq desktop+-base-dir (expand-file-name my-workspace-store-dir))
+  :config
+        (setq desktop+-base-dir (expand-file-name my-workspace-store-dir))
   )
 
 (use-package emacs
