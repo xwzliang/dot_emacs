@@ -250,6 +250,19 @@
   :delight
   :init
         (add-hook 'after-init-hook 'persp-mode)
+  :preface
+        (defun persp-switch-by-number (num)
+          "Switch to the perspective given by NUMBER."
+          (interactive "NSwitch to perspective number: ")
+          (let* ((persps (sort (persp-names) 'string-lessp))
+                 (max-persps (length persps)))
+            (if (<= num max-persps)
+                (persp-switch (nth (- num 1) persps))
+              (message "Perspective number %s not available, only %s exist%s"
+                       num
+                       max-persps
+                       (if (= 1 max-persps) "s" ""))))
+          )
   :config
         ; Don't auto resume
         (setq persp-auto-resume-time 0)
@@ -267,8 +280,36 @@
             "r p" 'persp-prev
             "r n" 'persp-next
          )
+        (
+            :prefix "C-a"
+            "c" 'persp-add-new
+            "p" 'persp-prev
+            "n" 'persp-next
+            "X" 'persp-kill
+            "," 'persp-rename
+            "." 'persp-switch
+            "a" 'persp-add-buffer
+            "k" 'persp-remove-buffer
+            "K" 'persp-kill-buffer
+            "b" 'persp-switch-to-buffer
+            "C-l" 'persp-load-state-from-file
+            "C-s" 'persp-save-state-to-file
+            "1" '(lambda () (interactive) (persp-switch-by-number 1))
+            "2" '(lambda () (interactive) (persp-switch-by-number 2))
+            "3" '(lambda () (interactive) (persp-switch-by-number 3))
+            "4" '(lambda () (interactive) (persp-switch-by-number 4))
+            "5" '(lambda () (interactive) (persp-switch-by-number 5))
+            "6" '(lambda () (interactive) (persp-switch-by-number 6))
+            "7" '(lambda () (interactive) (persp-switch-by-number 7))
+            "8" '(lambda () (interactive) (persp-switch-by-number 8))
+            "9" '(lambda () (interactive) (persp-switch-by-number 9))
+            "0" '(lambda () (interactive) (persp-switch-by-number 10))
+         )
   :custom
         (persp-save-dir my-workspace-store-dir)
+        (persp-names-sort-before-read-function
+         ;; Sort by alphabetic order
+           (lambda (list) (sort list 'string-lessp)))
   )
 
 
@@ -374,28 +415,28 @@
 (use-package tab-bar
 ;; frame-local tabs with named persistent window configurations
   :straight nil
-  :general
-        (
-            :prefix "C-a"
-            "t" 'tab-bar-mode
-            "c" 'tab-new
-            "p" 'tab-bar-switch-to-prev-tab
-            "n" 'tab-next
-            "X" 'tab-close
-            "r" 'tab-bar-undo-close-tab
-            "," 'tab-rename
-            "." 'tab-bar-select-tab-by-name
-            "0" 'tab-bar-switch-to-recent-tab
-            "1" 'tab-bar-select-tab
-            "2" 'tab-bar-select-tab
-            "3" 'tab-bar-select-tab
-            "4" 'tab-bar-select-tab
-            "5" 'tab-bar-select-tab
-            "6" 'tab-bar-select-tab
-            "7" 'tab-bar-select-tab
-            "8" 'tab-bar-select-tab
-            "9" 'tab-bar-select-tab
-         )
+  ;; :general
+  ;;       (
+  ;;           :prefix "C-a"
+  ;;           "t" 'tab-bar-mode
+  ;;           "c" 'tab-new
+  ;;           "p" 'tab-bar-switch-to-prev-tab
+  ;;           "n" 'tab-next
+  ;;           "X" 'tab-close
+  ;;           "r" 'tab-bar-undo-close-tab
+  ;;           "," 'tab-rename
+  ;;           "." 'tab-bar-select-tab-by-name
+  ;;           "0" 'tab-bar-switch-to-recent-tab
+  ;;           "1" 'tab-bar-select-tab
+  ;;           "2" 'tab-bar-select-tab
+  ;;           "3" 'tab-bar-select-tab
+  ;;           "4" 'tab-bar-select-tab
+  ;;           "5" 'tab-bar-select-tab
+  ;;           "6" 'tab-bar-select-tab
+  ;;           "7" 'tab-bar-select-tab
+  ;;           "8" 'tab-bar-select-tab
+  ;;           "9" 'tab-bar-select-tab
+  ;;        )
   :custom
         (tab-bar-new-tab-choice "*scratch*")
         (tab-bar-new-tab-to 'rightmost)
