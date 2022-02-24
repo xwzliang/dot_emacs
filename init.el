@@ -264,6 +264,37 @@
                        (if (= 1 max-persps) "s" ""))))
           )
   :config
+        (el-patch-defun persp-prev ()
+          "Switch to previous perspective (to the left)."
+          (interactive)
+          (let* ((persp-list (el-patch-swap (persp-names-current-frame-fast-ordered)
+                                            (sort (persp-names) 'string-lessp)))
+                 (persp-list-length (length persp-list))
+                 (only-perspective? (equal persp-list-length 1))
+                 (pos (cl-position (safe-persp-name (get-current-persp)) persp-list)))
+            (cond
+             ((null pos) nil)
+             (only-perspective? nil)
+             ((= pos 0)
+              (if persp-switch-wrap
+                  (persp-switch (nth (1- persp-list-length) persp-list))))
+             (t (persp-switch (nth (1- pos) persp-list))))))
+
+        (el-patch-defun persp-next ()
+          "Switch to next perspective (to the right)."
+          (interactive)
+          (let* ((persp-list (el-patch-swap (persp-names-current-frame-fast-ordered)
+                                            (sort (persp-names) 'string-lessp)))
+                 (persp-list-length (length persp-list))
+                 (only-perspective? (equal persp-list-length 1))
+                 (pos (cl-position (safe-persp-name (get-current-persp)) persp-list)))
+            (cond
+             ((null pos) nil)
+             (only-perspective? nil)
+             ((= pos (1- persp-list-length))
+              (if persp-switch-wrap (persp-switch (nth 0 persp-list))))
+             (t (persp-switch (nth (1+ pos) persp-list))))))
+
         ; Don't auto resume
         (setq persp-auto-resume-time 0)
         (persp-set-keymap-prefix (kbd "C-c r"))
