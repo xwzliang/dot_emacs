@@ -53,6 +53,8 @@
       )
   )
 
+(defvar my-hostname (concat " " (system-name)))
+
 ;; Disable the startup splash screen
 (setq inhibit-splash-screen t)
 
@@ -206,6 +208,7 @@
 ;; A fancy and fast mode-line inspired by minimalism design
   :config
         (doom-modeline-mode 1)
+        (setq global-mode-string (append global-mode-string '(my-hostname)))
   :custom
         (doom-modeline-icon nil)
         ;; Change height of the modeline
@@ -4258,6 +4261,18 @@
         (setq desktop+-base-dir (expand-file-name my-workspace-store-dir))
   :config
         (setq desktop+-base-dir (expand-file-name my-workspace-store-dir))
+  )
+
+(use-package time
+  :straight nil
+  :general
+        (my-space-leader-def
+            "t t" 'display-time-mode
+         )
+  :config
+        (display-time-mode 1)
+  :custom
+        (display-time-format " %H:%M %d/%m/%Y")
   )
 
 (use-package emacs
