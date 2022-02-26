@@ -1203,6 +1203,10 @@
 
 (use-package yasnippet
 ;; A template system for Emacs, It allows you to type an abbreviation and automatically expand it into function templates.
+  :bind
+        (
+            ("C-h y" . yas-describe-tables)
+        )
   :general
         (
             :states '(insert normal)
