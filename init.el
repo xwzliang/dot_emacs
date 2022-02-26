@@ -3112,6 +3112,9 @@
         (setq lsp-sqls-server "~/go/bin/sqls")
   :hook
         (lsp-mode . lsp-enable-which-key-integration)
+        (lsp-mode . (lambda ()
+            (add-hook 'before-save-hook #'lsp-format-buffer nil t)
+        ))
         (scala-mode . lsp)
         (typescript-mode . lsp)
         (js-mode . lsp)
