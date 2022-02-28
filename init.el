@@ -595,7 +595,7 @@
             "v" 'evil-window-vsplit
             "x" 'evil-quit
          )
-        ([remap evil-search-forward] 'helm-occur)
+        ([remap evil-search-forward] 'swiper)
   :config
         (evil-mode 1)
         (global-undo-tree-mode)
