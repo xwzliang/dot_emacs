@@ -907,6 +907,11 @@
   :custom
         ;; Don't start searches with ^
         (ivy-initial-inputs-alist nil)
+  :custom-face
+        (ivy-minibuffer-match-face-1 ((t (:foreground "gold3"))))
+        (ivy-minibuffer-match-face-2 ((t (:inherit ivy-minibuffer-match-face-1))))
+        (ivy-minibuffer-match-face-3 ((t (:inherit ivy-minibuffer-match-face-1))))
+        (ivy-minibuffer-match-face-4 ((t (:inherit ivy-minibuffer-match-face-1))))
   )
 
 (use-package counsel
@@ -929,6 +934,19 @@
   :custom
         ;; Don't show app path
         (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  )
+
+(use-package swiper
+;; Swiper is an alternative to isearch that uses Ivy to show an overview of all matches.
+  :custom-face
+        (swiper-match-face-1 ((t (:inherit isearch))))
+        (swiper-match-face-2 ((t (:inherit swiper-match-face-1))))
+        (swiper-match-face-3 ((t (:inherit swiper-match-face-1))))
+        (swiper-match-face-4 ((t (:inherit swiper-match-face-1))))
+        (swiper-background-match-face-1 ((t (:inherit isearch))))
+        (swiper-background-match-face-2 ((t (:inherit swiper-background-match-face-1))))
+        (swiper-background-match-face-3 ((t (:inherit swiper-background-match-face-1))))
+        (swiper-background-match-face-4 ((t (:inherit swiper-background-match-face-1))))
   )
 
 (use-package ivy-rich
