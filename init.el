@@ -904,6 +904,9 @@
             "TAB" 'ivy-alt-done
             "C-l" 'ivy-dispatching-done
         )
+  :config
+  		;; make selection highlight-background expand full width of the minibuffer
+        (setcdr (assoc t ivy-format-functions-alist) #'ivy-format-function-line)
   :custom
         ;; Don't start searches with ^
         (ivy-initial-inputs-alist nil)
@@ -912,6 +915,7 @@
         (ivy-minibuffer-match-face-2 ((t (:inherit ivy-minibuffer-match-face-1))))
         (ivy-minibuffer-match-face-3 ((t (:inherit ivy-minibuffer-match-face-1))))
         (ivy-minibuffer-match-face-4 ((t (:inherit ivy-minibuffer-match-face-1))))
+        (ivy-current-match ((t (:background "forestgreen"))))
   )
 
 (use-package counsel
