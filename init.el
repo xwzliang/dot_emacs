@@ -907,6 +907,9 @@
   :config
   		;; make selection highlight-background expand full width of the minibuffer
         (setcdr (assoc t ivy-format-functions-alist) #'ivy-format-function-line)
+        (setq ivy-re-builders-alist
+            ;; allow input not in order
+            '((t   . ivy--regex-ignore-order)))
   :custom
         ;; Don't start searches with ^
         (ivy-initial-inputs-alist nil)
