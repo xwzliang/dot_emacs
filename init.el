@@ -1658,7 +1658,7 @@
         ;; For latex exporting
         (add-to-list 'org-latex-packages-alist '("" "tabularx" nil))
         (setq org-preview-latex-default-process 'imagemagick)
-        (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0))			;; Make latex preview bigger
+        (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))			;; Make latex preview bigger
 
         (setq org-enforce-todo-dependencies t)
         (setq org-enforce-todo-checkbox-dependencies t)
@@ -2919,6 +2919,9 @@
 
 (use-package exec-path-from-shell
 ;; Make Emacs use the PATH set up by the user's shell
+  :config
+        (when (memq window-system '(mac ns x))
+            (exec-path-from-shell-initialize))
   )
 
 (use-package eshell-up
