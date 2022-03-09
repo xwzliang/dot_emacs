@@ -3297,6 +3297,50 @@
         ;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
   )
 
+(use-package dart-mode
+;; An Emacs major mode for the Dart language
+  )
+
+(use-package lsp-dart
+;; Emacs Dart IDE using lsp-mode to connect to Dart Analysis Server
+  :hook
+        (dart-mode . lsp)
+  )
+
+(use-package hover
+;; Emacs tool for running flutter mobile apps on desktop using hover
+  :after dart-mode
+  ;; :bind
+  ;;       (:map hover-minor-mode-map
+  ;;             ("C-M-z" . hover-run-or-hot-reload)
+  ;;             ("C-M-x" . hover-run-or-hot-restart)
+  ;;             ("C-M-p" . hover-take-screenshot))
+  :init
+        (setq
+                hover-hot-reload-on-save t
+                hover-screenshot-path (concat (getenv "HOME") "/Pictures")
+                hover-screenshot-prefix "hover-screenshot"
+                hover-observatory-uri "http://127.0.0.1:50300"
+                hover-clear-buffer-on-hot-restart t
+                )
+        (hover-minor-mode 1)
+  )
+
+(use-package flutter
+  :after dart-mode
+  :preface
+        (defun my-flutter-run-on-all-devices ()
+          (interactive)
+          (flutter-run "-d all")
+          )
+  ;; :bind (:map dart-mode-map
+  ;;             ("C-M-x" . #'flutter-run-or-hot-reload))
+  :hook
+        (dart-mode . (lambda ()
+            (add-hook 'before-save-hook 'flutter-run-or-hot-reload nil t)
+        ))
+  )
+
 (use-package json-reformat
 ;; Reformat tool for JSON
   )
