@@ -75,12 +75,15 @@
 ;; disable semantic-idle-scheduler-function
 (advice-add 'semantic-idle-scheduler-function :around #'ignore)
 
+(setq my-system-is-mac nil)
+
 ;; Settings for MacOS
 (cond ((string-equal system-type "darwin")
        (progn
          ;; modify option and command key
          (setq mac-command-modifier 'super)
          (setq mac-option-modifier 'meta)
+         (setq my-system-is-mac t)
   )))
 
 ;; load paths
@@ -4352,6 +4355,7 @@
   )
 
 (use-package desktop
+  :disabled my-system-is-mac
   :straight nil
   :init
         (setq desktop-dirname (expand-file-name my-workspace-store-dir))
@@ -4376,6 +4380,7 @@
         (desktop-base-file-name "emacs.desktop")
         (desktop-files-not-to-save nil)
         (desktop-save t)
+        (desktop-restore-eager 5)
   :hook
         (desktop-after-read . (lambda ()
             (setq desktop-dirname (expand-file-name my-workspace-store-dir))
@@ -4383,6 +4388,7 @@
   )
 
 (use-package desktop+
+  :disabled my-system-is-mac
   :init
         (setq desktop+-base-dir (expand-file-name my-workspace-store-dir))
   :config
