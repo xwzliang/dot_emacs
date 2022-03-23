@@ -3378,7 +3378,9 @@
   ;;             ("C-M-x" . #'flutter-run-or-hot-reload))
   :hook
         (dart-mode . (lambda ()
-            (add-hook 'before-save-hook 'flutter-run-or-hot-reload nil t)
+                       (if (not (string-match-p "_test\.dart$" buffer-file-name))
+                           (add-hook 'before-save-hook 'flutter-run-or-hot-reload nil t)
+                           )
         ))
   )
 
