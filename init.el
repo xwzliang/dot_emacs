@@ -475,7 +475,7 @@
   ;;           "9" 'tab-bar-select-tab
   ;;        )
   :config
-  		(tab-bar-mode 0)
+        (tab-bar-mode 0)
   :custom
         (tab-bar-new-tab-choice "*scratch*")
         (tab-bar-new-tab-to 'rightmost)
@@ -908,7 +908,7 @@
             "C-l" 'ivy-dispatching-done
         )
   :config
-  		;; make selection highlight-background expand full width of the minibuffer
+        ;; make selection highlight-background expand full width of the minibuffer
         (setcdr (assoc t ivy-format-functions-alist) #'ivy-format-function-line)
         (setq ivy-re-builders-alist
             ;; allow input not in order
@@ -4391,7 +4391,7 @@
   :hook
         (desktop-after-read . (lambda ()
             (setq desktop-dirname (expand-file-name my-workspace-store-dir))
-				))
+                ))
   )
 
 (use-package desktop+
