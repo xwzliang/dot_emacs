@@ -3648,6 +3648,13 @@
                                       "--no-audio-display"
                                       "--fs"				;; Play video in full screen
                                       ))
+  :hook
+        ;; When I finish an episode, start a new one, tell siri to stop it.
+        (emms-player-started . (lambda ()
+            ;; (start-process-shell-command "siri" nil "echo 'ffplay -nodisp -autoexit ~/Dropbox/Sounds/Siri/siri_open_bedroom.m4a' | at now +1 minute")
+            (emms-pause)
+            (start-process-shell-command "siri" nil "cd ~/Dropbox/Sounds/Siri/; ffplay -nodisp -autoexit hey_siri.m4a; ffplay -nodisp -autoexit switch_tv.m4a")
+        ))
   )
 
 ;; (use-package later-do
