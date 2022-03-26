@@ -2678,7 +2678,7 @@
           (org-roam-node-find
            nil
            nil
-           (my-org-roam-filter-exclude-tag-list '("literature" "wiki"))
+           (my-org-roam-filter-exclude-tag-list '("literature" "wiki" "project"))
            ))
 
   :general
