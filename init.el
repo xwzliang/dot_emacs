@@ -1009,11 +1009,11 @@
             "s" 'helm-find-files
             "f" 'helm-occur
         )
-        (my-comma-leader-def
-            :states '(normal motion visual insert)
-            :keymaps 'helm-map
-            "," 'helm-keyboard-quit
-         )
+        ;; (my-comma-leader-def
+        ;;     :states '(normal motion visual insert)
+        ;;     :keymaps 'helm-map
+        ;;     "," 'helm-keyboard-quit
+        ;;  )
   :config
         (require 'helm-config)
         (global-unset-key (kbd "C-x c"))
