@@ -2567,12 +2567,24 @@
 
         (defun my-org-roam-find-wiki ()
           (interactive)
-          (with-current-buffer (find-file-noselect (f-join org-directory "wiki" ".dir-locals.el"))
-            (save-excursion
-                (org-roam-node-find)
-              )
-            )
-          )
+          ;; (with-current-buffer (find-file-noselect (f-join org-directory "wiki" ".dir-locals.el"))
+          ;;   (save-excursion
+          ;;       (org-roam-node-find)
+          ;;     )
+          ;;   )
+          (org-roam-node-find
+           nil
+           nil
+           (my-org-roam-filter-by-tag "wiki")
+           :templates
+           '(
+                ("r" "bibliography reference" plain "%?"
+                    :if-new
+                    (file+head "wiki/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: wiki")
+                    :immediate-finish t
+                    :unnarrowed t)
+                )
+           ))
 
         (defun my-org-roam-filter-exclude-tag (tag-name)
           (lambda (node)
@@ -2584,13 +2596,23 @@
                    (my-org-roam-filter-exclude-tag tag-name)
                    (org-roam-node-list))))
 
+        (defun my-org-roam-filter-exclude-tag-list (tag-name-list)
+          (lambda (node)
+            (not (seq-intersection tag-name-list (org-roam-node-tags node)))))
+
+        (defun my-org-roam-list-notes-exclude-tag-list (tag-name-list)
+          (mapcar #'org-roam-node-file
+                  (seq-filter
+                   (my-org-roam-filter-exclude-tag-list tag-name-list)
+                   (org-roam-node-list))))
+
         (defun my-org-roam-find-ever-green ()
           (interactive)
           ;; Select a ever green note to open (exclude literature notes), creating it if necessary
           (org-roam-node-find
            nil
            nil
-           (my-org-roam-filter-exclude-tag "literature")
+           (my-org-roam-filter-exclude-tag-list '("literature" "wiki"))
            ))
 
   :general
@@ -2675,15 +2697,15 @@
                     ;; :unnarrowed t)
             )
         )
-        (add-to-list 'safe-local-variable-values
-            '(eval setq-local org-roam-db-location
-                    (expand-file-name "~/.emacs.d/org-roam-wiki.db"))
-        )
-        (add-to-list 'safe-local-variable-values
-            '(eval setq-local org-roam-directory
-                (expand-file-name
-                    (locate-dominating-file default-directory ".dir-locals.el")))
-        )
+        ;; (add-to-list 'safe-local-variable-values
+        ;;     '(eval setq-local org-roam-db-location
+        ;;             (expand-file-name "~/.emacs.d/org-roam-wiki.db"))
+        ;; )
+        ;; (add-to-list 'safe-local-variable-values
+        ;;     '(eval setq-local org-roam-directory
+        ;;         (expand-file-name
+        ;;             (locate-dominating-file default-directory ".dir-locals.el")))
+        ;; )
   ;; :hook
   ;;       (after-init . org-roam-mode)
   :custom
