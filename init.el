@@ -2548,6 +2548,16 @@
                    (my-org-roam-filter-by-tag tag-name)
                    (org-roam-node-list))))
 
+        (defun my-org-roam-filter-by-tag-list (tag-name-list)
+          (lambda (node)
+            (seq-intersection tag-name-list (org-roam-node-tags node))))
+
+        (defun my-org-roam-list-notes-by-tag-list (tag-name-list)
+          (mapcar #'org-roam-node-file
+                  (seq-filter
+                   (my-org-roam-filter-by-tag-list tag-name-list)
+                   (org-roam-node-list))))
+
         (defun my-org-roam-find-literature ()
           (interactive)
           ;; Select a literature note to open, creating it if necessary
@@ -2585,6 +2595,62 @@
                     :unnarrowed t)
                 )
            ))
+
+        ;; (defun my-org-roam-find-project ()
+        ;;   (interactive)
+        ;;   (org-roam-node-find
+        ;;    nil
+        ;;    nil
+        ;;    (my-org-roam-filter-by-tag "project")
+        ;;    :templates
+        ;;    '(
+        ;;         ("r" "bibliography reference" plain "%?"
+        ;;             :if-new
+        ;;             (file+head "project/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: project")
+        ;;             :immediate-finish t
+        ;;             :unnarrowed t)
+        ;;         )
+        ;;    ))
+
+        (defun my-org-roam-find-project ()
+          ;; (interactive "sproject name: ")
+          (interactive)
+          (let* (
+                 (my-roam-project-dir (f-join org-roam-directory "project"))
+                 (my-roam-project-list (mapcar 'f-filename (f-directories my-roam-project-dir)))
+                 (my-roam-find-or-create-project-note (lambda (my-project-name)
+                    ;; Put my-project-name to latest kill in the kill-ring, then use %c in template to use it
+                                                ;; (message my-project-name)
+                    (kill-new my-project-name)
+                    (ignore-errors (make-directory (f-join my-roam-project-dir my-project-name)))
+                    (org-roam-node-find
+                    nil
+                    nil
+                    (my-org-roam-filter-by-tag-list '("project" my-project-name))
+                    :templates
+                    '(
+                            ("r" "bibliography reference" plain "%?"
+                                :if-new
+                                (file+head "project/%c/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :project:%c:")
+                                :immediate-finish t
+                                :unnarrowed t)
+                            )
+                        )
+                    )
+                  )
+                 )
+            (ivy-read "roam projects: " my-roam-project-list
+                      :action my-roam-find-or-create-project-note
+                      )
+
+            ;; Can't make helm source work... ivy-read is much easier to use
+            ;; (helm :sources (helm-build-sync-source "roam projects"
+            ;;                  :candidates my-roam-project-list
+            ;;                  :action my-roam-find-or-create-project-note
+            ;;                  )
+            ;; )
+          )
+        )
 
         (defun my-org-roam-filter-exclude-tag (tag-name)
           (lambda (node)
@@ -2632,6 +2698,7 @@
             "s" 'my-org-roam-find-ever-green
             "l" 'my-org-roam-find-literature
             "w" 'my-org-roam-find-wiki
+            "p" 'my-org-roam-find-project
             "h" 'my-org-roam-highlight-pdf-by-excerpt
             "k" 'my-pdf-delete-all-annotations
          )
