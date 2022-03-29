@@ -1734,6 +1734,7 @@
             (prettify-symbols-mode)))
   :custom-face
         (org-table ((t (:foreground "white"))))
+        (org-headline-done ((t (:foreground "brightblack"))))
   )
 
 (use-package visual-fill-column
