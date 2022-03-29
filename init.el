@@ -4452,7 +4452,8 @@
   )
 
 (use-package desktop
-  :disabled my-system-is-mac
+  ;; :disabled my-system-is-mac
+  :disabled t
   :straight nil
   :init
         (setq desktop-dirname (expand-file-name my-workspace-store-dir))
@@ -4485,7 +4486,8 @@
   )
 
 (use-package desktop+
-  :disabled my-system-is-mac
+  ;; :disabled my-system-is-mac
+  :disabled t
   :init
         (setq desktop+-base-dir (expand-file-name my-workspace-store-dir))
   :config
