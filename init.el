@@ -4370,6 +4370,8 @@
         (my-space-leader-def
             "v u" 'vc-revert
          )
+  :custom
+        (vc-follow-symlinks t)
 )
 
 (use-package smerge-mode
