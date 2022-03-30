@@ -2158,7 +2158,7 @@
             "t" 'ebib-push-citation
             "T" 'ebib-browse-doi
             ;; "s" 'ebib-jump-to-entry
-            "/" 'ebib-jump-to-entry
+            "/" 'swiper
             "i" 'isbn-to-bibtex
             "I" 'my-ebib-add-newest-pdf-from-downloads
             "Fo" 'ebib-view-file
