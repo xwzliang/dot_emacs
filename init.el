@@ -3289,6 +3289,7 @@
         (scala-mode . lsp)
         (typescript-mode . lsp)
         (js-mode . lsp)
+        (python-mode . lsp)
   )
 
 (use-package lsp-java
