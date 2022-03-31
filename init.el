@@ -84,6 +84,8 @@
          (setq mac-command-modifier 'super)
          (setq mac-option-modifier 'meta)
          (setq my-system-is-mac t)
+         ;; Use this for dired to work properly
+         (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls")
   )))
 
 ;; load paths
