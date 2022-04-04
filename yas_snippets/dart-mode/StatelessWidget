@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: StatelessWidget
+# key: slw
+# group: flutter
+# --
+import 'package:flutter/material.dart';
+
+class ${1:Name} extends StatelessWidget {
+  const $1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container($0);
+  }
+}

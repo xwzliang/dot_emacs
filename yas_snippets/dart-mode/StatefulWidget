@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# name: StatefulWidget
+# key: sfw
+# group: flutter
+# --
+import 'package:flutter/material.dart';
+
+class ${1:Name} extends StatefulWidget {
+  const $1({Key? key}) : super(key: key);
+
+  @override
+  $1State createState() => $1State();
+}
+
+class $1State extends State<$1> {
+  @override
+  Widget build(BuildContext context) {
+    return Container($0);
+  }
+}
