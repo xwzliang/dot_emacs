@@ -1247,6 +1247,7 @@
   :custom
         ; Don't make aliases for the old style yas/ prefixed symbols
         (yas-alias-to-yas/prefix-p nil)
+        (yas-snippet-dirs '("~/git/dot_emacs/yas_snippets"))
   )
 
 (use-package yasnippet-snippets
