@@ -1835,6 +1835,8 @@
                     (org-agenda-prefix-format '((todo . " %1c ")))
                 ))
         )))
+  :custom-face
+        (org-agenda-dimmed-todo-face ((t (:inherit font-lock-keyword-face))))
   )
 
 (use-package org-analyzer
