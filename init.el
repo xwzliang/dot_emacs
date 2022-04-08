@@ -2135,6 +2135,20 @@
               (ebib-add-reading-list-item)
             )
           )
+
+        (defun my-ebib-clean-curly-braces-from-entry (field key db)
+            "Return the contents of FIELD from KEY in DB without curly braces."
+            (let
+                ((field-value (cond
+                               ((cl-equalp field "Author/Editor")
+                                (or (ebib-get-field-value "Author" key db 'noerror 'unbraced 'xref)
+                                    (ebib-get-field-value "Editor" key db "(No Author/Editor)" 'unbraced 'xref))
+                                )
+                               )
+                  ))
+                (replace-regexp-in-string "[{}]" "" field-value)
+              )
+          )
   :config
         (setq ebib-bibtex-dialect 'biblatex)
         (defvar my-ebib-dir (f-join org-directory "ebib")
@@ -2203,6 +2217,16 @@
                 "N" 'my-ebib-popup-video-note
             )
         ))
+  :custom
+        (ebib-field-transformation-functions
+         '(
+           ("Title" . ebib-clean-TeX-markup-from-entry)
+           ("Doi" . ebib-display-www-link)
+           ("Url" . ebib-display-www-link)
+           ("Note" . ebib-notes-display-note-symbol)
+           ("Author/Editor" . my-ebib-clean-curly-braces-from-entry)
+           )
+         )
   )
 
 (use-package ebib-biblio
