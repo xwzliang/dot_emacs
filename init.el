@@ -910,6 +910,7 @@
             "C-l" 'ivy-dispatching-done
         )
   :config
+        (ivy-mode 1)
         ;; make selection highlight-background expand full width of the minibuffer
         (setcdr (assoc t ivy-format-functions-alist) #'ivy-format-function-line)
         (setq ivy-re-builders-alist
@@ -1019,7 +1020,7 @@
   :config
         (require 'helm-config)
         (global-unset-key (kbd "C-x c"))
-        (helm-mode 1)
+        ;; (helm-mode 1)
         (setq
             ;; helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
             helm-ff-file-name-history-use-recentf t
@@ -3360,8 +3361,15 @@
 ;; Emacs Scala IDE using lsp-mode to connect to Metals
 
 (use-package helm-lsp
+  :disabled t
 ;; Helm lsp integration.
 ;; helm-lsp-workspace-symbol - workspace symbols for the current workspace
+  )
+
+(use-package lsp-ivy
+;; Ivy lsp integration.
+;; lsp-ivy-workspace-symbol - workspace symbols for the current workspace
+;; lsp-ivy-global-workspace-symbol - workspace symbols from all of the active workspaces.
   )
 
 ;; (use-package company-lsp
