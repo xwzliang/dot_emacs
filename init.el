@@ -3238,10 +3238,10 @@
             :repo "xwzliang/el-doctest-mode"
          )
   :mode "\\.doctest\\'"
-  :general
-        (my-space-leader-def
-            "t p" 'doctest-execute
-         )
+  ;; :general
+  ;;       (my-space-leader-def
+  ;;           "t p" 'doctest-execute
+  ;;        )
   :config
         (doctest-register-mmm-classes t t)
   :custom
@@ -3284,10 +3284,10 @@
 
 (use-package overseer
 ;; Ert-runner Integration Into Emacs
-  :general
-        (my-space-leader-def
-            "t e" 'overseer-test-this-buffer
-         )
+  ;; :general
+  ;;       (my-space-leader-def
+  ;;           "t e" 'overseer-test-this-buffer
+  ;;        )
   :config
         (el-patch-defun overseer--current-buffer-test-file-p ()
           "Return t if the current buffer is a test file."
@@ -3394,10 +3394,10 @@
         (
             ("C-c t r" . emr-show-refactor-menu)
          )
-  :general
-        (my-space-leader-def
-            "t r" 'emr-show-refactor-menu
-         )
+  ;; :general
+  ;;       (my-space-leader-def
+  ;;           "t r" 'emr-show-refactor-menu
+  ;;        )
   :custom
         (emr-popup-help-delay 3)
   )
@@ -3501,6 +3501,20 @@
 
 (use-package flutter
   :after dart-mode
+  :general
+        (my-space-leader-def
+            :definer 'minor-mode
+            ;; :states '(normal motion visual)
+            :keymaps 'flutter-test-mode
+            "t t" 'flutter-test-current-file
+            "t a" 'flutter-test-all
+         )
+        (
+            :prefix my-space-leader
+            :keymaps 'dart-mode-map
+            "t r" 'flutter-hot-restart
+            "t R" 'flutter-run
+         )
   :preface
         (defun my-flutter-run-on-all-devices ()
           (interactive)
@@ -3510,8 +3524,9 @@
   ;;             ("C-M-x" . #'flutter-run-or-hot-reload))
   :hook
         (dart-mode . (lambda ()
-                       (if (not (string-match-p "_test\.dart$" buffer-file-name))
-                           (add-hook 'before-save-hook 'flutter-run-or-hot-reload nil t)
+                       (if (string-match-p "_test\.dart$" buffer-file-name)
+                           (flutter-test-mode)
+                         (add-hook 'before-save-hook 'flutter-run-or-hot-reload nil t)
                            )
         ))
   )
@@ -4539,7 +4554,7 @@
   :straight nil
   :general
         (my-space-leader-def
-            "t t" 'display-time-mode
+            "t v" 'display-time-mode
          )
   :config
         (display-time-mode 1)
