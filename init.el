@@ -1245,6 +1245,7 @@
         )
   :config
         (yas-global-mode 1)
+        (yas-reload-all)
   :custom
         ; Don't make aliases for the old style yas/ prefixed symbols
         (yas-alias-to-yas/prefix-p nil)
