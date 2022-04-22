@@ -3504,13 +3504,13 @@
   :general
         (my-space-leader-def
             :definer 'minor-mode
-            ;; :states '(normal motion visual)
             :keymaps 'flutter-test-mode
             "t t" 'flutter-test-current-file
             "t a" 'flutter-test-all
          )
         (
             :prefix my-space-leader
+            :states '(normal motion visual)
             :keymaps 'dart-mode-map
             "t r" 'flutter-hot-restart
             "t R" 'flutter-run
