@@ -3478,6 +3478,8 @@
 ;; Emacs Dart IDE using lsp-mode to connect to Dart Analysis Server
   :hook
         (dart-mode . lsp)
+  :custom
+        (lsp-dart-flutter-sdk-dir (if my-system-is-mac nil "~/snap/flutter/common/flutter"))
   )
 
 (use-package hover
