@@ -4562,6 +4562,12 @@
         (display-time-format " %H:%M %d/%m/%Y")
   )
 
+(use-package python
+  :straight nil
+  :custom
+        (python-shell-interpreter "python3")
+  )
+
 (use-package emacs
   :straight nil
   :general
