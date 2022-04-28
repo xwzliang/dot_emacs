@@ -935,6 +935,7 @@
             :keymaps 'ivy-minibuffer-map
             ;; :keymaps 'minibuffer-local-map
             "C-r" 'counsel-minibuffer-history
+            "C-u" 'counsel-up-directory
         )
         (my-comma-leader-def
             "SPC" 'counsel-M-x
