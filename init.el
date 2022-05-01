@@ -1614,6 +1614,8 @@
             ("C-c o s" . org-schedule)
             ("C-c o z" . org-toggle-archive-tag)
             ("C-c o o" . org-open-at-point)
+            ("C-c o `" . org-mark-ring-goto)
+            ("C-c o m" . org-mark-ring-push)
             ("C-c o i" . org-insert-structure-template)  ;; Insert #+BEGIN_SRC block
             ("C-c o v" . org-latex-preview)
             :map org-mode-map
