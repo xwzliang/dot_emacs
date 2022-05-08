@@ -1616,6 +1616,7 @@
             ("C-c o o" . org-open-at-point)
             ("C-c o `" . org-mark-ring-goto)
             ("C-c o m" . org-mark-ring-push)
+            ("C-c o t" . org-set-tags-command)
             ("C-c o i" . org-insert-structure-template)  ;; Insert #+BEGIN_SRC block
             ("C-c o v" . org-latex-preview)
             :map org-mode-map
@@ -2293,7 +2294,7 @@
         (org)
   :bind
         (
-            ("C-c o t" . org-pomodoro)
+            ("C-c o T" . org-pomodoro)
          )
   :custom
         (org-pomodoro-audio-player (executable-find "mpv"))
