@@ -3327,6 +3327,14 @@
         (python-mode . lsp)
   )
 
+(use-package lsp-pyright
+;; lsp-mode client leveraging Pyright language server (type check, auto import, etc.)
+  :hook
+        (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          ))
+  )
+
 (use-package lsp-java
 ;; Emacs Java IDE using Eclipse JDT Language Server
   :hook
