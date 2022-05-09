@@ -678,6 +678,7 @@
                     (derived-mode-p 'magit-mode) 'magit-refresh-all
                     (derived-mode-p 'neotree-mode) 'neotree-refresh
                     (equal major-mode 'elfeed-search-mode) 'elfeed-search-fetch
+                    (equal major-mode 'compilation-mode) 'recompile
                    )
          )
   :config
