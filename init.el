@@ -3220,6 +3220,14 @@
         (python-mode . pyenv-mode)
   )
 
+(use-package pipenv
+;; A Pipenv porcelain inside Emacs.
+  :hook
+        (python-mode . pipenv-mode)
+  :init
+        (setq pipenv-projectile-after-switch-function 'pipenv-projectile-after-switch-extended)
+  )
+
 (use-package pippel
 ;; Emacs frontend to python package manager pip
   :custom
