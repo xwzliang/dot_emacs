@@ -4587,6 +4587,15 @@
 
 (use-package python
   :straight nil
+  :general
+        (
+            :prefix my-space-leader
+            :states '(normal motion visual)
+            :keymaps 'python-mode-map
+            "t t" 'projectile-test-project
+            ;; If don't want to compilation-mode to prompt compile command
+            ;; set this dir-local variable compilation-read-command to nil
+         )
   :custom
         (python-shell-interpreter "python3")
   )
