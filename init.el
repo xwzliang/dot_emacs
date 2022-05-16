@@ -3350,6 +3350,10 @@
         (java-mode . lsp)
   )
 
+(use-package groovy-mode
+;; Emacs modes for Groovy and Grails (gradle file syntax highlighting)
+  )
+
 (use-package emmet-mode
 ;; Emmet's support for emacs, Emmet is a plugin for many popular text editors which greatly improves HTML & CSS workflow
 ;; Place point in an emmet snippet and press C-j to expand it, and you'll transform your snippet into the appropriate tag structure
