@@ -917,6 +917,7 @@
         (setq ivy-re-builders-alist
             ;; allow input not in order
             '((t   . ivy--regex-ignore-order)))
+        (setq-default ivy-calling t)            ;; makes ivy follow its results
   :custom
         ;; Don't start searches with ^
         (ivy-initial-inputs-alist nil)
