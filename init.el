@@ -909,6 +909,9 @@
             "C-k" 'ivy-previous-line
             "TAB" 'ivy-alt-done
             "C-l" 'ivy-dispatching-done
+            ;; Control + return not working somehow
+            ;; "C-RET" 'ivy-immediate-done
+            "M-RET" 'ivy-immediate-done
         )
   :config
         (ivy-mode 1)
