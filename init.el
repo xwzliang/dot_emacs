@@ -3508,7 +3508,9 @@
   :hook
         (dart-mode . lsp)
   :custom
-        (lsp-dart-flutter-sdk-dir (if my-system-is-mac nil "~/snap/flutter/common/flutter"))
+        (lsp-dart-flutter-sdk-dir nil)
+        ;; Use following if flutter is installed by snap
+        ;; (lsp-dart-flutter-sdk-dir (if my-system-is-mac nil "~/snap/flutter/common/flutter"))
   )
 
 (use-package hover
