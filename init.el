@@ -3832,6 +3832,8 @@
             "v" 'my-emms-mpv-toggle-subtitle
             "s" 'my-emms-mpv-cycle-subtitle
             "S" 'my-emms-mpv-cycle-subtitle-backwards
+            "m" 'emms-mark-forward
+            "D" 'emms-mark-delete-marked-tracks
          )
   :config
         (require 'emms-setup)
