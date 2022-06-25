@@ -3812,6 +3812,27 @@
 
 (use-package emms
 ;; the Emacs Multi-Media System. Emms organizes playlists, allows browsing through track and album metadata, and plays files by calling external players
+  :preface
+        (defun my-emms-mpv-toggle-subtitle ()
+            (interactive)
+            (emms-player-mpv-cmd `(cycle sub-visibility))
+        )
+        (defun my-emms-mpv-cycle-subtitle ()
+            (interactive)
+            (emms-player-mpv-cmd `(cycle sub))
+        )
+        (defun my-emms-mpv-cycle-subtitle-backwards ()
+            (interactive)
+            (emms-player-mpv-cmd `(cycle sub down))
+        )
+  :general
+        (
+            :states 'normal
+            :keymaps 'emms-playlist-mode-map
+            "v" 'my-emms-mpv-toggle-subtitle
+            "s" 'my-emms-mpv-cycle-subtitle
+            "S" 'my-emms-mpv-cycle-subtitle-backwards
+         )
   :config
         (require 'emms-setup)
         (emms-all)
