@@ -3847,6 +3847,7 @@
                                       "--really-quiet"
                                       "--no-audio-display"
                                       "--fs"				;; Play video in full screen
+                                      "--save-position-on-quit"
                                       ))
   :hook
         ;; When I finish an episode, start a new one, tell siri to stop it.
