@@ -3825,6 +3825,18 @@
             (interactive)
             (emms-player-mpv-cmd `(cycle sub down))
         )
+        (defun my-emms-mpv-increase-subtitle-delay ()
+            (interactive)
+            (emms-player-mpv-cmd `(add sub-delay +0.1))
+        )
+        (defun my-emms-mpv-decrease-subtitle-delay ()
+            (interactive)
+            (emms-player-mpv-cmd `(add sub-delay -0.1))
+        )
+        (defun my-emms-mpv-reset-subtitle-delay ()
+            (interactive)
+            (emms-player-mpv-cmd `(set sub-delay 0))
+        )
   :general
         (
             :states 'normal
@@ -3834,6 +3846,10 @@
             "S" 'my-emms-mpv-cycle-subtitle-backwards
             "m" 'emms-mark-forward
             "D" 'emms-mark-delete-marked-tracks
+            "Z" 'my-emms-mpv-increase-subtitle-delay
+            "z" 'my-emms-mpv-decrease-subtitle-delay
+            "r" 'my-emms-mpv-reset-subtitle-delay
+            "R" 'emms-random
          )
   :config
         (require 'emms-setup)
