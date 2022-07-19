@@ -346,6 +346,8 @@
          )
   :custom
         (persp-save-dir my-workspace-store-dir)
+        ;; Don't ask if killing buffer belonging to other perspective
+        (persp-kill-foreign-buffer-behaviour nil)
         (persp-names-sort-before-read-function
          ;; Sort by alphabetic order
            (lambda (list) (sort list 'string-lessp)))
