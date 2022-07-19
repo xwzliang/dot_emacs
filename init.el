@@ -2412,6 +2412,216 @@
 (use-package org-roam
 ;; Rudimentary Roam replica with Org-mode
   :preface
+        (defun my-org-get-id-link-with-description ()
+          (if (org-id-get)
+              (let (
+                    (title (nth 4 (org-heading-components)))
+                    (id (org-id-get))
+                    )
+                (format "[[id:%s][%s]]" id title)
+                )
+              )
+          )
+
+        (defun my-outline-copy-id-link-of-direct-children ()
+          "Return a list of id links of direct children in the current heading."
+          (goto-char 0)
+          (save-excursion
+            (let ((id-links '()))
+              (when (and (org-at-heading-p)
+                         ;; Make sure we go from parent to child. And indirectly
+                         ;; ensure that we're not on the same heading (meaning that
+                         ;; there are no more headings after this one).
+                         (< (org-outline-level)
+                            (progn (outline-next-heading)
+                                   (org-outline-level))))
+                (if (org-id-get)
+                    (add-to-list 'id-links (my-org-get-id-link-with-description) t)
+                    )
+                (while (condition-case nil (progn (outline-forward-same-level 1) t) (error nil))
+                    (if (org-id-get)
+                        (add-to-list 'id-links (my-org-get-id-link-with-description) t)
+                        )
+                    ))
+              id-links)
+            )
+          )
+
+        (defun org-roam--h1-count ()
+          "Count level-1 headings in the current file."
+          (let ((h1-count 0))
+            (org-with-wide-buffer
+             (org-map-region (lambda ()
+                               (if (= (org-current-level) 1)
+                                   (cl-incf h1-count)))
+                             (point-min) (point-max))
+             h1-count)))
+
+        (defun org-roam--buffer-promoteable-p ()
+          "Verify that this buffer is promoteable:
+        There is a single level-1 heading
+        and no extra content before the first heading."
+          (and
+           (= (org-roam--h1-count) 1)
+           (org-with-point-at 1 (org-at-heading-p))))
+
+        (defun my-org-roam-promote-entire-buffer ()
+          "Promote the current buffer.
+        Converts a file containing a single level-1 headline node to a file
+        node."
+          (interactive)
+          (unless (org-roam--buffer-promoteable-p)
+            (user-error "Cannot promote: multiple root headings or there is extra file-level text"))
+          (org-with-point-at 1
+            (let ((title (nth 4 (org-heading-components)))
+                  (pdf-start-page (org-entry-get nil "NOTER_PAGE" t))
+                  (pdf-end-page (org-entry-get nil "NOTER_PAGE_END" t))
+                  (excerpt (my-org-get-contents-of-entry))
+                  (marginnote-link (org-entry-get nil "MARGINNOTE_LINK" t))
+                  (mpv-video-filename (org-entry-get nil "MPV_VIDEO_FILENAME" t))
+                  (mpv-video-position-start (org-entry-get nil "MPV_POSITION_START" t))
+                  (mpv-video-position-end (org-entry-get nil "MPV_POSITION_END" t))
+                  (children-id-links (my-outline-copy-id-link-of-direct-children))
+                  (tags (org-get-tags)))
+              (kill-whole-line)
+              (org-map-region #'org-promote (point-min) (point-max))
+              (org-roam-end-of-meta-data)
+              (when tags (org-roam-tag-add tags))
+              (insert "#+title: " title "\n")
+              ;; (message marginnote-link)
+              ;; (org-roam-end-of-meta-data)
+              (goto-char 0)
+              (search-forward "#+title: ")
+              (next-logical-line)
+              (delete-region (point) (point-max))
+              ;; (message children-id-links)
+              (insert "\n")
+              (if (> (length children-id-links) 0)
+                  (progn
+                    (insert "* DETAIL\n")
+                    (dolist (link children-id-links)
+                      (insert link "\n\n")
+                      )
+                    )
+                  )
+              (message pdf-start-page)
+              (if mpv-video-filename
+                  (insert (format "* EXCERPT
+:PROPERTIES:
+:PAGE_OR_LOCATION:       %s
+:END:
+" mpv-video-filename) excerpt)
+                (insert (format "* EXCERPT
+:PROPERTIES:
+:PAGE_OR_LOCATION:       %s-%s %s
+:END:
+" (or pdf-start-page mpv-video-position-start) (or pdf-end-page mpv-video-position-end) marginnote-link) excerpt)
+                )
+              ;; (org-roam-db-update-file)
+              )))
+
+        (defun my-org-roam-extract-subtree (literature-key region-begin region-end)
+          "Convert current subtree at point to a node, and extract it into a new file."
+          (save-excursion
+            (org-back-to-heading-or-point-min t)
+            (when (bobp) (user-error "Already a top-level node"))
+            ;; (org-id-get-create)
+            ;; (save-buffer)
+            ;; (org-roam-db-update-file)
+            (if (org-id-get)
+            (let* ((template-info nil)
+                   (node (org-roam-node-at-point))
+                   (content (buffer-substring-no-properties region-begin region-end))
+                   (template (org-roam-format-template
+                              (string-trim (org-capture-fill-template org-roam-extract-new-file-path))
+                              (lambda (key default-val)
+                                (let ((fn (intern key))
+                                      (node-fn (intern (concat "org-roam-node-" key)))
+                                      (ksym (intern (concat ":" key))))
+                                  (cond
+                                   ((fboundp fn)
+                                    (funcall fn node))
+                                   ((fboundp node-fn)
+                                    (funcall node-fn node))
+                                   (t (let ((r (read-from-minibuffer (format "%s: " key) default-val)))
+                                        (plist-put template-info ksym r)
+                                        r)))))))
+                   (file-path
+                    (expand-file-name
+                     (f-join "~/Documents/sync/notes/literature" literature-key template))))
+                     ;; (f-join "~/Documents" literature-key template))))
+              ;; (when (file-exists-p file-path)
+              ;;   (user-error "%s exists. Aborting" file-path))
+              ;; (org-copy-subtree)
+              ;; Create direcory if not exists
+              (make-directory (file-name-directory file-path) t)
+              (with-current-buffer (find-file-noselect file-path)
+                (erase-buffer)
+                ;; (org-paste-subtree level)
+                (insert content)
+                (goto-char 0)
+                (while (> (org-current-level) 1) (org-promote-subtree))
+                (save-buffer)
+                (my-org-roam-promote-entire-buffer)
+                (save-buffer)
+                )
+              )
+              )
+            ))
+
+        (defun my-org-roam-split-literature-notes ()
+          (interactive)
+          (let* (
+                (roam-refs (org-entry-get nil "ROAM_REFS" t))
+                (literature-key (s-replace "cite:&" "" roam-refs))
+                (tree (org-element-parse-buffer 'headline))
+                (headline-list (org-element-map tree 'headline
+                    (lambda (el) (list
+                            (org-element-property :raw-value el) ; get header title without tags etc
+                            (org-element-property :begin el)
+                            (org-element-property :end el)
+                            (org-element-property :level el) ; get depth
+                            ;; >> could add other properties here
+                            ))))
+                ;; sort by level from deep to shallow
+                ;; (sorted-headline-list (sort headline-list
+                ;;                             (lambda (first second)
+                ;;                               (> (nth 2 first) (nth 2 second))
+                ;;                               )
+                ;;                             ))
+                )
+            ;; (message headline-list)
+            (dolist (headline headline-list)
+              (goto-char (nth 1 headline))
+              ;; (org-find-exact-headline-in-buffer (nth 0 headline))
+              (save-excursion
+                (if (org-id-get)
+                    (progn
+                      (message (org-id-get))
+                      (my-org-roam-extract-subtree literature-key (nth 1 headline) (nth 2 headline))
+                      )
+                  )
+                )
+              )
+            ;; (point-min)
+            ;; (while (condition-case nil (progn (outline-next-heading) t) (error nil))
+            ;;   (save-excursion
+            ;; ;; (my-org-roam-extract-subtree literature-key)
+            ;; (call-interactively (lambda ()
+            ;;                       (interactive)
+            ;;                     (my-org-roam-extract-subtree literature-key)
+            ;;                    )
+            ;;  )
+            ;; )
+            ;;   )
+            ;; (my-org-roam-extract-subtree literature-key)
+            ;; (org-map-entries (lambda ()
+            ;;                     (my-org-roam-extract-subtree literature-key)
+            ;;                    )
+            ;;  )
+            )
+          )
+
         (defun my-org-get-contents-of-entry ()
           "Get the content text of the entry at point
         Excludes the heading and any child subtrees."
@@ -2787,7 +2997,7 @@
                               ("^_" . "")                     ;; remove starting underscore
                               ("_$" . "")))                   ;; remove ending underscore
                      (slug (-reduce-from #'cl-replace (strip-nonspacing-marks title) pairs)))
-                (downcase (truncate-string-to-width slug 125))))))
+                (downcase (truncate-string-to-width slug 60))))))
 
         (setq org-roam-completion-system 'helm)
         (org-roam-db-autosync-mode)
