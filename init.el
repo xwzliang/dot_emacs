@@ -4065,6 +4065,11 @@
             "z" 'my-emms-mpv-decrease-subtitle-delay
             "r" 'my-emms-mpv-reset-subtitle-delay
             "R" 'emms-random
+            ;; Make playlist current
+            "." 'emms-playlist-set-playlist-buffer
+            "a" 'emms-add-directory
+            "w" 'emms-playlist-save
+            "c" 'emms-playlist-new
          )
   :config
         (require 'emms-setup)
