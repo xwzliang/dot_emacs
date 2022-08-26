@@ -4068,6 +4068,7 @@
             ;; Make playlist current
             "." 'emms-playlist-set-playlist-buffer
             "a" 'emms-add-directory
+            "A" 'emms-add-playlist
             "w" 'emms-playlist-save
             "c" 'emms-playlist-new
          )
