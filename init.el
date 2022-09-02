@@ -4061,8 +4061,8 @@
             "S" 'my-emms-mpv-cycle-subtitle-backwards
             "m" 'emms-mark-forward
             "D" 'emms-mark-delete-marked-tracks
-            "Z" 'my-emms-mpv-increase-subtitle-delay
-            "z" 'my-emms-mpv-decrease-subtitle-delay
+            "z" 'my-emms-mpv-increase-subtitle-delay
+            "Z" 'my-emms-mpv-decrease-subtitle-delay
             "r" 'my-emms-mpv-reset-subtitle-delay
             "R" 'emms-random
             ;; Make playlist current
