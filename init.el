@@ -2513,9 +2513,13 @@
 " mpv-video-filename) excerpt)
                 (insert (format "* EXCERPT
 :PROPERTIES:
-:PAGE_OR_LOCATION:       %s-%s %s
+:PAGE_OR_LOCATION:       %s %s-%s %s
 :END:
-" (or pdf-start-page mpv-video-position-start) (or pdf-end-page mpv-video-position-end) marginnote-link) excerpt)
+" (if my-org-roam-current-video-filename
+      (format "[%s]" my-org-roam-current-video-filename)
+    ""
+   )
+(or pdf-start-page mpv-video-position-start) (or pdf-end-page mpv-video-position-end) marginnote-link) excerpt)
                 )
               ;; (org-roam-db-update-file)
               )))
@@ -2600,6 +2604,9 @@
                       (message (org-id-get))
                       (my-org-roam-extract-subtree literature-key (nth 1 headline) (nth 2 headline))
                       )
+                    (if (org-entry-get nil "MPV_VIDEO_FILENAME" t)
+                      (setq my-org-roam-current-video-filename (org-entry-get nil "MPV_VIDEO_FILENAME" t))
+                    )
                   )
                 )
               )
@@ -2620,6 +2627,7 @@
             ;;                    )
             ;;  )
             )
+            (setq my-org-roam-current-video-filename nil)
           )
 
         (defun my-org-get-contents-of-entry ()
