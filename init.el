@@ -4072,7 +4072,9 @@
             "z" 'my-emms-mpv-increase-subtitle-delay
             "Z" 'my-emms-mpv-decrease-subtitle-delay
             "r" 'my-emms-mpv-reset-subtitle-delay
-            "R" 'emms-random
+            ;; "R" 'emms-random
+            ;; Rename playlist
+            "R" 'rename-buffer
             ;; Make playlist current
             "." 'emms-playlist-set-playlist-buffer
             "a" 'emms-add-directory
