@@ -1458,6 +1458,11 @@
 
 (use-package git-timemachine
 ;; Git time machine
+  :straight
+        (
+            :host github
+            :repo "emacsmirror/git-timemachine"
+         )
   :bind
         (
             ("C-c g r" . git-timemachine)
