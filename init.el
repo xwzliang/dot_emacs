@@ -4,15 +4,15 @@
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
+      (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
+    (start-process-shell-command "clone" nil "mkdir -p ~/git/Downloads; cd ~/git/Downloads; git clone https://github.com/xwzliang/straight.el.git 2>/dev/null")
+    (with-temp-buffer
+      (insert-file "~/git/Downloads/straight.el/install.el")
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+
 (setq package-enable-at-startup nil)
 (setq straight-use-package-by-default t)
 ;; Configure straight package version lockfile
