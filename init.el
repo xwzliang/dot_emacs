@@ -8,7 +8,7 @@
   (unless (file-exists-p bootstrap-file)
     (start-process-shell-command "clone" nil "mkdir -p ~/git/Downloads; cd ~/git/Downloads; git clone https://github.com/xwzliang/straight.el.git 2>/dev/null")
     (with-temp-buffer
-      (insert-file "~/git/Downloads/straight.el/install.el")
+      (insert-file-contents "~/git/Downloads/straight.el/install.el")
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
