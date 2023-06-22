@@ -2176,7 +2176,8 @@
         (setq ebib-file-search-dirs (list (f-join my-ebib-dir "files")))
         (setq ebib-notes-directory (f-join my-ebib-dir "notes"))
         (setq ebib-preload-bib-files
-            (f-files my-ebib-dir (lambda (file) (equal (f-ext file) "bib")))
+            ;; (f-files my-ebib-dir (lambda (file) (equal (f-ext file) "bib")))
+            '("~/Documents/sync/references/refs.bib")
          )
         ;; (setq ebib-file-associations '(("pdf" . "nohup evince %s")))
         (setq ebib-file-associations '(("pdf" . "zathura")))
@@ -2186,6 +2187,7 @@
   :general
         (my-space-leader-def
             "r e" 'ebib
+            "r i" 'ebib-import-entries
          )
         (
             :states 'normal
@@ -2203,6 +2205,7 @@
             "f" 'my-ebib-view-pdf
             ;; "n" 'my-ebib-popup-note
             "RA" 'my-ebib-add-reading-list-item-for-learning
+            "!" 'ebib-generate-autokey
          )
         (
             :states 'normal
@@ -4804,9 +4807,8 @@
         (setq bibtex-autokey-name-year-separator "_")
         (setq bibtex-autokey-year-title-separator "_")
         (setq bibtex-autokey-titleword-length 100)
-        (setq bibtex-autokey-titlewords 3)
-        ;; (setq bibtex-autokey-titlewords-stretch 1)
-        ;; (setq bibtex-autokey-name-case-convert-function 'capitalize)
+        (setq bibtex-autokey-titlewords 5)
+        (setq bibtex-autokey-titlewords-stretch 2)
         (setq bibtex-autokey-titleword-case-convert-function 'capitalize)
         (setq bibtex-autokey-titleword-ignore
         '("A" "An" "The" "And"))
@@ -4814,6 +4816,7 @@
         ;; (setq bibtex-completion-pdf-open-function
         ;;     (lambda (fpath)
         ;;         (call-process "evince" nil 0 nil fpath)))
+        (setq bibtex-autokey-name-case-convert-function 'capitalize)
   )
 
 (use-package desktop
