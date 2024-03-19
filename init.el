@@ -1612,6 +1612,59 @@
 (use-package org
   :init
         (setq org-directory "~/Dropbox/org")
+  :preface
+        (defun my-org-get-content-of-entry ()
+          "Function to get content of the current org entry, excluding the heading."
+          (save-excursion
+            ;; Move to the beginning of the current entry.
+            (org-back-to-heading t)
+            ;; Go to the end of the heading line to exclude the heading itself.
+            (forward-line 1)
+            ;; Skip scheduled, deadline, and properties.
+            (org-end-of-meta-data t)
+            ;; Now, capture the content from here to the end of the entry.
+            (let ((start (point))
+                  (end (org-entry-end-position)))
+              (when (< start end) ; Ensure there is content to capture.
+                (buffer-substring-no-properties start end)))))
+
+        (defun my-org-cleanup-empty-org-sections ()
+          (interactive)
+          (let ((to-delete '()))
+           (org-map-entries
+             (lambda ()
+               (let (
+                     (heading-start (point))
+                     (element (org-element-at-point))
+                     (content (my-org-get-content-of-entry))
+                     (has-children (save-excursion (org-goto-first-child)))
+                     )
+                 (when (and (or (string-match-p "^*+.*" (format "%s" content))
+                                (not content)
+                                )
+                                (not has-children)
+                            )
+                    ;; (message "to delete: %s" (org-element-property :title element))
+                    (push heading-start to-delete)
+                   )
+                 )
+               ))
+            ;; Delete collected headings and check their parents.
+            (dolist (pos to-delete)
+              (goto-char pos)
+              (org-cut-subtree)
+             )
+           )
+          )
+
+        (defun my-org-capture-convict-conditioning-filtering ()
+          (when (and (not org-note-abort)
+                     (equal (plist-get org-capture-plist :description) "Journal Convict Conditioning"))
+            (my-org-cleanup-empty-org-sections)
+            (my-org-cleanup-empty-org-sections)
+            (message "buffer is %s" (buffer-string))
+           )
+        )
   :bind
         (
             ("C-c o c" . org-capture)
@@ -1726,15 +1779,47 @@
         ;; TODO state to which a repeater should return the repeating task.
         (setq org-todo-repeat-to-state "TODO")
         (setq org-tag-alist '(("Daily" . ?d) ("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("IMPORTANT" . ?i) ("URGENT" . ?u) ("optional" . ?o) ("Emacs" . ?e)))
+        (setq my-org-convict-conditioning-exercises
+"
+** Pushups
+*** Close Pushups
+
+*** One-arm Pushups
+
+** Squats
+*** Close Squats
+
+*** One-leg Squats
+
+** Pullups
+*** Half Pullups
+
+*** Full Pullups
+
+** Leg Raises
+*** Hanging Knee Raises
+
+*** Hanging Straight Leg Raises
+
+** Bridges
+*** Head Bridges
+
+** Handstand Pushups
+*** Wall Handstands
+
+")
         (setq org-capture-templates
-        '(
+        `(
             ("e" "Journal Entry"
                 entry (file+olp+datetree (lambda () (f-join org-directory "journal.org")))
                 "* %?")
+            ("c" "Journal Convict Conditioning"
+                entry (file+olp+datetree (lambda () (f-join org-directory "conditioning.org")))
+                ,(concat "* warm up%?" my-org-convict-conditioning-exercises "* work set" my-org-convict-conditioning-exercises))
             ("j" "Journal Checklist"
                 checkitem (file+olp+datetree (lambda () (f-join org-directory "journal.org")))
                 "[/]\n- [ ] %?")
-            ("c" "Checklist Item"
+            ("J" "Checklist Item"
                 plain (function (lambda nil (goto-char (point))))
                 "*** Checklist\n- [ ] %?")
             ("i" "Inbox TODO"
@@ -1748,6 +1833,7 @@
             (push '("[ ]" . "☐") prettify-symbols-alist)
             (push '("[X]" . "☑" ) prettify-symbols-alist)
             (prettify-symbols-mode)))
+        (org-capture-prepare-finalize . my-org-capture-convict-conditioning-filtering)
   :custom-face
         (org-table ((t (:foreground "white"))))
         (org-headline-done ((t (:foreground "brightblack"))))
