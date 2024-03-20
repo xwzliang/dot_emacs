@@ -1618,6 +1618,80 @@
   :init
         (setq org-directory "~/Dropbox/org")
   :preface
+        ;; Convert date string "YYYY-MM-DD" to Emacs time format
+        (defun date-to-time (date-str)
+          "Convert a date string to time."
+          (apply #'encode-time (parse-time-string date-str)))
+
+        (defun my-org-convict-conditioning-convert-to-org-table (file-path)
+          (interactive "fEnter the path of the file: ")  ; Prompt the user for a file path
+          ;; Variables for date, exercise type, and details
+          (let ((current-date "")
+                (date-str "")
+                (warmup-or-workset "")
+                (exercise-type "")
+                (exercise-name "")
+                (repetitions "")
+                ;; Prepare the buffer for the output table
+                (output-buffer (get-buffer-create "*Org Table Output*"))
+                (days-ago (time-subtract (current-time) (days-to-time 14)))
+                )
+            ;; Initialize output buffer with a table header
+            (with-current-buffer output-buffer
+              (erase-buffer) ;; Clear the buffer to start fresh
+              (insert "| Date | Exercise | Type | Set | Reps |\n")
+              (insert "|-\n"))
+            ;; Process the current buffer
+            (with-temp-buffer
+              (insert-file-contents file-path)
+              (goto-char (point-min))
+              (while (not (eobp))
+                (let ((line (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+                  (cond ((string-match "^\\*\\*\\* \\(.*\\)" line)
+                         (setq date-str (match-string 1 line))
+                         ;; Convert date string to time format
+                         (setq current-date (date-to-time (concat (car (s-split " " date-str)) " 00:00")))
+                         ;; Check if current-date is more than two weeks ago
+                         (if (time-less-p current-date days-ago)
+                             ;; Reset current-date to skip processing this and related lines
+                             (setq current-date "")
+                            (setq current-date (format "%s" current-date))
+                           )
+                         )
+                        (
+                         (and (not (string= current-date ""))
+                              (string-match "^\\*\\*\\*\\* \\(.*\\)" line)
+                              )
+                         (setq warmup-or-workset (match-string 1 line)))
+                        (
+                         (and (not (string= current-date ""))
+                              (string-match "^\\*\\*\\*\\*\\* \\(.*\\)" line)
+                              )
+                         (setq exercise-type (match-string 1 line)))
+                        (
+                         (and (not (string= current-date ""))
+                              (string-match "^\\*\\*\\*\\*\\*\\* \\(.*\\)" line)
+                              )
+                         (setq exercise-name (match-string 1 line)))
+                        ;; Match non-empty line which doesn't start with * or : or whitespaces
+                        (
+                         (and (not (string= current-date ""))
+                              (string-match "\\(^[^*:\s].*\\)$" line)
+                              )
+                         (setq repetitions (match-string 1 line))
+                         ;; Insert row into the output table
+                         (with-current-buffer output-buffer
+                           (goto-char (point-max))
+                           (insert (format "| %s | %s | %s | %s | %s |\n" date-str exercise-type warmup-or-workset exercise-name repetitions)))))
+                  (forward-line 1))))
+            ;; Format the table in the output buffer
+            (with-current-buffer output-buffer
+              (goto-char (point-min))
+              (org-mode)
+              (org-table-align)
+              (buffer-string))
+        ))
+
         (defun my-org-get-content-of-entry ()
           "Function to get content of the current org entry, excluding the heading."
           (save-excursion
@@ -1644,11 +1718,15 @@
                      (content (my-org-get-content-of-entry))
                      (has-children (save-excursion (org-goto-first-child)))
                      )
-                 (when (and (or (string-match-p "^*+.*" (format "%s" content))
+                 (when (or
+                        (and (or (string-match-p "^*+.*" (format "%s" content))
                                 (not content)
                                 )
                                 (not has-children)
-                            )
+                         )
+                         (equal (org-element-property :title element) "routine")
+                         (equal (org-element-property :title element) "journal")
+                        )
                     ;; (message "to delete: %s" (org-element-property :title element))
                     (push heading-start to-delete)
                    )
@@ -1784,6 +1862,14 @@
         ;; TODO state to which a repeater should return the repeating task.
         (setq org-todo-repeat-to-state "TODO")
         (setq org-tag-alist '(("Daily" . ?d) ("Research" . ?r) ("Learning" . ?l) ("Code" . ?c) ("IMPORTANT" . ?i) ("URGENT" . ?u) ("optional" . ?o) ("Emacs" . ?e)))
+        (setq my-org-convict-conditioning-file (f-join org-directory "conditioning.org"))
+        (setq my-org-convict-conditioning-routines
+"
+* routine
+| Pullups & Squats            |
+| Pushups & Leg Raises        |
+| Handstand Pushups & Bridges |
+")
         (setq my-org-convict-conditioning-exercises
 "
 ** Pushups
@@ -1818,9 +1904,9 @@
             ("e" "Journal Entry"
                 entry (file+olp+datetree (lambda () (f-join org-directory "journal.org")))
                 "* %?")
-            ("c" "Journal Convict Conditioning"
-                entry (file+olp+datetree (lambda () (f-join org-directory "conditioning.org")))
-                ,(concat "* warm up%?" my-org-convict-conditioning-exercises "* work set" my-org-convict-conditioning-exercises))
+             ("c" "Journal Convict Conditioning"
+                entry (file+olp+datetree (lambda () my-org-convict-conditioning-file))
+                ,(concat my-org-convict-conditioning-routines "* journal\n" "%(my-org-convict-conditioning-convert-to-org-table my-org-convict-conditioning-file)" "* warm up%?" my-org-convict-conditioning-exercises "* work set" my-org-convict-conditioning-exercises))
             ("j" "Journal Checklist"
                 checkitem (file+olp+datetree (lambda () (f-join org-directory "journal.org")))
                 "[/]\n- [ ] %?")
