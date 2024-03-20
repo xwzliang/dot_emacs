@@ -1872,24 +1872,36 @@
 ")
         (setq my-org-convict-conditioning-exercises
 "
+* warm up
 ** Pushups
 *** Close Pushups
-
-*** One-arm Pushups
 
 ** Squats
 *** Close Squats
 
-*** One-leg Squats
-
 ** Pullups
 *** Half Pullups
-
-*** Full Pullups
 
 ** Leg Raises
 *** Hanging Knee Raises
 
+** Bridges
+*** Head Bridges
+
+** Handstand Pushups
+*** Wall Handstands
+
+* work set
+** Pushups
+*** One-arm Pushups
+
+** Squats
+*** One-leg Squats
+
+** Pullups
+*** Full Pullups
+
+** Leg Raises
 *** Hanging Straight Leg Raises
 
 ** Bridges
@@ -1906,7 +1918,7 @@
                 "* %?")
              ("c" "Journal Convict Conditioning"
                 entry (file+olp+datetree (lambda () my-org-convict-conditioning-file))
-                ,(concat my-org-convict-conditioning-routines "* journal\n" "%(my-org-convict-conditioning-convert-to-org-table my-org-convict-conditioning-file)" "* warm up%?" my-org-convict-conditioning-exercises "* work set" my-org-convict-conditioning-exercises))
+                ,(concat my-org-convict-conditioning-routines "* journal\n" "%(my-org-convict-conditioning-convert-to-org-table my-org-convict-conditioning-file)" "%?" my-org-convict-conditioning-exercises))
             ("j" "Journal Checklist"
                 checkitem (file+olp+datetree (lambda () (f-join org-directory "journal.org")))
                 "[/]\n- [ ] %?")
