@@ -4,15 +4,15 @@
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
+      (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
+    (start-process-shell-command "clone" nil "mkdir -p ~/git/Downloads; cd ~/git/Downloads; git clone https://github.com/xwzliang/straight.el.git 2>/dev/null")
+    (with-temp-buffer
+      (insert-file-contents "~/git/Downloads/straight.el/install.el")
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+
 (setq package-enable-at-startup nil)
 (setq straight-use-package-by-default t)
 ;; Configure straight package version lockfile
@@ -1458,6 +1458,11 @@
 
 (use-package git-timemachine
 ;; Git time machine
+  :straight
+        (
+            :host github
+            :repo "emacsmirror/git-timemachine"
+         )
   :bind
         (
             ("C-c g r" . git-timemachine)
@@ -2257,7 +2262,8 @@
         (setq ebib-file-search-dirs (list (f-join my-ebib-dir "files")))
         (setq ebib-notes-directory (f-join my-ebib-dir "notes"))
         (setq ebib-preload-bib-files
-            (f-files my-ebib-dir (lambda (file) (equal (f-ext file) "bib")))
+            ;; (f-files my-ebib-dir (lambda (file) (equal (f-ext file) "bib")))
+            '("~/Documents/sync/references/refs.bib")
          )
         ;; (setq ebib-file-associations '(("pdf" . "nohup evince %s")))
         (setq ebib-file-associations '(("pdf" . "zathura")))
@@ -2267,6 +2273,7 @@
   :general
         (my-space-leader-def
             "r e" 'ebib
+            "r i" 'ebib-import-entries
          )
         (
             :states 'normal
@@ -2284,6 +2291,7 @@
             "f" 'my-ebib-view-pdf
             ;; "n" 'my-ebib-popup-note
             "RA" 'my-ebib-add-reading-list-item-for-learning
+            "!" 'ebib-generate-autokey
          )
         (
             :states 'normal
@@ -2599,9 +2607,13 @@
 " mpv-video-filename) excerpt)
                 (insert (format "* EXCERPT
 :PROPERTIES:
-:PAGE_OR_LOCATION:       %s-%s %s
+:PAGE_OR_LOCATION:       %s %s-%s %s
 :END:
-" (or pdf-start-page mpv-video-position-start) (or pdf-end-page mpv-video-position-end) marginnote-link) excerpt)
+" (if my-org-roam-current-video-filename
+      (format "[%s]" my-org-roam-current-video-filename)
+    ""
+   )
+(or pdf-start-page mpv-video-position-start) (or pdf-end-page mpv-video-position-end) marginnote-link) excerpt)
                 )
               ;; (org-roam-db-update-file)
               )))
@@ -2686,6 +2698,9 @@
                       (message (org-id-get))
                       (my-org-roam-extract-subtree literature-key (nth 1 headline) (nth 2 headline))
                       )
+                    (if (org-entry-get nil "MPV_VIDEO_FILENAME" t)
+                      (setq my-org-roam-current-video-filename (org-entry-get nil "MPV_VIDEO_FILENAME" t))
+                    )
                   )
                 )
               )
@@ -2706,6 +2721,7 @@
             ;;                    )
             ;;  )
             )
+            (setq my-org-roam-current-video-filename nil)
           )
 
         (defun my-org-get-contents-of-entry ()
@@ -3646,6 +3662,15 @@
                           ))
   )
 
+;; Use pyls lsp
+;; (use-package lsp-python-ms
+;;   :ensure t
+;;   :init (setq lsp-python-ms-auto-install-server t)
+;;   :hook (python-mode . (lambda ()
+;;                           (require 'lsp-python-ms)
+;;                           (lsp)))  ; or lsp-deferred
+;;   )
+
 (use-package lsp-java
 ;; Emacs Java IDE using Eclipse JDT Language Server
   :hook
@@ -4147,13 +4172,16 @@
             "S" 'my-emms-mpv-cycle-subtitle-backwards
             "m" 'emms-mark-forward
             "D" 'emms-mark-delete-marked-tracks
-            "Z" 'my-emms-mpv-increase-subtitle-delay
-            "z" 'my-emms-mpv-decrease-subtitle-delay
+            "z" 'my-emms-mpv-increase-subtitle-delay
+            "Z" 'my-emms-mpv-decrease-subtitle-delay
             "r" 'my-emms-mpv-reset-subtitle-delay
-            "R" 'emms-random
+            ;; "R" 'emms-random
+            ;; Rename playlist
+            "R" 'rename-buffer
             ;; Make playlist current
             "." 'emms-playlist-set-playlist-buffer
             "a" 'emms-add-directory
+            "A" 'emms-add-playlist
             "w" 'emms-playlist-save
             "c" 'emms-playlist-new
          )
@@ -4874,9 +4902,8 @@
         (setq bibtex-autokey-name-year-separator "_")
         (setq bibtex-autokey-year-title-separator "_")
         (setq bibtex-autokey-titleword-length 100)
-        (setq bibtex-autokey-titlewords 3)
-        ;; (setq bibtex-autokey-titlewords-stretch 1)
-        ;; (setq bibtex-autokey-name-case-convert-function 'capitalize)
+        (setq bibtex-autokey-titlewords 5)
+        (setq bibtex-autokey-titlewords-stretch 2)
         (setq bibtex-autokey-titleword-case-convert-function 'capitalize)
         (setq bibtex-autokey-titleword-ignore
         '("A" "An" "The" "And"))
@@ -4884,6 +4911,7 @@
         ;; (setq bibtex-completion-pdf-open-function
         ;;     (lambda (fpath)
         ;;         (call-process "evince" nil 0 nil fpath)))
+        (setq bibtex-autokey-name-case-convert-function 'capitalize)
   )
 
 (use-package desktop
