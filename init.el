@@ -114,6 +114,8 @@
   ;; Operations on the current project
   )
 
+;; (use-package emacsql-sqlite3)
+
 (use-package general
 ;; Convenience wrappers for keybindings
   :config
@@ -1399,6 +1401,7 @@
   )
 
 (use-package forge
+  :disabled
 ;; Work with Git forges from the comfort of Magit
   :after
         (magit)
@@ -1918,7 +1921,7 @@
                 "* %?")
              ("c" "Journal Convict Conditioning"
                 entry (file+olp+datetree (lambda () my-org-convict-conditioning-file))
-                ,(concat my-org-convict-conditioning-routines "* journal\n" "%(my-org-convict-conditioning-convert-to-org-table my-org-convict-conditioning-file)" "%?" my-org-convict-conditioning-exercises))
+                ,(concat "* journal\n" "%(my-org-convict-conditioning-convert-to-org-table my-org-convict-conditioning-file)" "%?" my-org-convict-conditioning-routines my-org-convict-conditioning-exercises))
             ("j" "Journal Checklist"
                 checkitem (file+olp+datetree (lambda () (f-join org-directory "journal.org")))
                 "[/]\n- [ ] %?")
@@ -2601,6 +2604,7 @@
          )
   )
 
+
 (use-package org-roam
 ;; Rudimentary Roam replica with Org-mode
   :preface
@@ -3156,6 +3160,7 @@
             "k" 'my-pdf-delete-all-annotations
          )
   :init
+        ;; (setq org-roam-database-connector 'sqlite3)
         (setq org-roam-v2-ack t)
   :config
         ;; Customize slug of roam node: truncate slug if too long
@@ -3812,7 +3817,7 @@
 ;; Emacs Scala IDE using lsp-mode to connect to Metals
 
 (use-package helm-lsp
-  :disabled t
+  ;; :disabled t
 ;; Helm lsp integration.
 ;; helm-lsp-workspace-symbol - workspace symbols for the current workspace
   )
@@ -4417,6 +4422,7 @@
   )
 
 (use-package exwm
+  :disabled my-system-is-mac
   ;; EXWM (Emacs X Window Manager) is a full-featured tiling X window manager for Emacs built on top of XELB
   :preface
         (defun my-exwm-update-class ()
@@ -4503,6 +4509,7 @@
 (use-package desktop-environment
   ;; The package desktop-environment provides commands and a global minor mode to control your GNU/Linux desktop from Emacs.
   ;; With desktop-environment, you can control the brightness and volume as well as take screenshots and lock your screen
+  :disabled my-system-is-mac
   :after exwm
   :config
         (desktop-environment-mode)
