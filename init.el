@@ -1626,31 +1626,34 @@
           "Convert a date string to time."
           (apply #'encode-time (parse-time-string date-str)))
 
-        (defun my-org-insert-weekly-training-entry ()
+        (defun my/org-insert-weekly-training-entry ()
             "Insert a new training entry for today by copying last week's entry and updating the date."
             (interactive)
             (save-excursion
                 (let* ((today (current-time))
-                    (day-abbr (capitalize (format-time-string "%a" today))) ;; e.g. "Mon"
+                    (day-abbr (capitalize (format-time-string "%a" today))) ;; e.g., "Mon"
                     (today-date (format-time-string "%Y-%m-%d" today))
                     (lines (split-string (buffer-string) "\n"))
-                    (start-point (cl-position-if (lambda (line)
-                                                    (and (string-prefix-p "| " line)
-                                                        (string-match (concat "| " day-abbr " ") line)))
-                                                    lines))
-                    (new-lines '()))
-                (if start-point
-                    (let ((line1 (nth start-point lines))
+                    ;; Search from bottom up
+                    (reversed-lines (reverse lines))
+                    (reversed-index (cl-position-if (lambda (line)
+                                                        (and (string-prefix-p "| " line)
+                                                            (string-match (concat "| " day-abbr " ") line)))
+                                                    reversed-lines))
+                    (line-count (length lines)))
+                (if reversed-index
+                    (let* ((start-point (- line-count reversed-index 1))
+                            (line1 (nth start-point lines))
                             (line2 (nth (+ start-point 1) lines)))
-                        ;; Replace the date in both lines
+                        ;; Replace the date
                         (setq line1 (replace-regexp-in-string "| [0-9-]+ |" (concat "| " today-date " |") line1))
                         (setq line2 (replace-regexp-in-string "| [0-9-]+ |" (concat "| " today-date " |") line2))
                         ;; Insert at end
                         (goto-char (point-max))
-                        (insert "\n" line1 "\n" line2)
+                        (insert line1 "\n" line2)
                         (message "Inserted training entry for %s (%s)" day-abbr today-date))
                     (message "No previous entry found for %s" day-abbr)))))
-
+        
         (defun my-org-convict-conditioning-convert-to-org-table (file-path)
           (interactive "fEnter the path of the file: ")  ; Prompt the user for a file path
           ;; Variables for date, exercise type, and details
