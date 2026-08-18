@@ -2391,8 +2391,8 @@
         (setq ebib-file-search-dirs (list (f-join my-ebib-dir "files")))
         (setq ebib-notes-directory (f-join my-ebib-dir "notes"))
         (setq ebib-preload-bib-files
-            ;; (f-files my-ebib-dir (lambda (file) (equal (f-ext file) "bib")))
-            '("~/Documents/sync/references/refs.bib")
+            (f-files my-ebib-dir (lambda (file) (equal (f-ext file) "bib")))
+            ;; '("~/Documents/sync/references/refs.bib")
          )
         ;; (setq ebib-file-associations '(("pdf" . "nohup evince %s")))
         (setq ebib-file-associations '(("pdf" . "zathura")))
@@ -4336,7 +4336,7 @@
         (emms-player-started . (lambda ()
             ;; (start-process-shell-command "siri" nil "echo 'ffplay -nodisp -autoexit ~/Dropbox/Sounds/Siri/siri_open_bedroom.m4a' | at now +1 minute")
             (emms-pause)
-            (start-process-shell-command "siri" nil "cd ~/Dropbox/Sounds/Siri/; ffplay -nodisp -autoexit hey_siri.m4a; ffplay -nodisp -autoexit switch_tv.m4a")
+            ;; (start-process-shell-command "siri" nil "cd ~/Dropbox/Sounds/Siri/; ffplay -nodisp -autoexit hey_siri.m4a; ffplay -nodisp -autoexit switch_tv.m4a")
         ))
   )
 
