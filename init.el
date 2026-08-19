@@ -3098,44 +3098,34 @@
         ;;    ))
 
         (defun my-org-roam-find-project ()
-          ;; (interactive "sproject name: ")
+          "Find or create an Org-roam note in a selected project."
           (interactive)
-          (let* (
-                 (my-roam-project-dir (f-join org-roam-directory "project"))
-                 (my-roam-project-list (mapcar 'f-filename (f-directories my-roam-project-dir)))
-                 (my-roam-find-or-create-project-note (lambda (my-project-name)
-                    ;; Put my-project-name to latest kill in the kill-ring, then use %c in template to use it
-                                                ;; (message my-project-name)
-                    (kill-new my-project-name)
-                    (ignore-errors (make-directory (f-join my-roam-project-dir my-project-name)))
-                    (org-roam-node-find
-                    nil
-                    nil
-                    (my-org-roam-filter-by-tag-list '("project" my-project-name))
-                    :templates
-                    '(
-                            ("r" "bibliography reference" plain "%?"
-                                :if-new
-                                (file+head "project/%c/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :project:%c:")
-                                :immediate-finish t
-                                :unnarrowed t)
-                            )
-                        )
-                    )
-                  )
-                 )
-            (ivy-read "roam projects: " my-roam-project-list
-                      :action my-roam-find-or-create-project-note
-                      )
-
-            ;; Can't make helm source work... ivy-read is much easier to use
-            ;; (helm :sources (helm-build-sync-source "roam projects"
-            ;;                  :candidates my-roam-project-list
-            ;;                  :action my-roam-find-or-create-project-note
-            ;;                  )
-            ;; )
-          )
-        )
+          (let* ((project-root (f-join org-roam-directory "project"))
+                 (project-names (mapcar #'f-filename
+                                        (f-directories project-root)))
+                 ;; Get the result first, so `org-roam-node-find' does not try
+                 ;; to open its minibuffer from an Ivy follow-mode action.
+                 (project-name (completing-read "Roam project: "
+                                                project-names nil nil)))
+            (when (string= project-name "")
+              (user-error "Project name cannot be empty"))
+            (let ((project-directory (f-join project-root project-name)))
+              ;; `%c' in the capture template expands to the latest kill.
+              (kill-new project-name)
+              (make-directory project-directory t)
+              (org-roam-node-find
+               nil
+               nil
+               (lambda (node)
+                 (file-in-directory-p (org-roam-node-file node)
+                                      project-directory))
+               :templates
+               '(("r" "bibliography reference" plain "%?"
+                  :if-new
+                  (file+head "project/%c/%<%Y%m%d%H%M%S>-${slug}.org"
+                             "#+title: ${title}\n#+filetags: :project:%c:")
+                  :immediate-finish t
+                  :unnarrowed t))))))
 
         (defun my-org-roam-filter-exclude-tag (tag-name)
           (lambda (node)
