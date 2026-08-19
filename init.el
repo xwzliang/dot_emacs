@@ -3173,6 +3173,7 @@
             "f" 'org-roam-node-find
             ;; "g" 'org-roam-graph
             "i" 'org-roam-node-insert
+            "o" 'org-open-at-point
             "c" 'org-roam-capture
             ;; Show backlinks
             "v" 'org-roam-buffer-toggle
