@@ -1653,7 +1653,7 @@
                         (insert line1 "\n" line2)
                         (message "Inserted training entry for %s (%s)" day-abbr today-date))
                     (message "No previous entry found for %s" day-abbr)))))
-        
+
         (defun my-org-convict-conditioning-convert-to-org-table (file-path)
           (interactive "fEnter the path of the file: ")  ; Prompt the user for a file path
           ;; Variables for date, exercise type, and details
@@ -3164,6 +3164,7 @@
             ;; "g" 'org-roam-graph
             "i" 'org-roam-node-insert
             "o" 'org-open-at-point
+            "S" 'org-roam-db-sync
             "c" 'org-roam-capture
             ;; Show backlinks
             "v" 'org-roam-buffer-toggle
