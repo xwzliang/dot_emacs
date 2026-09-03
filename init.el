@@ -2382,6 +2382,91 @@
                 (replace-regexp-in-string "[{}]" "" field-value)
               )
           )
+
+        (defvar doi-utils-download-pdf)
+        (defvar org-ref-clean-bibtex-entry-hook)
+
+        (defun my-isbn-to-bibtex (isbn bibfile)
+            "Fetch BibTeX entry for ISBN and insert it into BIBFILE used by Ebib.
+Prompts for an ISBN and lets you select from Ebib's bibliography databases."
+            (interactive
+             (let* ((cur-file (and (boundp 'ebib--cur-db)
+                                   ebib--cur-db
+                                   (fboundp 'ebib-db-get-filename)
+                                   (ebib-db-get-filename ebib--cur-db)))
+                    (files (delete-dups
+                            (delq nil
+                                  (append
+                                   (when cur-file (list cur-file))
+                                   (when (and (boundp 'ebib--databases)
+                                              ebib--databases
+                                              (fboundp 'ebib-db-get-filename))
+                                     (mapcar #'ebib-db-get-filename ebib--databases))
+                                   (when (boundp 'ebib-preload-bib-files)
+                                     (copy-sequence ebib-preload-bib-files))
+                                   (when (and (boundp 'my-ebib-dir)
+                                              (file-directory-p my-ebib-dir))
+                                     (directory-files my-ebib-dir t "\\.bib\\'"))))))
+                    (candidates (mapcar (lambda (f) (cons (file-name-nondirectory f) f)) files))
+                    (default-choice (or (and cur-file (file-name-nondirectory cur-file))
+                                        (caar candidates)))
+                    (isbn (read-string
+                           "ISBN: "
+                           (cond
+                            ((and (region-active-p)
+                                  (string-match-p "^[0-9]" (buffer-substring-no-properties (region-beginning) (region-end))))
+                             (buffer-substring-no-properties (region-beginning) (region-end)))
+                            ((and (stringp (car kill-ring))
+                                  (string-match-p "^[0-9]" (car kill-ring)))
+                             (car kill-ring))
+                            (t nil))))
+                    (bibfile
+                     (if candidates
+                         (let* ((prompt (if default-choice
+                                            (format "Bib file (default %s): " default-choice)
+                                          "Bib file: "))
+                                (choice (completing-read prompt candidates nil t nil nil default-choice)))
+                           (or (cdr (assoc choice candidates))
+                               (expand-file-name choice)))
+                       (read-file-name "Bib file: " nil nil t))))
+               (list isbn bibfile)))
+            (unless (fboundp 'isbn-to-bibtex)
+              (require 'org-ref-isbn nil t)
+              (require 'org-ref nil t))
+            (unless (fboundp 'isbn-to-bibtex)
+              (user-error "[Ebib] Function `isbn-to-bibtex' not found. Please ensure org-ref is installed"))
+            (let* ((target-db (and (boundp 'ebib--databases)
+                                   (fboundp 'ebib-db-get-filename)
+                                   (cl-find-if (lambda (db)
+                                                 (let ((fn (ebib-db-get-filename db)))
+                                                   (and fn (file-equal-p fn bibfile))))
+                                               ebib--databases)))
+                   (modtime-before (and (file-exists-p bibfile)
+                                        (file-attribute-modification-time (file-attributes bibfile)))))
+              ;; Save target database first if modified to prevent conflicts
+              (when (and target-db
+                         (fboundp 'ebib-db-modified-p)
+                         (ebib-db-modified-p target-db)
+                         (fboundp 'ebib--save-database))
+                (ebib--save-database target-db))
+              ;; Disable PDF download attempt to avoid prompting for "Dir: "
+              (let ((doi-utils-download-pdf nil)
+                    (org-ref-clean-bibtex-entry-hook
+                     (if (boundp 'org-ref-clean-bibtex-entry-hook)
+                         (remq 'orcb-download-pdf org-ref-clean-bibtex-entry-hook)
+                       nil)))
+                (save-window-excursion
+                  (isbn-to-bibtex isbn bibfile)))
+              (let ((modtime-after (and (file-exists-p bibfile)
+                                        (file-attribute-modification-time (file-attributes bibfile)))))
+                (if (and modtime-before modtime-after (not (equal modtime-before modtime-after)))
+                    (progn
+                      (when (and target-db (fboundp 'ebib--reload-database))
+                        (ebib--reload-database target-db)
+                        (when (fboundp 'ebib--update-buffers)
+                          (ebib--update-buffers)))
+                      (message "Added ISBN %s to %s and reloaded into Ebib." isbn (file-name-nondirectory bibfile)))
+                  (message "No entry added for ISBN %s." isbn)))))
   :config
         (setq ebib-bibtex-dialect 'biblatex)
         (defvar my-ebib-dir (f-join org-directory "ebib")
@@ -2413,7 +2498,7 @@
             "T" 'ebib-browse-doi
             ;; "s" 'ebib-jump-to-entry
             "/" 'swiper
-            "i" 'isbn-to-bibtex
+            "i" 'my-isbn-to-bibtex
             "I" 'my-ebib-add-newest-pdf-from-downloads
             "Fo" 'ebib-view-file
             "u" 'my-ebib-browse-url
@@ -2427,7 +2512,7 @@
             :keymaps 'ebib-entry-mode-map
             "w" 'ebib-save-current-database
             "W" 'ebib-write-database
-            "i" 'isbn-to-bibtex
+            "i" 'my-isbn-to-bibtex
             "I" 'my-ebib-add-newest-pdf-from-downloads
             "u" 'my-ebib-edit-url
             "t" 'my-ebib-edit-keywords
