@@ -2238,6 +2238,8 @@
   :config
         (setq org-ref-default-bibliography ebib-preload-bib-files)
         (setq org-ref-pdf-directory ebib-file-search-dirs)
+        (setq bibtex-completion-bibliography ebib-preload-bib-files)
+        (setq bibtex-completion-library-path ebib-file-search-dirs)
   )
 
 (use-package biblio
@@ -2465,6 +2467,12 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
                         (ebib--reload-database target-db)
                         (when (fboundp 'ebib--update-buffers)
                           (ebib--update-buffers)))
+                      ;; Keep bibtex-completion in sync for org-roam-bibtex / helm-bibtex
+                      (when (boundp 'bibtex-completion-bibliography)
+                        (add-to-list 'bibtex-completion-bibliography bibfile))
+                      (when (fboundp 'bibtex-completion-clear-cache)
+                        (bibtex-completion-clear-cache))
+                      (setq bibtex-completion-cache nil)
                       (message "Added ISBN %s to %s and reloaded into Ebib." isbn (file-name-nondirectory bibfile)))
                   (message "No entry added for ISBN %s." isbn)))))
   :config
@@ -2479,6 +2487,10 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
             (f-files my-ebib-dir (lambda (file) (equal (f-ext file) "bib")))
             ;; '("~/Documents/sync/references/refs.bib")
          )
+        (setq bibtex-completion-bibliography ebib-preload-bib-files)
+        (setq bibtex-completion-library-path ebib-file-search-dirs)
+        (setq bibtex-completion-pdf-field "file")
+        (setq bibtex-completion-notes-path ebib-notes-directory)
         ;; (setq ebib-file-associations '(("pdf" . "nohup evince %s")))
         (setq ebib-file-associations '(("pdf" . "zathura")))
         (setq ebib-name-transform-function #'my-ebib-generate-filename)
@@ -3346,7 +3358,35 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
 (use-package org-roam-bibtex
 ;; Connector between Org-roam, BibTeX-completion, and Org-ref
   :preface
+        (defvar bibtex-completion-bibliography)
+        (defvar bibtex-completion-cache)
+
+        (defun my-orb-prepare-bibtex-completion (&optional citekey)
+          "Ensure `bibtex-completion-bibliography' is populated from Ebib and cache is refreshed."
+          (let ((current-bibs (if (boundp 'bibtex-completion-bibliography)
+                                  (if (listp bibtex-completion-bibliography)
+                                      bibtex-completion-bibliography
+                                    (list bibtex-completion-bibliography))
+                                nil)))
+            (setq bibtex-completion-bibliography
+                  (delete-dups
+                   (delq nil
+                         (append current-bibs
+                                 (when (boundp 'ebib-preload-bib-files)
+                                   ebib-preload-bib-files)
+                                 (when (and (boundp 'ebib--cur-db)
+                                            ebib--cur-db
+                                            (fboundp 'ebib-db-get-filename))
+                                   (list (ebib-db-get-filename ebib--cur-db))))))))
+          (when (and (fboundp 'bibtex-completion-get-entry)
+                     citekey
+                     (not (ignore-errors (bibtex-completion-get-entry citekey))))
+            (when (fboundp 'bibtex-completion-clear-cache)
+              (bibtex-completion-clear-cache))
+            (setq bibtex-completion-cache nil)))
+
         (defun my-orb-edit-note (citekey)
+          (my-orb-prepare-bibtex-completion citekey)
           (let ((org-roam-capture-templates
                    '(
                         ("r" "bibliography reference" plain "%?"
@@ -3365,6 +3405,7 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
                  ))
               (orb-edit-note citekey)))
         (defun my-orb-edit-video-note (citekey)
+          (my-orb-prepare-bibtex-completion citekey)
           (let ((orb-process-file-keyword nil)		;; Don't check file since it will be a directory most of time
                 (org-roam-capture-templates
                    '(
@@ -3384,6 +3425,7 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
                  ))
               (orb-edit-note citekey)))
   :config
+        (my-orb-prepare-bibtex-completion)
         (org-roam-bibtex-mode)
   :custom
         (orb-roam-ref-format 'org-ref-v3)
