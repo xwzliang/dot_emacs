@@ -5246,3 +5246,8 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
             "b" 'switch-to-buffer
          )
   )
+
+;; Story graph commands (local installation; no package download).
+(let ((story-links-file "/home/broliang/models/video_summarizer/config/story_links/story-links.el"))
+  (when (file-readable-p story-links-file)
+    (load story-links-file nil t)))
