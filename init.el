@@ -1627,7 +1627,9 @@
           (apply #'encode-time (parse-time-string date-str)))
 
         (defun my/org-insert-weekly-training-entry ()
-            "Insert a new training entry for today by copying last week's entry and updating the date."
+            "Copy the latest matching weekday's full training session to today.
+Include any additional rows, such as Running, with the same date and
+an empty weekday column.  Update the date on every copied row."
             (interactive)
             (save-excursion
                 (let* ((today (current-time))
@@ -1637,20 +1639,36 @@
                     ;; Search from bottom up
                     (reversed-lines (reverse lines))
                     (reversed-index (cl-position-if (lambda (line)
-                                                        (and (string-prefix-p "| " line)
-                                                            (string-match (concat "| " day-abbr " ") line)))
+                                                        (string-match-p
+                                                         (concat "^[ \t]*|[ \t]*[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}[ \t]*|[ \t]*"
+                                                                 day-abbr "[ \t]*|")
+                                                         line))
                                                     reversed-lines))
                     (line-count (length lines)))
                 (if reversed-index
                     (let* ((start-point (- line-count reversed-index 1))
-                            (line1 (nth start-point lines))
-                            (line2 (nth (+ start-point 1) lines)))
-                        ;; Replace the date
-                        (setq line1 (replace-regexp-in-string "| [0-9-]+ |" (concat "| " today-date " |") line1))
-                        (setq line2 (replace-regexp-in-string "| [0-9-]+ |" (concat "| " today-date " |") line2))
+                            (remaining (nthcdr start-point lines))
+                            (first-line (car remaining))
+                            (source-date (progn
+                                           (string-match "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}" first-line)
+                                           (match-string 0 first-line)))
+                            (continuation-regexp
+                             (concat "^[ \t]*|[ \t]*" (regexp-quote source-date)
+                                     "[ \t]*|[ \t]*|"))
+                            (session (list first-line)))
+                        (setq remaining (cdr remaining))
+                        (while (and remaining
+                                    (string-match-p continuation-regexp (car remaining)))
+                          (push (car remaining) session)
+                          (setq remaining (cdr remaining)))
                         ;; Insert at end
                         (goto-char (point-max))
-                        (insert line1 "\n" line2)
+                        (unless (bolp) (insert "\n"))
+                        (insert (mapconcat
+                                 (lambda (line)
+                                   (string-match "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}" line)
+                                   (replace-match today-date t t line))
+                                 (nreverse session) "\n"))
                         (message "Inserted training entry for %s (%s)" day-abbr today-date))
                     (message "No previous entry found for %s" day-abbr)))))
 
