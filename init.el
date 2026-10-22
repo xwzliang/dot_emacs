@@ -1626,51 +1626,102 @@
           "Convert a date string to time."
           (apply #'encode-time (parse-time-string date-str)))
 
-        (defun my/org-insert-weekly-training-entry ()
-            "Copy the latest matching weekday's full training session to today.
-Include any additional rows, such as Running, with the same date and
-an empty weekday column.  Update the date on every copied row."
-            (interactive)
-            (save-excursion
-                (let* ((today (current-time))
-                    (day-abbr (capitalize (format-time-string "%a" today))) ;; e.g., "Mon"
-                    (today-date (format-time-string "%Y-%m-%d" today))
-                    (lines (split-string (buffer-string) "\n"))
-                    ;; Search from bottom up
-                    (reversed-lines (reverse lines))
-                    (reversed-index (cl-position-if (lambda (line)
-                                                        (string-match-p
-                                                         (concat "^[ \t]*|[ \t]*[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}[ \t]*|[ \t]*"
-                                                                 day-abbr "[ \t]*|")
-                                                         line))
-                                                    reversed-lines))
-                    (line-count (length lines)))
-                (if reversed-index
-                    (let* ((start-point (- line-count reversed-index 1))
-                            (remaining (nthcdr start-point lines))
-                            (first-line (car remaining))
-                            (source-date (progn
-                                           (string-match "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}" first-line)
-                                           (match-string 0 first-line)))
-                            (continuation-regexp
-                             (concat "^[ \t]*|[ \t]*" (regexp-quote source-date)
-                                     "[ \t]*|[ \t]*|"))
-                            (session (list first-line)))
-                        (setq remaining (cdr remaining))
-                        (while (and remaining
-                                    (string-match-p continuation-regexp (car remaining)))
-                          (push (car remaining) session)
-                          (setq remaining (cdr remaining)))
-                        ;; Insert at end
-                        (goto-char (point-max))
-                        (unless (bolp) (insert "\n"))
-                        (insert (mapconcat
-                                 (lambda (line)
-                                   (string-match "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}" line)
-                                   (replace-match today-date t t line))
-                                 (nreverse session) "\n"))
-                        (message "Inserted training entry for %s (%s)" day-abbr today-date))
-                    (message "No previous entry found for %s" day-abbr)))))
+        (defun my/org-training--ensure-heading (title level)
+          "Find or create numeric TITLE at LEVEL within the narrowed parent.
+Return the heading position, keeping sibling years or months sorted."
+          (goto-char (point-min))
+          (let ((regexp (format "^\\*\\{%d\\} \\([0-9-]+\\)[ \t]*$" level))
+                found before)
+            (while (and (not found) (re-search-forward regexp nil t))
+              (let ((name (match-string-no-properties 1))
+                    (position (line-beginning-position)))
+                (cond ((string= name title) (setq found position))
+                      ((and (not before) (string< title name))
+                       (setq before position)))))
+            (or found
+                (progn
+                  (goto-char (or before (point-max)))
+                  (unless (bolp) (insert "\n"))
+                  (unless (or (bobp) (eq (char-before (1- (point))) ?\n))
+                    (insert "\n"))
+                  (let ((position (point)))
+                    (insert (make-string level ?*) " " title "\n\n")
+                    position)))))
+
+        (defun my/org-insert-daily-training-entry ()
+          "Copy the latest earlier matching weekday's session into today's month.
+Use ** YYYY / *** YYYY-MM below * Daily Training Journal, creating sorted
+sections when necessary.  Copy every row of the source date, including
+additional exercises with empty weekday cells.  Do not duplicate today.
+Only align the destination monthly table; leave saving to the user."
+          (interactive)
+          (require 'org-table)
+          (require 'cl-lib)
+          (require 'subr-x)
+          (unless (derived-mode-p 'org-mode)
+            (user-error "This command requires Org mode"))
+          (save-excursion
+            (save-restriction
+              (widen)
+              (goto-char (point-min))
+              (unless (re-search-forward "^\\* Daily Training Journal[ \t]*$" nil t)
+                (user-error "No Daily Training Journal heading found"))
+              (beginning-of-line)
+              (org-narrow-to-subtree)
+              (let* ((system-time-locale "C")
+                     (now (current-time))
+                     (today (format-time-string "%Y-%m-%d" now))
+                     (weekday (format-time-string "%a" now))
+                     (row-regexp "^[ \t]*|[ \t]*\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)[ \t]*|")
+                     rows source-date session)
+                (goto-char (point-min))
+                (while (re-search-forward row-regexp nil t)
+                  (let* ((date (match-string-no-properties 1))
+                         (line (buffer-substring-no-properties
+                                (line-beginning-position) (line-end-position)))
+                         (cells (mapcar #'string-trim (split-string line "|"))))
+                    (when (string= date today)
+                      (user-error "Training entries already exist for %s" today))
+                    (push (cons date line) rows)
+                    (when (and (string< date today)
+                               (string= (nth 2 cells) weekday)
+                               (or (not source-date) (string< source-date date)))
+                      (setq source-date date))))
+                (unless source-date
+                  (user-error "No previous entry found for %s" weekday))
+                (setq session
+                      (mapcar (lambda (row)
+                                (replace-regexp-in-string
+                                 (regexp-quote source-date) today (cdr row) t t))
+                              (cl-remove-if-not
+                               (lambda (row) (string= (car row) source-date))
+                               (nreverse rows))))
+                (atomic-change-group
+                  (goto-char (my/org-training--ensure-heading (substring today 0 4) 2))
+                  (org-narrow-to-subtree)
+                  (goto-char (my/org-training--ensure-heading (substring today 0 7) 3))
+                  (org-narrow-to-subtree)
+                  (goto-char (point-min))
+                  (unless (re-search-forward "^[ \t]*|[ \t]*Date[ \t]*|" nil t)
+                    (goto-char (point-max))
+                    (unless (bolp) (insert "\n"))
+                    (insert "| Date | Day | Exercise | Type | Set | Reps |\n"
+                            "|------+-----+----------+------+-----+------|\n")
+                    (forward-line -2))
+                  (beginning-of-line)
+                  (let ((table-start (point)) insertion)
+                    (while (and (not insertion) (not (eobp)) (org-at-table-p))
+                      (when (and (looking-at row-regexp)
+                                 (string< today (match-string-no-properties 1)))
+                        (setq insertion (point)))
+                      (unless insertion (forward-line 1)))
+                    (goto-char (or insertion (point)))
+                    (unless (bolp) (insert "\n"))
+                    (insert (mapconcat #'identity session "\n") "\n")
+                    (goto-char table-start)
+                    (org-table-align)))
+                (message "Inserted %s training session for %s (%s)"
+                         source-date today weekday)))))
 
         (defun my-org-convict-conditioning-convert-to-org-table (file-path)
           (interactive "fEnter the path of the file: ")  ; Prompt the user for a file path
