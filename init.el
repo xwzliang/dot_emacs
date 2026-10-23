@@ -1723,6 +1723,31 @@ Only align the destination monthly table; leave saving to the user."
                 (message "Inserted %s training session for %s (%s)"
                          source-date today weekday)))))
 
+        (defun my/org-update-daily-training-entry-date ()
+          "Set the training entry row at point to today's date.
+Update a nonempty Day cell as well, preserving blank continuation cells.
+Leave the row in place and leave saving to the user."
+          (interactive)
+          (require 'org-table)
+          (unless (derived-mode-p 'org-mode)
+            (user-error "This command requires Org mode"))
+          (unless (and (org-at-table-p)
+                       (save-excursion
+                         (beginning-of-line)
+                         (looking-at
+                          "[ \t]*|[ \t]*[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}[ \t]*|")))
+            (user-error "Place point on a training entry row with a date"))
+          (let* ((system-time-locale "C")
+                 (now (current-time))
+                 (today (format-time-string "%Y-%m-%d" now)))
+            (save-excursion
+              (atomic-change-group
+                (org-table-put nil 1 today)
+                (unless (string-match-p "\\`[ \t]*\\'" (org-table-get nil 2))
+                  (org-table-put nil 2 (format-time-string "%a" now)))
+                (org-table-align)))
+            (message "Updated training entry date to %s" today)))
+
         (defun my-org-convict-conditioning-convert-to-org-table (file-path)
           (interactive "fEnter the path of the file: ")  ; Prompt the user for a file path
           ;; Variables for date, exercise type, and details
