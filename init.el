@@ -1626,6 +1626,82 @@
           "Convert a date string to time."
           (apply #'encode-time (parse-time-string date-str)))
 
+        (defun my/org-training--next-level (exercise root)
+          "Return the documented variation after EXERCISE under ROOT.
+Numbered Markdown files in each directory form a separate progression.
+Read display names from their first level-one headings.  Reject unknown,
+ambiguous, or final documented variations instead of guessing."
+          (require 'cl-lib)
+          (require 'subr-x)
+          (let (series matches)
+            (dolist (file (directory-files-recursively root "\\`[0-9]+_.*\\.md\\'"))
+              (let ((directory (file-name-directory file))
+                    (level (string-to-number (file-name-nondirectory file)))
+                    title)
+                (with-temp-buffer
+                  (insert-file-contents file)
+                  (goto-char (point-min))
+                  (when (re-search-forward "^# +\\(.+\\)$" nil t)
+                    (setq title (string-trim (match-string-no-properties 1)))))
+                (when title
+                  (let ((entry (list level title file)))
+                    (push entry (alist-get directory series nil nil #'equal))
+                    (when (string-equal (downcase exercise) (downcase title))
+                      (push (cons directory entry) matches))))))
+            (unless matches
+              (user-error "No documented level found for %s" exercise))
+            (unless (= (length matches) 1)
+              (user-error "Ambiguous exercise title %s; check the exercise Markdown headings" exercise))
+            (let* ((match (car matches))
+                   (levels (sort (copy-sequence (alist-get (car match) series nil nil #'equal))
+                                 (lambda (a b) (< (car a) (car b)))))
+                   (next (cadr (member (cdr match) levels))))
+              (unless next
+                (user-error "%s is the last documented level in this series" exercise))
+              (when (= (car next) (cadr match))
+                (user-error "Duplicate level numbers in this exercise series"))
+              (cadr next))))
+
+        (defun my/org-increase-training-level ()
+          "Advance the current journal row's Set cell to its next exercise level.
+Use numbered exercise Markdown files in the journal's convict_conditioning
+folder.  Preserve date, weekday, exercise family, set type, and repetitions.
+Only align the current monthly table; leave the buffer unsaved for review."
+          (interactive)
+          (require 'org-table)
+          (require 'subr-x)
+          (unless (and (derived-mode-p 'org-mode) (org-at-table-p)
+                       (save-excursion
+                         (beginning-of-line)
+                         (looking-at "[ \t]*|[ \t]*[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}[ \t]*|")))
+            (user-error "Place point on a dated training table row"))
+          (let ((root (locate-dominating-file
+                       (or buffer-file-name default-directory)
+                       (lambda (directory)
+                         (file-directory-p (expand-file-name "training_journal" directory))))))
+            (unless root
+              (user-error "Cannot find the training_journal parent exercise directory"))
+            (save-excursion
+              (goto-char (org-table-begin))
+              (unless (and (string= (string-trim (org-table-get-field 1)) "Date")
+                           (string= (string-trim (org-table-get-field 5)) "Set")
+                           (string= (string-trim (org-table-get-field 6)) "Reps"))
+                (user-error "Expected the six-column training journal table")))
+            (let* ((current (string-trim (org-table-get-field 5)))
+                   (next (my/org-training--next-level current root))
+                   (row-line (line-number-at-pos))
+                   (column (current-column)))
+              (atomic-change-group
+                (save-excursion
+                  (org-table-goto-column 5)
+                  (org-table-blank-field)
+                  (insert next)
+                  (org-table-align))
+                (goto-char (point-min))
+                (forward-line (1- row-line))
+                (move-to-column column))
+              (message "Training level: %s → %s (repetitions unchanged)" current next))))
+
         (defun my/org-training--ensure-heading (title level)
           "Find or create numeric TITLE at LEVEL within the narrowed parent.
 Return the heading position, keeping sibling years or months sorted."
