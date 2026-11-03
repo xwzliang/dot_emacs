@@ -1821,36 +1821,63 @@ Only align the destination monthly table; leave saving to the user."
                          source-date today weekday)))))
 
         (defun my/org-update-daily-training-entry-date ()
-          "Set the training entry row at point to today's date.
-Update a nonempty Day cell as well.  Fill a blank Day cell if this is the
-first row for today in the current table; preserve other blank Day cells.
-Leave the row in place and leave saving to the user."
+          "Set the entry at point, or selected table rows, to today's date.
+An active region selects every dated row it touches in one table.
+Put the weekday only on the first row for today in that table, clearing
+the Day cells of other updated rows.  Skip headers and separator rows.
+Leave rows in place and leave saving to the user."
           (interactive)
           (require 'org-table)
           (unless (derived-mode-p 'org-mode)
             (user-error "This command requires Org mode"))
-          (unless (and (org-at-table-p)
-                       (save-excursion
-                         (beginning-of-line)
-                         (looking-at
-                          "[ \t]*|[ \t]*[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}[ \t]*|")))
-            (user-error "Place point on a training entry row with a date"))
           (let* ((system-time-locale "C")
                  (now (current-time))
-                 (today (format-time-string "%Y-%m-%d" now)))
+                 (today (format-time-string "%Y-%m-%d" now))
+                 (region (use-region-p))
+                 (start (if region (region-beginning) (point)))
+                 (end (if region (region-end) (line-end-position)))
+                 (row-regexp
+                  "[ \t]*|[ \t]*[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}[ \t]*|")
+                 rows)
             (save-excursion
-              (atomic-change-group
-                (org-table-put nil 1 today)
-                (when (or (not (string-match-p "\\`[ \t]*\\'" (org-table-get nil 2)))
-                          (save-excursion
-                            (beginning-of-line)
-                            (not (re-search-backward
-                                  (concat "^[ \t]*|[ \t]*" (regexp-quote today)
-                                          "[ \t]*|")
-                                  (org-table-begin) t))))
-                  (org-table-put nil 2 (format-time-string "%a" now)))
-                (org-table-align)))
-            (message "Updated training entry date to %s" today)))
+              (goto-char start)
+              (unless (org-at-table-p)
+                (user-error "Place point or select rows in a training table"))
+              (let ((table-start (org-table-begin))
+                    (table-end (org-table-end)))
+                (when (> end table-end)
+                  (user-error "Select rows within a single training table"))
+                (beginning-of-line)
+                (while (and (< (point) table-end)
+                            (or (not region) (< (point) end)))
+                  (when (looking-at row-regexp)
+                    (push (- (line-number-at-pos)
+                             (line-number-at-pos table-start)) rows))
+                  (if region (forward-line 1) (goto-char table-end)))
+                (unless rows
+                  (user-error "No dated training entry rows selected"))
+                ;; Store row offsets so changing field widths cannot shift targets.
+                (atomic-change-group
+                  (dolist (row rows)
+                    (goto-char table-start)
+                    (forward-line row)
+                    (org-table-put nil 1 today))
+                  ;; All dates are now final; find the first row for today.
+                  (goto-char table-start)
+                  (re-search-forward
+                   (concat "^[ \t]*|[ \t]*" (regexp-quote today) "[ \t]*|"))
+                  (let ((first-row (- (line-number-at-pos)
+                                      (line-number-at-pos table-start))))
+                    (dolist (row rows)
+                      (goto-char table-start)
+                      (forward-line row)
+                      (org-table-put nil 2
+                                     (if (= row first-row)
+                                         (format-time-string "%a" now)
+                                       ""))))
+                  (goto-char table-start)
+                  (org-table-align))))
+            (message "Updated %d training entry row(s) to %s" (length rows) today)))
 
         (defun my-org-convict-conditioning-convert-to-org-table (file-path)
           (interactive "fEnter the path of the file: ")  ; Prompt the user for a file path

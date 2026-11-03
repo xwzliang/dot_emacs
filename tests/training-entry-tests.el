@@ -115,7 +115,7 @@
   ;; ensures the command checks all preceding rows, not just its neighbor.
   (dolist (case '(("2026-11-02" "" "Tue")
                   ("2026-11-03" "" "")
-                  ("2026-11-03" "Mon" "Tue")))
+                  ("2026-11-03" "Mon" "")))
     (with-temp-buffer
       (org-mode)
       (insert "| Date | Day | Exercise |\n|------+-----+----------|\n"
@@ -133,5 +133,40 @@
       (should (equal (org-table-get nil 3) "Pushups"))
       (forward-line 1)
       (should (equal (org-table-get nil 2) "")))))
+
+(ert-deftest training-update-selected-rows ()
+  (dolist (earlier-today '(nil t))
+    (dolist (reverse-selection '(nil t))
+      (with-temp-buffer
+        (org-mode)
+        (insert "| Date | Day | Exercise |\n|------+-----+----------|\n"
+                "| " (if earlier-today "2026-11-03" "2026-11-02")
+                " | Tue | Running |\n"
+                "| 2026-11-01 | Sun | Squats |\n"
+                "| 2026-11-02 | Mon | Pushups |\n"
+                "| 2026-11-02 | | Leg Raises |\n")
+        (goto-char (point-min))
+        (forward-line 3)
+        (let ((start (+ (point) 4))
+              (now (encode-time 0 0 12 3 11 2026))
+              (transient-mark-mode t))
+          (forward-line 2)
+          (set-mark start)
+          (activate-mark)
+          (when reverse-selection (exchange-point-and-mark))
+          (cl-letf (((symbol-function 'current-time) (lambda () now)))
+            (my/org-update-daily-training-entry-date)))
+        (goto-char (point-min))
+        (forward-line 3)
+        (should (equal (org-table-get nil 1) "2026-11-03"))
+        (should (equal (org-table-get nil 2) (if earlier-today "" "Tue")))
+        (should (equal (org-table-get nil 3) "Squats"))
+        (forward-line 1)
+        (should (equal (org-table-get nil 1) "2026-11-03"))
+        (should (equal (org-table-get nil 2) ""))
+        (should (equal (org-table-get nil 3) "Pushups"))
+        ;; Ending the region at this row's beginning must exclude it.
+        (forward-line 1)
+        (should (equal (org-table-get nil 1) "2026-11-02"))))))
 
 (ert-run-tests-batch-and-exit)
