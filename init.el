@@ -1822,7 +1822,8 @@ Only align the destination monthly table; leave saving to the user."
 
         (defun my/org-update-daily-training-entry-date ()
           "Set the training entry row at point to today's date.
-Update a nonempty Day cell as well, preserving blank continuation cells.
+Update a nonempty Day cell as well.  Fill a blank Day cell if this is the
+first row for today in the current table; preserve other blank Day cells.
 Leave the row in place and leave saving to the user."
           (interactive)
           (require 'org-table)
@@ -1840,7 +1841,13 @@ Leave the row in place and leave saving to the user."
             (save-excursion
               (atomic-change-group
                 (org-table-put nil 1 today)
-                (unless (string-match-p "\\`[ \t]*\\'" (org-table-get nil 2))
+                (when (or (not (string-match-p "\\`[ \t]*\\'" (org-table-get nil 2)))
+                          (save-excursion
+                            (beginning-of-line)
+                            (not (re-search-backward
+                                  (concat "^[ \t]*|[ \t]*" (regexp-quote today)
+                                          "[ \t]*|")
+                                  (org-table-begin) t))))
                   (org-table-put nil 2 (format-time-string "%a" now)))
                 (org-table-align)))
             (message "Updated training entry date to %s" today)))

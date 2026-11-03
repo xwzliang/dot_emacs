@@ -1,13 +1,14 @@
 (require 'ert)
 (require 'org)
 (require 'cl-lib)
-;; Load only the two training functions, without starting the full init.
+;; Load only the training functions, without starting the full init.
 (let ((init (expand-file-name "../init.el" (file-name-directory load-file-name))))
   (with-temp-buffer
     (insert-file-contents init)
     (goto-char (point-min))
     (search-forward "(defun my/org-training--ensure-heading")
     (goto-char (match-beginning 0))
+    (eval (read (current-buffer)) t)
     (eval (read (current-buffer)) t)
     (eval (read (current-buffer)) t)))
 (defconst training-source "* Daily Training Journal\n:PROPERTIES:\n:ID: keep-me\n:END:\n\n** 2026\n\n*** 2026-09\n\n| Date | Day | Exercise | Type | Set | Reps |\n|------+-----+----------+------+-----+------|\n| 2026-09-24 | Thu | Leg Raises | warm up | Knee Raises | 2x10 |\n| 2026-09-24 | | | work set | Knee Raises | 2x15 |\n| 2026-09-24 | | Running | work set | Running | 3x400m |\n| 2026-09-24 | Thu | Squats | work set | Squats | 2x20 |\n\n* Historical entry comments\nKeep this note.\n")
@@ -108,5 +109,29 @@
     (goto-char (point-min))
     (re-search-forward "^| 2026-10-01")
     (should (string-match-p "7km" (thing-at-point 'line t)))))
+
+(ert-deftest training-update-date-fills-only-first-blank-day ()
+  ;; Previous date, current Day, expected Day.  An intervening old row
+  ;; ensures the command checks all preceding rows, not just its neighbor.
+  (dolist (case '(("2026-11-02" "" "Tue")
+                  ("2026-11-03" "" "")
+                  ("2026-11-03" "Mon" "Tue")))
+    (with-temp-buffer
+      (org-mode)
+      (insert "| Date | Day | Exercise |\n|------+-----+----------|\n"
+              "| " (nth 0 case) " | Mon | Running |\n"
+              "| 2026-11-02 | | Squats |\n"
+              "| 2026-11-02 | " (nth 1 case) " | Pushups |\n"
+              "| 2026-11-03 | | Leg Raises |\n")
+      (goto-char (point-min))
+      (forward-line 4)
+      (let ((now (encode-time 0 0 12 3 11 2026)))
+        (cl-letf (((symbol-function 'current-time) (lambda () now)))
+          (my/org-update-daily-training-entry-date)))
+      (should (equal (org-table-get nil 1) "2026-11-03"))
+      (should (equal (org-table-get nil 2) (nth 2 case)))
+      (should (equal (org-table-get nil 3) "Pushups"))
+      (forward-line 1)
+      (should (equal (org-table-get nil 2) "")))))
 
 (ert-run-tests-batch-and-exit)
