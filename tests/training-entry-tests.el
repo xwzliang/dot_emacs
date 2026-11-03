@@ -55,4 +55,58 @@
     (let ((before (buffer-string)))
       (should-error (test-training-insert-at "2026-09-25") :type 'user-error)
       (should (equal before (buffer-string))))))
+
+(ert-deftest training-running-only-falls-back-to-latest-strength-session ()
+  (with-temp-buffer
+    (insert training-source)
+    (org-mode)
+    (goto-char (point-min))
+    (search-forward "* Historical entry comments")
+    (beginning-of-line)
+    (insert "*** 2026-10\n\n"
+            "| Date | Day | Exercise | Type | Set | Reps |\n"
+            "|------+-----+----------+------+-----+------|\n"
+            "| 2026-10-01 | Thu | Pushups | warm up | Wall Pushups | 1x10 |\n"
+            "| 2026-10-01 | | | work set | Wall Pushups | 2x20 |\n"
+            "| 2026-10-01 | | Running | work set | Running | 5km |\n"
+            "| 2026-10-01 | | | work set | Running | 1km |\n"
+            "| 2026-10-08 | Thu | Running | work set | Running | 6km |\n"
+            "| 2026-10-14 | Wed | Squats | work set | Squats | 2x20 |\n"
+            "| 2026-10-15 | Thu | Running | work set | Running | 7km |\n"
+            "| 2026-10-15 | | | work set | Running | 2km |\n\n")
+    (let ((original (buffer-string)))
+      (test-training-insert-at "2026-10-22")
+      (should (= 4 (how-many "^| 2026-10-22" (point-min) (point-max))))
+      (goto-char (point-min))
+      (re-search-forward "^| 2026-10-22")
+      (let ((rows (buffer-substring (line-beginning-position)
+                                    (progn (forward-line 4) (point)))))
+        (should (string-match-p "7km" rows))
+        (should (string-match-p "2km" rows))
+        (should (string-match-p "Pushups" rows))
+        (should (string-match-p "1x10" rows))
+        (should (string-match-p "2x20" rows))
+        (should-not (string-match-p "5km\\|6km\\|1km\\|Squats\\|Leg Raises" rows)))
+      ;; Source rows survive unchanged; only the new month's table is aligned.
+      (should (string-prefix-p
+               (substring original 0 (string-match "*** 2026-10" original))
+               (buffer-string)))
+      (let ((before (buffer-string)))
+        (should-error (test-training-insert-at "2026-10-22") :type 'user-error)
+        (should (equal before (buffer-string)))))))
+
+(ert-deftest training-running-only-without-strength-history ()
+  (with-temp-buffer
+    (org-mode)
+    (insert "* Daily Training Journal\n** 2026\n*** 2026-09\n"
+            "| Date | Day | Exercise | Type | Set | Reps |\n"
+            "|------+-----+----------+------+-----+------|\n"
+            "| 2026-09-17 | Thu | Running | work set | Running | 5km |\n"
+            "| 2026-09-24 | Thu | Running | work set | Running | 7km |\n")
+    (test-training-insert-at "2026-10-01")
+    (should (= 1 (how-many "^| 2026-10-01" (point-min) (point-max))))
+    (goto-char (point-min))
+    (re-search-forward "^| 2026-10-01")
+    (should (string-match-p "7km" (thing-at-point 'line t)))))
+
 (ert-run-tests-batch-and-exit)

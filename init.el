@@ -1728,7 +1728,10 @@ Return the heading position, keeping sibling years or months sorted."
           "Copy the latest earlier matching weekday's session into today's month.
 Use ** YYYY / *** YYYY-MM below * Daily Training Journal, creating sorted
 sections when necessary.  Copy every row of the source date, including
-additional exercises with empty weekday cells.  Do not duplicate today.
+additional exercises with empty weekday cells.  If that session is Running
+only, also copy the non-running rows from the latest earlier matching
+weekday with other exercises.  Blank Exercise cells inherit the preceding
+exercise for that date.  Do not duplicate today.
 Only align the destination monthly table; leave saving to the user."
           (interactive)
           (require 'org-table)
@@ -1749,7 +1752,9 @@ Only align the destination monthly table; leave saving to the user."
                      (today (format-time-string "%Y-%m-%d" now))
                      (weekday (format-time-string "%a" now))
                      (row-regexp "^[ \t]*|[ \t]*\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)[ \t]*|")
-                     rows source-date session)
+                     (exercises (make-hash-table :test #'equal))
+                     (non-running (make-hash-table :test #'equal))
+                     rows matching-dates source-date extra-date session)
                 (goto-char (point-min))
                 (while (re-search-forward row-regexp nil t)
                   (let* ((date (match-string-no-properties 1))
@@ -1759,19 +1764,35 @@ Only align the destination monthly table; leave saving to the user."
                     (when (string= date today)
                       (user-error "Training entries already exist for %s" today))
                     (push (cons date line) rows)
+                    (unless (string-empty-p (nth 3 cells))
+                      (puthash date (nth 3 cells) exercises))
+                    (unless (equal (downcase (or (gethash date exercises) "")) "running")
+                      (push (cons date line) (gethash date non-running)))
                     (when (and (string< date today)
-                               (string= (nth 2 cells) weekday)
-                               (or (not source-date) (string< source-date date)))
-                      (setq source-date date))))
+                               (string= (nth 2 cells) weekday))
+                      (cl-pushnew date matching-dates :test #'equal)
+                      (when (or (not source-date) (string< source-date date))
+                        (setq source-date date)))))
                 (unless source-date
                   (user-error "No previous entry found for %s" weekday))
+                (unless (gethash source-date non-running)
+                  (setq extra-date
+                        (car (sort
+                              (cl-remove-if-not
+                               (lambda (date)
+                                 (and (string< date source-date)
+                                      (gethash date non-running)))
+                               matching-dates)
+                              #'string>))))
                 (setq session
                       (mapcar (lambda (row)
                                 (replace-regexp-in-string
-                                 (regexp-quote source-date) today (cdr row) t t))
-                              (cl-remove-if-not
-                               (lambda (row) (string= (car row) source-date))
-                               (nreverse rows))))
+                                 (regexp-quote (car row)) today (cdr row) t t))
+                              (append
+                               (cl-remove-if-not
+                                (lambda (row) (string= (car row) source-date))
+                                (nreverse rows))
+                               (reverse (gethash extra-date non-running)))))
                 (atomic-change-group
                   (goto-char (my/org-training--ensure-heading (substring today 0 4) 2))
                   (org-narrow-to-subtree)
