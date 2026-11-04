@@ -23,7 +23,7 @@
 ;; (toggle-debug-on-error)
 
 ;; Back up settings
-(defvar my-workspace-store-dir "~/Dropbox/org/persp/")
+(defvar my-workspace-store-dir "~/git/my_zettelkasten/persp/")
 ;; (setq backup-directory-alist `(("." . "~/.emacs.d/my_backups")))
 (defvar backup-directory "~/.emacs.d/my_backups")
 (if (not (file-exists-p backup-directory))
@@ -450,7 +450,7 @@
 ;;             "C-l" 'eyebrowse-restore
 ;;          )
 ;;   :custom
-;;         (eyebrowse-restore-dir "~/Dropbox/org/persp/eyebrowse")
+;;         (eyebrowse-restore-dir "~/git/my_zettelkasten/persp/eyebrowse")
 ;;   :config
 ;;         (eyebrowse-restore-mode)
 ;;   )
@@ -1619,7 +1619,7 @@
 
 (use-package org
   :init
-        (setq org-directory "~/Dropbox/org")
+        (setq org-directory "~/git/my_zettelkasten")
   :preface
         ;; Convert date string "YYYY-MM-DD" to Emacs time format
         (defun date-to-time (date-str)
@@ -2857,9 +2857,9 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
         (org-pomodoro-ticking-sound-states '(:pomodoro))
         ;; Long break 25 minutes
         (org-pomodoro-long-break-length 25)
-        (org-pomodoro-short-break-sound (expand-file-name "~/Dropbox/Sounds/Alert/Sunny_Day.mp3"))
-        (org-pomodoro-long-break-sound (expand-file-name "~/Dropbox/Sounds/Alert/Sunny_Day.mp3"))
-        (org-pomodoro-finished-sound (expand-file-name "~/Dropbox/Sounds/Alert/Little_Crystal.mp3"))
+        (org-pomodoro-short-break-sound (expand-file-name "~/.local/share/sounds/Alert/Sunny_Day.mp3"))
+        (org-pomodoro-long-break-sound (expand-file-name "~/.local/share/sounds/Alert/Sunny_Day.mp3"))
+        (org-pomodoro-finished-sound (expand-file-name "~/.local/share/sounds/Alert/Little_Crystal.mp3"))
   )
 
 (use-package hide-mode-line
@@ -4678,9 +4678,9 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
   :hook
         ;; When I finish an episode, start a new one, tell siri to stop it.
         (emms-player-started . (lambda ()
-            ;; (start-process-shell-command "siri" nil "echo 'ffplay -nodisp -autoexit ~/Dropbox/Sounds/Siri/siri_open_bedroom.m4a' | at now +1 minute")
+            ;; (start-process-shell-command "siri" nil "echo 'ffplay -nodisp -autoexit ~/.local/share/sounds/Siri/siri_open_bedroom.m4a' | at now +1 minute")
             (emms-pause)
-            ;; (start-process-shell-command "siri" nil "cd ~/Dropbox/Sounds/Siri/; ffplay -nodisp -autoexit hey_siri.m4a; ffplay -nodisp -autoexit switch_tv.m4a")
+            ;; (start-process-shell-command "siri" nil "cd ~/.local/share/sounds/Siri/; ffplay -nodisp -autoexit hey_siri.m4a; ffplay -nodisp -autoexit switch_tv.m4a")
         ))
   )
 
@@ -4823,7 +4823,7 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
         ;; (start-process-shell-command "xrandr" nil "xrandr --output eDP --primary --mode 3840x2160 --pos 0x0 --rotate normal --output DisplayPort-0 --off --output DisplayPort-1 --off --output DisplayPort-2 --off")
 
         ;; setup background image (wallpaper), if resolution needs to be set also, make sure resolution is set before background image
-        (start-process-shell-command "feh" nil "feh --bg-scale ~/Dropbox/Devices_backup/WallPaper0.JPG")
+        (start-process-shell-command "feh" nil "feh --bg-scale ~/Pictures/WallPaper0.JPG")
 
         ;; setup keyboard
         (start-process-shell-command "xmodmap" nil "xmodmap ~/git/dot_emacs/exwm/Xmodmap")
@@ -5198,7 +5198,7 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
   :custom
         (auth-sources (quote (
             ;; "~/.authinfo"
-            "~/Dropbox/org/keys/emacs/authinfo"
+            "~/.authinfo"
          )))
 )
 
@@ -5398,7 +5398,7 @@ Prompts for an ISBN and lets you select from Ebib's bibliography databases."
   :straight nil
   :init
         (setq desktop-dirname (expand-file-name my-workspace-store-dir))
-        ;; (setq desktop-dirname-default (expand-file-name "~/Dropbox/org/persp/default"))
+        ;; (setq desktop-dirname-default (expand-file-name "~/git/my_zettelkasten/persp/default"))
   ;; :general
   ;;       (
   ;;           :prefix "C-a"
