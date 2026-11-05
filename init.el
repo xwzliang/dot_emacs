@@ -1731,7 +1731,8 @@ sections when necessary.  Copy every row of the source date, including
 additional exercises with empty weekday cells.  If that session is Running
 only, also copy the non-running rows from the latest earlier matching
 weekday with other exercises.  Blank Exercise cells inherit the preceding
-exercise for that date.  Do not duplicate today.
+exercise for that date.  Put Running rows last and the weekday only on
+the first inserted row.  Do not duplicate today.
 Only align the destination monthly table; leave saving to the user."
           (interactive)
           (require 'org-table)
@@ -1784,15 +1785,30 @@ Only align the destination monthly table; leave saving to the user."
                                       (gethash date non-running)))
                                matching-dates)
                               #'string>))))
-                (setq session
-                      (mapcar (lambda (row)
-                                (replace-regexp-in-string
-                                 (regexp-quote (car row)) today (cdr row) t t))
-                              (append
-                               (cl-remove-if-not
-                                (lambda (row) (string= (car row) source-date))
-                                (nreverse rows))
-                               (reverse (gethash extra-date non-running)))))
+                (let* ((selected
+                        (append
+                         (cl-remove-if-not
+                          (lambda (row) (string= (car row) source-date))
+                          (nreverse rows))
+                         (reverse (gethash extra-date non-running))))
+                       (strength-row-p
+                        (lambda (row)
+                          (member row (gethash (car row) non-running))))
+                       (ordered
+                        (append (cl-remove-if-not strength-row-p selected)
+                                (cl-remove-if strength-row-p selected)))
+                       (first-row t))
+                  (setq session
+                        (mapcar
+                         (lambda (row)
+                           (let ((cells (split-string (cdr row) "|")))
+                             (setf (nth 1 cells) (concat " " today " ")
+                                   (nth 2 cells) (if first-row
+                                                     (concat " " weekday " ")
+                                                   " "))
+                             (setq first-row nil)
+                             (mapconcat #'identity cells "|")))
+                         ordered)))
                 (atomic-change-group
                   (goto-char (my/org-training--ensure-heading (substring today 0 4) 2))
                   (org-narrow-to-subtree)
