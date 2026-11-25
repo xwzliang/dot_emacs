@@ -59,6 +59,9 @@
 (setq inhibit-splash-screen t)
 
 ;; basic settings
+;; Open large files without confirmation, including during Org-roam sync.
+(setq large-file-warning-threshold nil)
+
 (setq
       global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
       mark-ring-max 5000                ; increase mark ring to contains 5000 entries
